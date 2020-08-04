@@ -11,7 +11,7 @@ class CurrentWeather {
     let forecast: Forecast
     let name: String
     let timezone: Int
-    let weather: [Weather]
+    let weather: Weather
     
     init?(json: Any) {
         if let jsonDict = json as? [String: Any],
@@ -20,13 +20,14 @@ class CurrentWeather {
             let main = Forecast(json: jsonDict["main"] as Any),
             let name = jsonDict["name"] as? String,
             let timezone = jsonDict["timezone"] as? Int,
-            let weather = jsonDict["weather"] as? [Any]{
+            let weather = Weather(json: jsonDict["weather"] as! [Any]){
 
             self.id = id
             self.forecast = main
             self.name = name
             self.timezone = timezone
-            self.weather = weather.compactMap(Weather.init)
+            self.weather = weather
+
         } else {
             return nil
         }

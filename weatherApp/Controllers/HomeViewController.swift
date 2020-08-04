@@ -10,23 +10,105 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
+    
+    private let cellReuseIdentifier = "cellReuseIdentifier"
+    private var currentWeather: [CurrentWeather]?
+    private var refreshControl: UIRefreshControl!
+    
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        fetchWeather()
+        setupNavigationBar()
+        setupTableView()
+        setupData()
     }
     
-    private func fetchWeather() {
+    private func setupNavigationBar(){
+        self.title = "WeatherApp"
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
+        self.navigationController?.navigationBar.tintColor = UIColor.black;
+    }
+    
+    private func setupData() {
+        currentWeather = []
+        
         for city in Cities.allCases {
-            WeatherService().fetchCurrentWeather(id: city.rawValue) { (currentWeather) in
+            WeatherService().fetchCurrentWeather(id: city.rawValue) { [weak self] (currentWeather) in
                 if let currentWeather = currentWeather {
-                    print(currentWeather.name)
-                    print(currentWeather.forecast.convertToCelsius(degrees: currentWeather.forecast.temp))
-                    print(currentWeather.forecast.temp)
-                    print()
+                    self?.currentWeather?.append(currentWeather)
+                    self?.refresh()
                 }
             }
         }
     }
     
+    private func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(HomeViewController.refresh), for: UIControl.Event.valueChanged)
+        tableView.refreshControl = refreshControl
+        
+        tableView.register(UINib(nibName: "WeatherTableViewCell", bundle: nil), forCellReuseIdentifier: cellReuseIdentifier)
+    }
+    
+    @objc private func refresh() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            self.refreshControl.endRefreshing()
+        }
+    }
+    
+    private func numberOfCurrentWeather() -> Int {
+        return currentWeather?.count ?? 0
+    }
+    
+    func currentWeather(atIndex index: Int) -> CurrentWeather? {
+        guard let currentWeather = currentWeather else {
+            return nil
+        }
+        
+        return currentWeather[index]
+    }
+    
+}
+
+extension HomeViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return numberOfCurrentWeather()
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! WeatherTableViewCell
+        
+        if let currentWeather = currentWeather(atIndex: indexPath.row){
+            cell.setup(withWeather: currentWeather)
+        }
+        
+        return cell
+    }
+    
+}
+
+extension HomeViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 130.0
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        if let currentWeather = currentWeather(atIndex: indexPath.row) {
+            let detailViewController = DetailWeatherViewController()
+            detailViewController.currentWeather = currentWeather
+            navigationController?.pushViewController(detailViewController, animated: true)
+        }
+    }
 }
