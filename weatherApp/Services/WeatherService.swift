@@ -15,6 +15,7 @@ class WeatherService {
     
     //MARK: - Fetching
     
+    // current weather fetching logic for fetching by the location id
     func fetchCurrentWeather(id: Int, completion: @escaping ((CurrentWeather?) -> Void)){
         let property = "id=\(id)"
         fetchCurrentWeather(property: property) { (currentWeather) in
@@ -27,6 +28,7 @@ class WeatherService {
         }
     }
     
+    // current weather fetching logic for fetching by the location name
     func fetchCurrentWeather(name: String, completion: @escaping ((CurrentWeather?) -> Void)){
         let property = "q=\(name)"
         fetchCurrentWeather(property: property) { (currentWeather) in
@@ -39,6 +41,7 @@ class WeatherService {
         }
     }
     
+    // main current weather fetching logic
     private func fetchCurrentWeather(property: String, completion: @escaping ((CurrentWeather?) -> Void)) {
         let resourceStringUrl = "\(baseUrlString)?\(property)&APPID=\(apiKey)"
         guard let url = URL(string: resourceStringUrl) else {

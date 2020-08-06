@@ -48,7 +48,4 @@ class DetailWeatherViewController: UIViewController {
         }
     }
     
-    //TODO:
-    // refaktorat, dodati jos gradova (provjeriti kako je tableview)
-    
 }
