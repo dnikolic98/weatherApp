@@ -6,6 +6,8 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
+
+//TODO: - izdvojiti json od modela
 class CurrentWeather {
     let id: Int
     let forecast: Forecast

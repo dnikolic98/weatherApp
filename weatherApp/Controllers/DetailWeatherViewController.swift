@@ -27,29 +27,29 @@ class DetailWeatherViewController: UIViewController {
         setupUiElements()
     }
     
+    //MARK: - UI elements setup
+    
     private func setupUiElements(){
         let forecast = currentWeather.forecast
         
-        self.title = currentWeather.name
+        title = currentWeather.name
         
-        temp.text = tempFormat(temp: forecast.temp.c)
-        minTemp.text = tempFormat(temp: forecast.temp_min.c)
-        maxTemp.text = tempFormat(temp: forecast.temp_max.c)
-        feelsLike.text = tempFormat(temp: forecast.feelsLike.c)
-        weatherDescription.text = currentWeather.weather.description
-        humidity.text = "\(forecast.humidtiy) %"
+        temp.text = Temperature.celsiusToString(temp: forecast.temp.c)
+        minTemp.text = Temperature.celsiusToString(temp: forecast.temp_min.c)
+        maxTemp.text = Temperature.celsiusToString(temp: forecast.temp_max.c)
+        feelsLike.text = Temperature.celsiusToString(temp: forecast.feelsLike.c)
+        weatherDescription.text = currentWeather.weather.description.firstCapitalized
+        humidity.text = "\(forecast.humidity) %"
         pressure.text = "\(forecast.pressure) hPa"
         
         let urlString = currentWeather.weather.iconUrlString
-        if
-            let url = URL(string: urlString) {
+        if let url = URL(string: urlString) {
             weatherIcon.kf.setImage(with: url)
         }
     }
     
-    private func tempFormat(temp: Double) -> String{
-        let temp = Int(temp)
-        return "\(temp) °C"
-    }
+    //TODO:
+    // gitignore podove
+    // refaktorat, dodati jos gradova (provjeriti kako je tableview)
     
 }

@@ -10,26 +10,11 @@ import UIKit
 import Kingfisher
 
 class WeatherTableViewCell: UITableViewCell {
-    @IBOutlet weak var weatherIcon: UIImageView!
-    @IBOutlet weak var locationName: UILabel!
-    @IBOutlet weak var weatherDescription: UILabel!
-    @IBOutlet weak var currentTemp: UILabel!
-    @IBOutlet weak var minMaxTemp: UILabel!
-    
-    func setup(withWeather currentWeather: CurrentWeather) {
-        let forecast = currentWeather.forecast
-        
-        locationName.text = currentWeather.name
-        weatherDescription.text = currentWeather.weather.description
-        currentTemp.text = tempFormat(temp: forecast.temp.c)
-        minMaxTemp.text = minMaxFormat(min: forecast.temp_min.c, max: forecast.temp_max.c)
-        
-        let urlString = currentWeather.weather.iconUrlString
-        if
-            let url = URL(string: urlString) {
-            weatherIcon.kf.setImage(with: url)
-        }
-    }
+    @IBOutlet private weak var weatherIcon: UIImageView!
+    @IBOutlet private weak var locationName: UILabel!
+    @IBOutlet private weak var weatherDescription: UILabel!
+    @IBOutlet private weak var currentTemp: UILabel!
+    @IBOutlet private weak var minMaxTemp: UILabel!
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -40,14 +25,25 @@ class WeatherTableViewCell: UITableViewCell {
         weatherIcon?.image = nil
     }
     
-    private func tempFormat(temp: Double) -> String{
-        let temp = Int(temp)
-        return "\(temp) °C"
+    //MARK: - UI elements setup
+    
+    func set(withWeather currentWeather: CurrentWeather) {
+        let forecast = currentWeather.forecast
+        
+        locationName.text = currentWeather.name
+        weatherDescription.text = currentWeather.weather.description.firstCapitalized
+        currentTemp.text = Temperature.celsiusToString(temp: forecast.temp.c)
+        minMaxTemp.text = minMaxFormat(min: forecast.temp_min.c, max: forecast.temp_max.c)
+        
+        let urlString = currentWeather.weather.iconUrlString
+        if let url = URL(string: urlString) {
+            weatherIcon.kf.setImage(with: url)
+        }
     }
     
     private func minMaxFormat(min: Double, max: Double) -> String{
-        let min = tempFormat(temp: min)
-        let max = tempFormat(temp: max)
+        let min = Temperature.celsiusToString(temp: min)
+        let max = Temperature.celsiusToString(temp: max)
         return "\(min) - \(max)"
     }
 }

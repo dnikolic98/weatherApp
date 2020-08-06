@@ -6,8 +6,8 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
-import Foundation
 
+//TODO: dodati jos gradova
 enum Cities: Int, CaseIterable {
     
     case Zagreb = 3186886

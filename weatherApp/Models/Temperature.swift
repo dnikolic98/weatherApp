@@ -6,27 +6,17 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
-class Temperature {
-    let k: Double
-    var c: Double!
-    var f: Double!
-    
-    
-    init(kelvin: Double){
-        self.k = kelvin
-        setupTemp()
+struct Temperature {
+    let kelvin: Double
+    var c: Double {
+        kelvin - 273.15
+    }
+    var f: Double {
+        kelvin * 9/5 - 459.67
     }
     
-    func setupTemp(){
-        self.c = convertToCelsius(kelvin: k)
-        self.f = convertToFarenheit(kelvin: k)
-    }
-    
-    func convertToCelsius(kelvin: Double) -> Double {
-        return kelvin - 273.15
-    }
-    
-    func convertToFarenheit(kelvin: Double) -> Double {
-        return kelvin * 9/5 - 459.67
+    static func celsiusToString(temp: Double) -> String{
+        let temp = Int(temp)
+        return "\(temp) °C"
     }
 }

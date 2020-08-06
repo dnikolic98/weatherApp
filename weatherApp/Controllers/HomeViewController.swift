@@ -10,12 +10,11 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    
     private let cellReuseIdentifier = "cellReuseIdentifier"
-    private var currentWeather: [CurrentWeather]?
+    private var currentWeather: [CurrentWeather] = []
     private var refreshControl: UIRefreshControl!
     
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet private weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,25 +24,42 @@ class HomeViewController: UIViewController {
         setupData()
     }
     
-    private func setupNavigationBar(){
-        self.title = "WeatherApp"
-        
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
-        self.navigationController?.navigationBar.tintColor = UIColor.black;
-    }
+    //MARK: - Data
     
     private func setupData() {
         currentWeather = []
         
         for city in Cities.allCases {
             WeatherService().fetchCurrentWeather(id: city.rawValue) { [weak self] (currentWeather) in
-                if let currentWeather = currentWeather {
-                    self?.currentWeather?.append(currentWeather)
-                    self?.refresh()
-                }
+                guard
+                    let self = self,
+                    let currentWeather = currentWeather else { return }
+                self.currentWeather.append(currentWeather)
+                self.refresh()
             }
         }
+    }
+    
+    private func numberOfCurrentWeather() -> Int {
+        return currentWeather.count
+    }
+    
+    private func currentWeather(atIndex index: Int) -> CurrentWeather? {
+        guard currentWeather.count > index else {
+            return nil
+        }
+        
+        return currentWeather[index]
+    }
+    
+    //MARK: - UI elements setup
+    
+    private func setupNavigationBar(){
+        title = "WeatherApp"
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
+        self.navigationController?.navigationBar.tintColor = UIColor.black;
     }
     
     private func setupTableView() {
@@ -51,7 +67,7 @@ class HomeViewController: UIViewController {
         tableView.dataSource = self
         
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(HomeViewController.refresh), for: UIControl.Event.valueChanged)
+        refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
         tableView.refreshControl = refreshControl
         
         tableView.register(UINib(nibName: "WeatherTableViewCell", bundle: nil), forCellReuseIdentifier: cellReuseIdentifier)
@@ -64,19 +80,10 @@ class HomeViewController: UIViewController {
         }
     }
     
-    private func numberOfCurrentWeather() -> Int {
-        return currentWeather?.count ?? 0
-    }
-    
-    func currentWeather(atIndex index: Int) -> CurrentWeather? {
-        guard let currentWeather = currentWeather else {
-            return nil
-        }
-        
-        return currentWeather[index]
-    }
-    
 }
+
+
+//MARK: - TableView DataSource
 
 extension HomeViewController: UITableViewDataSource {
     
@@ -88,7 +95,7 @@ extension HomeViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! WeatherTableViewCell
         
         if let currentWeather = currentWeather(atIndex: indexPath.row){
-            cell.setup(withWeather: currentWeather)
+            cell.set(withWeather: currentWeather)
         }
         
         return cell
@@ -96,10 +103,12 @@ extension HomeViewController: UITableViewDataSource {
     
 }
 
+//MARK: - TableView Delegate
+
 extension HomeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 130.0
+        return 140.0
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
