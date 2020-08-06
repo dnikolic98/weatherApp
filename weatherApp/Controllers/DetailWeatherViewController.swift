@@ -34,10 +34,10 @@ class DetailWeatherViewController: UIViewController {
         
         title = currentWeather.name
         
-        temp.text = Temperature.celsiusToString(temp: forecast.temp.c)
-        minTemp.text = Temperature.celsiusToString(temp: forecast.temp_min.c)
-        maxTemp.text = Temperature.celsiusToString(temp: forecast.temp_max.c)
-        feelsLike.text = Temperature.celsiusToString(temp: forecast.feelsLike.c)
+        temp.text = Temperature.celsiusToString(temp: forecast.temperature.c)
+        minTemp.text = Temperature.celsiusToString(temp: forecast.minTemperature.c)
+        maxTemp.text = Temperature.celsiusToString(temp: forecast.maxTemperature.c)
+        feelsLike.text = Temperature.celsiusToString(temp: forecast.feelsLikeTemperature.c)
         weatherDescription.text = currentWeather.weather.description.firstCapitalized
         humidity.text = "\(forecast.humidity) %"
         pressure.text = "\(forecast.pressure) hPa"
@@ -49,7 +49,6 @@ class DetailWeatherViewController: UIViewController {
     }
     
     //TODO:
-    // gitignore podove
     // refaktorat, dodati jos gradova (provjeriti kako je tableview)
     
 }

@@ -7,32 +7,11 @@
 //
 
 
-//TODO: - izdvojiti json od modela
-class CurrentWeather {
+struct CurrentWeather {
     let id: Int
     let forecast: Forecast
     let name: String
     let timezone: Int
     let weather: Weather
-    
-    init?(json: Any) {
-        if let jsonDict = json as? [String: Any],
-
-            let id = jsonDict["id"] as? Int,
-            let main = Forecast(json: jsonDict["main"] as Any),
-            let name = jsonDict["name"] as? String,
-            let timezone = jsonDict["timezone"] as? Int,
-            let weather = Weather(json: jsonDict["weather"] as! [Any]){
-
-            self.id = id
-            self.forecast = main
-            self.name = name
-            self.timezone = timezone
-            self.weather = weather
-
-        } else {
-            return nil
-        }
-    }
     
 }

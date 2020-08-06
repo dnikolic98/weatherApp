@@ -45,9 +45,7 @@ class HomeViewController: UIViewController {
     }
     
     private func currentWeather(atIndex index: Int) -> CurrentWeather? {
-        guard currentWeather.count > index else {
-            return nil
-        }
+        guard currentWeather.count > index else { return nil }
         
         return currentWeather[index]
     }

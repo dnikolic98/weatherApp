@@ -32,8 +32,8 @@ class WeatherTableViewCell: UITableViewCell {
         
         locationName.text = currentWeather.name
         weatherDescription.text = currentWeather.weather.description.firstCapitalized
-        currentTemp.text = Temperature.celsiusToString(temp: forecast.temp.c)
-        minMaxTemp.text = minMaxFormat(min: forecast.temp_min.c, max: forecast.temp_max.c)
+        currentTemp.text = Temperature.celsiusToString(temp: forecast.temperature.c)
+        minMaxTemp.text = minMaxFormat(min: forecast.minTemperature.c, max: forecast.maxTemperature.c)
         
         let urlString = currentWeather.weather.iconUrlString
         if let url = URL(string: urlString) {
