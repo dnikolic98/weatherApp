@@ -9,10 +9,18 @@
 import UIKit
 
 class WeatherConditionDetailCollectionViewCell: UICollectionViewCell {
-
+    @IBOutlet weak var conditionLabel: UILabel!
+    @IBOutlet weak var valueLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        layer.cornerRadius = 8
+    }
+    
+    func set(condition: String, value: String){
+        conditionLabel.text = condition.uppercased()
+        valueLabel.text = value
     }
 
 }

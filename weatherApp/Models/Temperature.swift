@@ -17,6 +17,6 @@ struct Temperature {
     
     static func celsiusToString(temp: Double) -> String{
         let temp = Int(temp)
-        return "\(temp) °C"
+        return "\(temp)° C"
     }
 }
