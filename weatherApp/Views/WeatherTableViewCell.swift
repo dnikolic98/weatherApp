@@ -10,6 +10,7 @@ import UIKit
 import Kingfisher
 
 class WeatherTableViewCell: UITableViewCell {
+    @IBOutlet private weak var paddedView: UIView!
     @IBOutlet private weak var weatherIcon: UIImageView!
     @IBOutlet private weak var locationName: UILabel!
     @IBOutlet private weak var weatherDescription: UILabel!
@@ -44,7 +45,7 @@ class WeatherTableViewCell: UITableViewCell {
     private func minMaxFormat(min: Double, max: Double) -> String{
         let min = Temperature.celsiusToString(temp: min)
         let max = Temperature.celsiusToString(temp: max)
-        return "\(min) - \(max)"
+        return "\(max) / \(min)"
     }
 }
 

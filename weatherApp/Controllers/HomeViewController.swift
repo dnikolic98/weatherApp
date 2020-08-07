@@ -24,6 +24,16 @@ class HomeViewController: UIViewController {
         setupData()
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+
+        view.setGradientBackground(colorOne: Colors.grey, colorTwo: Colors.darkNavyBlue)
+    }
+    
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        refreshTableView()
+    }
+    
     //MARK: - Data
     
     private func setupData() {
@@ -35,7 +45,7 @@ class HomeViewController: UIViewController {
                     let self = self,
                     let currentWeather = currentWeather else { return }
                 self.currentWeather.append(currentWeather)
-                self.refresh()
+                self.refreshTableView()
             }
         }
     }
@@ -57,21 +67,25 @@ class HomeViewController: UIViewController {
         
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
-        self.navigationController?.navigationBar.tintColor = UIColor.black;
+        navigationController?.navigationBar.tintColor = UIColor.white;
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+
     }
     
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         
+        tableView.separatorStyle = .none
+        
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
+        refreshControl.addTarget(self, action: #selector(refreshTableView), for: UIControl.Event.valueChanged)
         tableView.refreshControl = refreshControl
         
         tableView.register(UINib(nibName: "WeatherTableViewCell", bundle: nil), forCellReuseIdentifier: cellReuseIdentifier)
     }
     
-    @objc private func refresh() {
+    @objc private func refreshTableView() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
             self.refreshControl.endRefreshing()
@@ -106,7 +120,7 @@ extension HomeViewController: UITableViewDataSource {
 extension HomeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 140.0
+        return 100.0
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -117,5 +131,16 @@ extension HomeViewController: UITableViewDelegate {
             detailViewController.currentWeather = currentWeather
             navigationController?.pushViewController(detailViewController, animated: true)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let verticalPadding: CGFloat = 10
+        let horizontalPadding: CGFloat = 20
+        
+        let maskLayer = CALayer()
+        maskLayer.cornerRadius = 10
+        maskLayer.backgroundColor = UIColor.black.cgColor
+        maskLayer.frame = CGRect(x: cell.bounds.origin.x, y: cell.bounds.origin.y, width: cell.bounds.width, height: cell.bounds.height).insetBy(dx: horizontalPadding/2, dy: verticalPadding/2)
+        cell.layer.mask = maskLayer
     }
 }

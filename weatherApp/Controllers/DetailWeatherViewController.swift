@@ -27,6 +27,12 @@ class DetailWeatherViewController: UIViewController {
         setupUiElements()
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+
+        view.setGradientBackground(colorOne: Colors.grey, colorTwo: Colors.darkNavyBlue)
+    }
+    
     //MARK: - UI elements setup
     
     private func setupUiElements(){
