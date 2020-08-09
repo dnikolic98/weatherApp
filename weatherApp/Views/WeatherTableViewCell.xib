@@ -63,7 +63,7 @@
                     <constraint firstItem="RWV-Xy-Gw4" firstAttribute="centerX" secondItem="QBy-Bl-Bsh" secondAttribute="centerX" id="xwO-rD-4Ys"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.3045499559859155" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.15061069542253522" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>
                 <outlet property="currentTemp" destination="RWV-Xy-Gw4" id="yhT-E8-Lw4"/>
                 <outlet property="locationName" destination="Xij-80-4tW" id="q6K-sw-fie"/>
