@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		13E8F276292783AC56A01250 /* Pods_weatherApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2CBE0A15CAE8FD584CED745 /* Pods_weatherApp.framework */; };
 		A31ADEDE24E13EEC0071762E /* UIColors+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31ADEDD24E13EEC0071762E /* UIColors+Extension.swift */; };
+		A31ADEE024E186B80071762E /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31ADEDF24E186B80071762E /* Array+Extension.swift */; };
 		A3794AEA24D84B4B008A8779 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3794AE924D84B4B008A8779 /* AppDelegate.swift */; };
 		A3794AF324D84B4D008A8779 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3794AF224D84B4D008A8779 /* Assets.xcassets */; };
 		A3794AF624D84B4D008A8779 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3794AF424D84B4D008A8779 /* LaunchScreen.storyboard */; };
@@ -30,6 +31,7 @@
 
 /* Begin PBXFileReference section */
 		A31ADEDD24E13EEC0071762E /* UIColors+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColors+Extension.swift"; sourceTree = "<group>"; };
+		A31ADEDF24E186B80071762E /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		A3794AE624D84B4B008A8779 /* weatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = weatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3794AE924D84B4B008A8779 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A3794AF224D84B4D008A8779 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				A37C883324D99934007764FA /* String+Extension.swift */,
 				A3E516AB24DCAD600013F4CE /* UIView+Extension.swift */,
 				A31ADEDD24E13EEC0071762E /* UIColors+Extension.swift */,
+				A31ADEDF24E186B80071762E /* Array+Extension.swift */,
 			);
 			path = Globals;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 				A37C882724D949EE007764FA /* Cities.swift in Sources */,
 				A3EC098A24D8B34C007CDC4D /* Weather.swift in Sources */,
 				A31ADEDE24E13EEC0071762E /* UIColors+Extension.swift in Sources */,
+				A31ADEE024E186B80071762E /* Array+Extension.swift in Sources */,
 				A3EC098824D8B336007CDC4D /* Forecast.swift in Sources */,
 				A37C883424D99934007764FA /* String+Extension.swift in Sources */,
 			);

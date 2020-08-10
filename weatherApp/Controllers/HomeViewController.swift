@@ -42,7 +42,9 @@ class HomeViewController: UIViewController {
             guard
                 let self = self,
                 let currentWeatherList = currentWeatherList
-                else { return }
+            else {
+                return
+            }
             
             self.currentWeather = currentWeatherList
             self.refreshTableView()
@@ -51,9 +53,7 @@ class HomeViewController: UIViewController {
     }
     
     private func currentWeather(atIndex index: Int) -> CurrentWeather? {
-        guard currentWeather.count > index else { return nil }
-        
-        return currentWeather[index]
+        return currentWeather.at(index)
     }
     
     //MARK: - UI elements setup
