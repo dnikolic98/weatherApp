@@ -43,7 +43,7 @@ class HomeViewController: UIViewController {
                 guard
                     let self = self,
                     let currentWeather = currentWeather
-                else { return }
+                    else { return }
                 
                 self.currentWeather.append(currentWeather)
                 self.refreshTableView()
@@ -128,15 +128,4 @@ extension HomeViewController: UITableViewDelegate {
         navigationController?.pushViewController(detailViewController, animated: true)
     }
     
-    // TODO prebaciti u cell klasu
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let verticalPadding: CGFloat = 10
-        let horizontalPadding: CGFloat = 20
-        
-        let maskLayer = CALayer()
-        maskLayer.cornerRadius = 10
-        maskLayer.backgroundColor = UIColor.black.cgColor
-        maskLayer.frame = CGRect(x: cell.bounds.origin.x, y: cell.bounds.origin.y, width: cell.bounds.width, height: cell.bounds.height).insetBy(dx: horizontalPadding / 2, dy: verticalPadding / 2)
-        cell.layer.mask = maskLayer
-    }
 }

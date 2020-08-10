@@ -31,6 +31,10 @@ class WeatherTableViewCell: UITableViewCell {
         weatherIcon?.image = nil
     }
     
+    override func layoutSubviews() {
+        setLayerMask()
+    }
+    
     //MARK: - UI elements setup
     
     func set(withWeather currentWeather: CurrentWeather) {
@@ -51,6 +55,17 @@ class WeatherTableViewCell: UITableViewCell {
         let min = Temperature.celsiusToString(temp: min)
         let max = Temperature.celsiusToString(temp: max)
         return "\(max) / \(min)"
+    }
+    
+    private func setLayerMask() {
+        let verticalPadding: CGFloat = 10
+        let horizontalPadding: CGFloat = 20
+        
+        let maskLayer = CALayer()
+        maskLayer.cornerRadius = 10
+        maskLayer.backgroundColor = UIColor.black.cgColor
+        maskLayer.frame = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.width, height: bounds.height).insetBy(dx: horizontalPadding / 2, dy: verticalPadding / 2)
+        layer.mask = maskLayer
     }
 }
 
