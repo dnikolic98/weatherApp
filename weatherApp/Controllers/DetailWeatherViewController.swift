@@ -23,6 +23,8 @@ class DetailWeatherViewController: UIViewController {
     @IBOutlet private weak var minTempLabel: UILabel!
     @IBOutlet private weak var collectionViewHeightConstraint: NSLayoutConstraint!
     
+    //MARK: - Overrides
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -46,6 +48,7 @@ class DetailWeatherViewController: UIViewController {
         conditions.append(("feels like", Temperature.celsiusToString(temp: forecast.temperature.c)))
         conditions.append(("humidity",  "\(forecast.humidity) %"))
         conditions.append(("pressure",  "\(forecast.pressure) hPa"))
+        conditions.append(("wind", "\(currentWeather.wind.speed * 3.6) km/h"))
     }
     
     private func numOfConditions() -> Int {

@@ -13,5 +13,6 @@ struct CurrentWeather {
     let name: String
     let timezone: Int
     let weather: Weather
-    
+    let wind: Wind
+
 }

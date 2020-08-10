@@ -6,4 +6,8 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
-import Foundation
+struct Wind {
+    let speed: Double
+    let directionDegree: Int
+    
+}
