@@ -51,7 +51,7 @@ class WeatherTableViewCell: UITableViewCell {
         }
     }
     
-    private func minMaxFormat(min: Double, max: Double) -> String{
+    private func minMaxFormat(min: Double, max: Double) -> String {
         let min = Temperature.celsiusToString(temp: min)
         let max = Temperature.celsiusToString(temp: max)
         return "\(max) / \(min)"

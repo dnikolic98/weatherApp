@@ -11,7 +11,7 @@ import Kingfisher
 
 class DetailWeatherViewController: UIViewController {
     
-    var currentWeather: CurrentWeather!
+    var currentWeather: CurrentWeather?
     
     @IBOutlet private weak var temp: UILabel!
     @IBOutlet private weak var weatherIcon: UIImageView!
@@ -45,6 +45,8 @@ class DetailWeatherViewController: UIViewController {
     //MARK: - UI elements setup
     
     private func setWeatherInformation() {
+        guard let currentWeather = currentWeather else { return }
+        
         let forecast = currentWeather.forecast
         
         title = currentWeather.name

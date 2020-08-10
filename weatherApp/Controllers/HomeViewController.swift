@@ -36,19 +36,18 @@ class HomeViewController: UIViewController {
     //MARK: - Data
     
     @objc private func setupData() {
-        currentWeather = []
+        let locationIds = Cities.allCases.map { $0.rawValue }
         
-        for city in Cities.allCases {
-            WeatherService().fetchCurrentWeather(id: city.rawValue) { [weak self] (currentWeather) in
-                guard
-                    let self = self,
-                    let currentWeather = currentWeather
-                    else { return }
-                
-                self.currentWeather.append(currentWeather)
-                self.refreshTableView()
-            }
+        WeatherService().fetchSeveralCurrentWeather(id: locationIds) { [weak self] (currentWeatherList) in
+            guard
+                let self = self,
+                let currentWeatherList = currentWeatherList
+                else { return }
+            
+            self.currentWeather = currentWeatherList
+            self.refreshTableView()
         }
+        
     }
     
     private func currentWeather(atIndex index: Int) -> CurrentWeather? {
@@ -59,7 +58,7 @@ class HomeViewController: UIViewController {
     
     //MARK: - UI elements setup
     
-    private func setupNavigationBar(){
+    private func setupNavigationBar() {
         title = "WeatherApp"
         
         navigationController?.navigationBar.prefersLargeTitles = true
