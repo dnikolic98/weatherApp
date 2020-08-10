@@ -35,7 +35,7 @@ class HomeViewController: UIViewController {
     
     //MARK: - Data
     
-    private func setupData() {
+    @objc private func setupData() {
         currentWeather = []
         
         for city in Cities.allCases {
@@ -44,6 +44,7 @@ class HomeViewController: UIViewController {
                     let self = self,
                     let currentWeather = currentWeather
                 else { return }
+                
                 self.currentWeather.append(currentWeather)
                 self.refreshTableView()
             }
@@ -67,7 +68,6 @@ class HomeViewController: UIViewController {
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
     }
     
-    //TODO: add fetching instead of refreshing
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -75,13 +75,13 @@ class HomeViewController: UIViewController {
         tableView.separatorStyle = .none
         
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refreshTableView), for: UIControl.Event.valueChanged)
+        refreshControl.addTarget(self, action: #selector(setupData), for: UIControl.Event.valueChanged)
         tableView.refreshControl = refreshControl
         
         tableView.register(UINib(nibName: WeatherTableViewCell.typeName, bundle: nil), forCellReuseIdentifier: WeatherTableViewCell.typeName)
     }
     
-    @objc private func refreshTableView() {
+    private func refreshTableView() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
             self.refreshControl.endRefreshing()
