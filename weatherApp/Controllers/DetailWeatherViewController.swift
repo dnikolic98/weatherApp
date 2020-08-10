@@ -30,7 +30,7 @@ class DetailWeatherViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
 
-        view.setGradientBackground(colorOne: Colors.grey, colorTwo: Colors.darkNavyBlue)
+        view.setGradientBackground(startColor: .grayBlueTint, endColor: .darkNavyBlue)
     }
     
     //MARK: - UI elements setup
@@ -53,5 +53,5 @@ class DetailWeatherViewController: UIViewController {
             weatherIcon.kf.setImage(with: url)
         }
     }
-    
+
 }

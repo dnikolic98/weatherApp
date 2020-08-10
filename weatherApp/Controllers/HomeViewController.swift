@@ -26,8 +26,8 @@ class HomeViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-
-        view.setGradientBackground(colorOne: Colors.grey, colorTwo: Colors.darkNavyBlue)
+        
+        view.setGradientBackground(startColor: .grayBlueTint, endColor: .darkNavyBlue)
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -67,11 +67,11 @@ class HomeViewController: UIViewController {
         
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
-        navigationController?.navigationBar.tintColor = UIColor.white;
+        navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-
     }
     
+    //TODO: add fetching instead of refreshing
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -126,13 +126,14 @@ extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if let currentWeather = currentWeather(atIndex: indexPath.row) {
-            let detailViewController = DetailWeatherViewController()
-            detailViewController.currentWeather = currentWeather
-            navigationController?.pushViewController(detailViewController, animated: true)
-        }
+        guard let currentWeather = currentWeather(atIndex: indexPath.row) else { return }
+        
+        let detailViewController = DetailWeatherViewController()
+        detailViewController.currentWeather = currentWeather
+        navigationController?.pushViewController(detailViewController, animated: true)
     }
     
+    // TODO prebaciti u cell klasu
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let verticalPadding: CGFloat = 10
         let horizontalPadding: CGFloat = 20
@@ -140,7 +141,7 @@ extension HomeViewController: UITableViewDelegate {
         let maskLayer = CALayer()
         maskLayer.cornerRadius = 10
         maskLayer.backgroundColor = UIColor.black.cgColor
-        maskLayer.frame = CGRect(x: cell.bounds.origin.x, y: cell.bounds.origin.y, width: cell.bounds.width, height: cell.bounds.height).insetBy(dx: horizontalPadding/2, dy: verticalPadding/2)
+        maskLayer.frame = CGRect(x: cell.bounds.origin.x, y: cell.bounds.origin.y, width: cell.bounds.width, height: cell.bounds.height).insetBy(dx: horizontalPadding / 2, dy: verticalPadding / 2)
         cell.layer.mask = maskLayer
     }
 }

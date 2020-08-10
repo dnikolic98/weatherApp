@@ -9,16 +9,16 @@
 
 enum Cities: Int, CaseIterable {
     
-    case Zagreb = 3186886
-    case Split = 3190261
-    case Rijeka = 3191648
-    case Osijek = 3193935
-    case Vinkovci = 3187719
-    case Zadar = 3186952
-    case SlavonskiBrod = 3190586
-    case Pula = 3192224
-    case Dubrovnik = 3201047
-    case Karlovac = 3198259
-    case Krapina = 3197369
+    case zagreb = 3186886
+    case split = 3190261
+    case rijeka = 3191648
+    case osijek = 3193935
+    case cinkovci = 3187719
+    case zadar = 3186952
+    case slavonskiBrod = 3190586
+    case pula = 3192224
+    case dubrovnik = 3201047
+    case karlovac = 3198259
+    case krapina = 3197369
     
 }
