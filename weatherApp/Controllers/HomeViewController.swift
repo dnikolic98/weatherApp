@@ -10,7 +10,6 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    private let cellReuseIdentifier = "cellReuseIdentifier"
     private var currentWeather: [CurrentWeather] = []
     private var refreshControl: UIRefreshControl!
     
@@ -83,7 +82,7 @@ class HomeViewController: UIViewController {
         refreshControl.addTarget(self, action: #selector(refreshTableView), for: UIControl.Event.valueChanged)
         tableView.refreshControl = refreshControl
         
-        tableView.register(UINib(nibName: "WeatherTableViewCell", bundle: nil), forCellReuseIdentifier: cellReuseIdentifier)
+        tableView.register(UINib(nibName: WeatherTableViewCell.typeName, bundle: nil), forCellReuseIdentifier: WeatherTableViewCell.typeName)
     }
     
     @objc private func refreshTableView() {
@@ -105,7 +104,7 @@ extension HomeViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! WeatherTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.typeName, for: indexPath) as! WeatherTableViewCell
         
         if let currentWeather = currentWeather(atIndex: indexPath.row) {
             cell.set(withWeather: currentWeather)

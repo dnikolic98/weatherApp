@@ -8,6 +8,7 @@
 
 
 struct CurrentWeather {
+    
     let id: Int
     let forecast: Forecast
     let name: String

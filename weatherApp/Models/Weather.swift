@@ -7,6 +7,7 @@
 //
 
 struct Weather {
+    
     let description: String
     let icon: String
     let id: Int

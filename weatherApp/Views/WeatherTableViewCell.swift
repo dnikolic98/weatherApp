@@ -10,6 +10,11 @@ import UIKit
 import Kingfisher
 
 class WeatherTableViewCell: UITableViewCell {
+    
+    static var typeName: String {
+        return String(describing: self)
+    }
+    
     @IBOutlet private weak var paddedView: UIView!
     @IBOutlet private weak var weatherIcon: UIImageView!
     @IBOutlet private weak var locationName: UILabel!

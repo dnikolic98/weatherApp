@@ -10,6 +10,7 @@ import UIKit
 import Kingfisher
 
 class DetailWeatherViewController: UIViewController {
+    
     var currentWeather: CurrentWeather!
     
     @IBOutlet private weak var temp: UILabel!

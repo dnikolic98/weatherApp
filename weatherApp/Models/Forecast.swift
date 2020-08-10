@@ -8,6 +8,7 @@
 
 
 struct Forecast {
+    
     let feelsLikeTemperature: Temperature
     let humidity: Int
     let pressure: Int

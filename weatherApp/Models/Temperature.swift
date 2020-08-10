@@ -7,6 +7,7 @@
 //
 
 struct Temperature {
+    
     let kelvin: Double
     var celsius: Double {
         kelvin - 273.15
@@ -19,4 +20,5 @@ struct Temperature {
         let temp = Int(temp)
         return "\(temp) °C"
     }
+    
 }
