@@ -43,7 +43,8 @@ class HomeViewController: UIViewController {
             WeatherService().fetchCurrentWeather(id: city.rawValue) { [weak self] (currentWeather) in
                 guard
                     let self = self,
-                    let currentWeather = currentWeather else { return }
+                    let currentWeather = currentWeather
+                else { return }
                 self.currentWeather.append(currentWeather)
                 self.refreshTableView()
             }
@@ -106,7 +107,7 @@ extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! WeatherTableViewCell
         
-        if let currentWeather = currentWeather(atIndex: indexPath.row){
+        if let currentWeather = currentWeather(atIndex: indexPath.row) {
             cell.set(withWeather: currentWeather)
         }
         

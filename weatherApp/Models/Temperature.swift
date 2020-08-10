@@ -8,10 +8,10 @@
 
 struct Temperature {
     let kelvin: Double
-    var c: Double {
+    var celsius: Double {
         kelvin - 273.15
     }
-    var f: Double {
+    var fahrenheit: Double {
         kelvin * 9/5 - 459.67
     }
     

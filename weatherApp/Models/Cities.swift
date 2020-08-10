@@ -13,7 +13,7 @@ enum Cities: Int, CaseIterable {
     case split = 3190261
     case rijeka = 3191648
     case osijek = 3193935
-    case cinkovci = 3187719
+    case vinkovci = 3187719
     case zadar = 3186952
     case slavonskiBrod = 3190586
     case pula = 3192224

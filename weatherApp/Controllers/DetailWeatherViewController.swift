@@ -40,10 +40,10 @@ class DetailWeatherViewController: UIViewController {
         
         title = currentWeather.name
         
-        temp.text = Temperature.celsiusToString(temp: forecast.temperature.c)
-        minTemp.text = Temperature.celsiusToString(temp: forecast.minTemperature.c)
-        maxTemp.text = Temperature.celsiusToString(temp: forecast.maxTemperature.c)
-        feelsLike.text = Temperature.celsiusToString(temp: forecast.feelsLikeTemperature.c)
+        temp.text = Temperature.celsiusToString(temp: forecast.temperature.celsius)
+        minTemp.text = Temperature.celsiusToString(temp: forecast.minTemperature.celsius)
+        maxTemp.text = Temperature.celsiusToString(temp: forecast.maxTemperature.celsius)
+        feelsLike.text = Temperature.celsiusToString(temp: forecast.feelsLikeTemperature.celsius)
         weatherDescription.text = currentWeather.weather.description.firstCapitalized
         humidity.text = "\(forecast.humidity) %"
         pressure.text = "\(forecast.pressure) hPa"
