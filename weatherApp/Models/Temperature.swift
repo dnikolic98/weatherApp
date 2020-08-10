@@ -16,7 +16,7 @@ struct Temperature {
         kelvin * 9/5 - 459.67
     }
     
-    static func celsiusToString(temp: Double) -> String{
+    static func celsiusToString(temp: Double) -> String {
         let temp = Int(temp)
         return "\(temp) °C"
     }

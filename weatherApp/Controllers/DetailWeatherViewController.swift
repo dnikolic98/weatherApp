@@ -14,7 +14,7 @@ class DetailWeatherViewController: UIViewController {
     var currentWeather: CurrentWeather!
     
     @IBOutlet private weak var temp: UILabel!
-    @IBOutlet weak var weatherIcon: UIImageView!
+    @IBOutlet private weak var weatherIcon: UIImageView!
     @IBOutlet private weak var weatherDescription: UILabel!
     @IBOutlet private weak var humidity: UILabel!
     @IBOutlet private weak var pressure: UILabel!
@@ -22,10 +22,18 @@ class DetailWeatherViewController: UIViewController {
     @IBOutlet private weak var maxTemp: UILabel!
     @IBOutlet private weak var feelsLike: UILabel!
     
+    convenience init(currentWeather: CurrentWeather) {
+        self.init()
+        
+        self.currentWeather = currentWeather
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupUiElements()
+        if currentWeather != nil {
+            setWeatherInformation()
+        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -36,11 +44,10 @@ class DetailWeatherViewController: UIViewController {
     
     //MARK: - UI elements setup
     
-    private func setupUiElements(){
+    private func setWeatherInformation() {
         let forecast = currentWeather.forecast
         
         title = currentWeather.name
-        
         temp.text = Temperature.celsiusToString(temp: forecast.temperature.celsius)
         minTemp.text = Temperature.celsiusToString(temp: forecast.minTemperature.celsius)
         maxTemp.text = Temperature.celsiusToString(temp: forecast.maxTemperature.celsius)

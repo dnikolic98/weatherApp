@@ -50,10 +50,6 @@ class HomeViewController: UIViewController {
         }
     }
     
-    private func numberOfCurrentWeather() -> Int {
-        return currentWeather.count
-    }
-    
     private func currentWeather(atIndex index: Int) -> CurrentWeather? {
         guard currentWeather.count > index else { return nil }
         
@@ -100,7 +96,7 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numberOfCurrentWeather()
+        return currentWeather.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -128,8 +124,7 @@ extension HomeViewController: UITableViewDelegate {
         
         guard let currentWeather = currentWeather(atIndex: indexPath.row) else { return }
         
-        let detailViewController = DetailWeatherViewController()
-        detailViewController.currentWeather = currentWeather
+        let detailViewController = DetailWeatherViewController(currentWeather: currentWeather)
         navigationController?.pushViewController(detailViewController, animated: true)
     }
     
