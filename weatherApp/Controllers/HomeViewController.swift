@@ -10,7 +10,7 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    private var currentWeather: [CurrentWeather] = []
+    private var currentWeatherList: [CurrentWeather] = []
     private var refreshControl: UIRefreshControl!
     
     @IBOutlet private weak var tableView: UITableView!
@@ -46,14 +46,14 @@ class HomeViewController: UIViewController {
                 return
             }
             
-            self.currentWeather = currentWeatherList
+            self.currentWeatherList = currentWeatherList
             self.refreshTableView()
         }
         
     }
     
     private func currentWeather(atIndex index: Int) -> CurrentWeather? {
-        return currentWeather.at(index)
+        return currentWeatherList.at(index)
     }
     
     //MARK: - UI elements setup
@@ -95,7 +95,7 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return currentWeather.count
+        return currentWeatherList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIColor {
-
+    
     static let grayBlueTint = UIColor(hex: 0x859398)
     static let darkNavyBlue = UIColor(hex: 0x283048)
     static let darkPurple = UIColor(hex: 0x514A9D)

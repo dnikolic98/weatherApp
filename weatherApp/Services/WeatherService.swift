@@ -132,7 +132,10 @@ class WeatherService {
             let icon = jsonDict["icon"] as? String,
             let id = jsonDict["id"] as? Int,
             let main = jsonDict["main"] as? String
-        else { return nil }
+        else {
+            return nil
+            
+        }
         
         return Weather(description: description, icon: icon, id: id, main: main)
         
@@ -147,7 +150,10 @@ class WeatherService {
             let temperature = jsonDict["temp"] as? Double,
             let maxTemperature = jsonDict["temp_max"] as? Double,
             let minTemperature = jsonDict["temp_min"] as? Double
-        else { return nil }
+        else {
+            return nil
+            
+        }
         
         let feelsLike = Temperature(kelvin: feelsLikeTemperature)
         let temp = Temperature(kelvin: temperature)
@@ -165,7 +171,10 @@ class WeatherService {
             let name = jsonDict["name"] as? String,
             let weather = self.jsonToWeather(json: jsonDict["weather"] as! [Any]),
             let forecast = self.jsonToForecast(json: jsonDict["main"] as Any)
-        else { return nil }
+        else {
+            return nil
+            
+        }
         
         return CurrentWeather(id: id, forecast: forecast, name: name, weather: weather)
         
