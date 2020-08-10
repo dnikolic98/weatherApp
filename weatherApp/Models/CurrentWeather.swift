@@ -8,10 +8,10 @@
 
 
 struct CurrentWeather {
+    
     let id: Int
     let forecast: Forecast
     let name: String
-    let timezone: Int
     let weather: Weather
     let wind: Wind
 

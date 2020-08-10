@@ -12,7 +12,7 @@ import Kingfisher
 class DetailWeatherViewController: UIViewController {
     private let cellReuseIdentifier = "cellReuseIdentifier"
     
-    var currentWeather: CurrentWeather!
+    private var currentWeather: CurrentWeather!
     private var conditions: [(name: String, value: String)] = []
     
     @IBOutlet private weak var tempLabel: UILabel!
@@ -25,19 +25,28 @@ class DetailWeatherViewController: UIViewController {
     
     //MARK: - Overrides
     
+    convenience init(currentWeather: CurrentWeather) {
+        self.init()
+        
+        self.currentWeather = currentWeather
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupUiElements()
-        setupConditions()
         setupCollectionView()
-        setupCollectionViewHeight()
+        
+        if currentWeather != nil {
+            setWeatherInformation()
+            setupConditions()
+            setupCollectionViewHeight()
+        }
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        
-        view.setGradientBackground(colorOne: Colors.grey, colorTwo: Colors.darkNavyBlue)
+
+        view.setGradientBackground(startColor: .grayBlueTint, endColor: .darkNavyBlue)
     }
     
     //MARK: CollectioView Data
@@ -45,7 +54,7 @@ class DetailWeatherViewController: UIViewController {
     private func setupConditions() {
         let forecast = currentWeather.forecast
         
-        conditions.append(("feels like", Temperature.celsiusToString(temp: forecast.temperature.c)))
+        conditions.append(("feels like", Temperature.celsiusToString(temp: forecast.temperature.celsius)))
         conditions.append(("humidity",  "\(forecast.humidity) %"))
         conditions.append(("pressure",  "\(forecast.pressure) hPa"))
         conditions.append(("wind", "\(currentWeather.wind.speed * 3.6) km/h"))
@@ -61,16 +70,18 @@ class DetailWeatherViewController: UIViewController {
     
     //MARK: - UI elements setup
     
-    private func setupUiElements(){
+    private func setWeatherInformation() {
+        guard let currentWeather = currentWeather else { return }
+        
         let forecast = currentWeather.forecast
         
         title = currentWeather.name
         
-        tempLabel.text = String(Temperature.celsiusToString(temp: forecast.temperature.c).dropLast(2))
+        tempLabel.text = String(Temperature.celsiusToString(temp: forecast.temperature.celsius).dropLast(2))
         weatherDescriptionLabel.text = currentWeather.weather.description.firstCapitalized
-        minTempLabel.text = Temperature.celsiusToString(temp: forecast.minTemperature.c)
-        maxTempLabel.text = Temperature.celsiusToString(temp: forecast.maxTemperature.c)
-        
+        minTempLabel.text = Temperature.celsiusToString(temp: forecast.minTemperature.celsius)
+        maxTempLabel.text = Temperature.celsiusToString(temp: forecast.maxTemperature.celsius)
+
         let urlString = currentWeather.weather.iconUrlString
         if let url = URL(string: urlString) {
             weatherIcon.kf.setImage(with: url)
@@ -104,7 +115,6 @@ class DetailWeatherViewController: UIViewController {
         return UICollectionViewCompositionalLayout(section: section)
     }
     
-    
     private func setupCollectionViewHeight(){
         let rows = numOfConditionRows()
         let rowHeight = 100
@@ -115,7 +125,7 @@ class DetailWeatherViewController: UIViewController {
     
 }
 
-//MARK: - CollectioView DataSource
+//MARK: - CollectionView DataSource
 
 extension DetailWeatherViewController: UICollectionViewDataSource {
     
@@ -133,5 +143,3 @@ extension DetailWeatherViewController: UICollectionViewDataSource {
     
     
 }
-
-

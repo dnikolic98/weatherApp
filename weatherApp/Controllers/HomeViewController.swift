@@ -10,10 +10,9 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    private let cellReuseIdentifier = "cellReuseIdentifier"
-    private let rowHeight = 100.0 as CGFloat
+    private let rowHeight = CGFloat(100.0)
     private var refreshControl: UIRefreshControl!
-    private var currentWeather: [CurrentWeather] = []
+    private var currentWeatherList: [CurrentWeather] = []
     
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
@@ -34,7 +33,7 @@ class HomeViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        view.setGradientBackground(colorOne: Colors.grey, colorTwo: Colors.darkNavyBlue)
+        view.setGradientBackground(startColor: .grayBlueTint, endColor: .darkNavyBlue)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,28 +49,28 @@ class HomeViewController: UIViewController {
     
     //MARK: - TableView Data
     
-    private func setupData() {
-        currentWeather = []
+    @objc private func setupData() {
+        let locationIds = Cities.allCases.map { $0.rawValue }
         
-        for city in Cities.allCases {
-            WeatherService().fetchCurrentWeather(id: city.rawValue) { [weak self] (currentWeather) in
-                guard
-                    let self = self,
-                    let currentWeather = currentWeather else { return }
-                self.currentWeather.append(currentWeather)
-                self.refreshTableView()
+        WeatherService().fetchSeveralCurrentWeather(id: locationIds) { [weak self] (currentWeatherList) in
+            guard
+                let self = self,
+                let currentWeatherList = currentWeatherList
+            else {
+                return
             }
+            
+            self.currentWeatherList = currentWeatherList
+            self.refreshTableView()
         }
     }
     
     private func numberOfCurrentWeather() -> Int {
-        return currentWeather.count
+        return currentWeatherList.count
     }
     
     private func currentWeather(atIndex index: Int) -> CurrentWeather? {
-        guard currentWeather.count > index else { return nil }
-        
-        return currentWeather[index]
+        return currentWeatherList.at(index)
     }
     
     //MARK: - UI elements setup
@@ -101,15 +100,14 @@ class HomeViewController: UIViewController {
         tableView.isScrollEnabled = false
         
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refreshTableView), for: UIControl.Event.valueChanged)
+        refreshControl.addTarget(self, action: #selector(setupData), for: UIControl.Event.valueChanged)
         tableView.refreshControl = refreshControl
         
-        tableView.register(UINib(nibName: "WeatherTableViewCell", bundle: nil), forCellReuseIdentifier: cellReuseIdentifier)
-        
         tableViewHeightConstraint.constant = CGFloat(0)
+        tableView.register(UINib(nibName: WeatherTableViewCell.typeName, bundle: nil), forCellReuseIdentifier: WeatherTableViewCell.typeName)
     }
     
-    @objc private func refreshTableView() {
+    private func refreshTableView() {
         DispatchQueue.main.async {
             self.refreshTableViewHeight()
             self.tableView.reloadData()
@@ -135,9 +133,9 @@ extension HomeViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! WeatherTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.typeName, for: indexPath) as! WeatherTableViewCell
         
-        if let currentWeather = currentWeather(atIndex: indexPath.row){
+        if let currentWeather = currentWeather(atIndex: indexPath.row) {
             cell.set(withWeather: currentWeather)
         }
         
@@ -157,21 +155,10 @@ extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if let currentWeather = currentWeather(atIndex: indexPath.row) {
-            let detailViewController = DetailWeatherViewController()
-            detailViewController.currentWeather = currentWeather
-            navigationController?.pushViewController(detailViewController, animated: true)
-        }
+        guard let currentWeather = currentWeather(atIndex: indexPath.row) else { return }
+        
+        let detailViewController = DetailWeatherViewController(currentWeather: currentWeather)
+        navigationController?.pushViewController(detailViewController, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let verticalPadding: CGFloat = 10
-        let horizontalPadding: CGFloat = 20
-        
-        let maskLayer = CALayer()
-        maskLayer.cornerRadius = 10
-        maskLayer.backgroundColor = UIColor.black.cgColor
-        maskLayer.frame = CGRect(x: cell.bounds.origin.x, y: cell.bounds.origin.y, width: cell.bounds.width, height: cell.bounds.height).insetBy(dx: horizontalPadding/2, dy: verticalPadding/2)
-        cell.layer.mask = maskLayer
-    }
 }

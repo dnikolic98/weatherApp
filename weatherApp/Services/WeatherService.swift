@@ -10,40 +10,88 @@ import Foundation
 
 
 class WeatherService {
+    
     private let apiKey = "bfac26f5e35c596e0656c5847c49d349"
-    private let baseUrlString = "https://api.openweathermap.org/data/2.5/weather"
+    private let baseUrlString = "https://api.openweathermap.org/data/2.5/"
     
     //MARK: - Fetching
     
-    // current weather fetching logic for fetching by the location id
-    func fetchCurrentWeather(id: Int, completion: @escaping ((CurrentWeather?) -> Void)){
-        let property = "id=\(id)"
-        fetchCurrentWeather(property: property) { (currentWeather) in
-            guard let currentWeather = currentWeather else {
+    func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeather]?) -> Void)) {
+        var currentWeatherList: [CurrentWeather] = []
+        
+        let severalIds = id.map { String($0) }.joined(separator:",")
+        let resourceStringUrl = "\(baseUrlString)group?id=\(severalIds)&APPID=\(apiKey)"
+        
+        guard let url = URL(string: resourceStringUrl) else {
+            completion(nil)
+            return
+        }
+        let request = URLRequest(url: url)
+        
+        let dataTask = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data else {
                 completion(nil)
                 return
             }
             
-            completion(currentWeather)
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: [])
+                guard
+                    let jsonDict = json as? [String: Any],
+                    let dataList = jsonDict["list"] as? [[String: Any]]
+                else {
+                    completion(nil)
+                    return
+                }
+                
+                for data in dataList {
+                    guard
+                        let currentWeather = self.jsonToCurrentWeather(json: data)
+                    else {
+                        completion(nil)
+                        return
+                    }
+
+                    currentWeatherList.append(currentWeather)
+                }
+
+                completion(currentWeatherList)
+            } catch {
+                completion(nil)
+            }
         }
+        dataTask.resume()
     }
     
-    // current weather fetching logic for fetching by the location name
-    func fetchCurrentWeather(name: String, completion: @escaping ((CurrentWeather?) -> Void)){
-        let property = "q=\(name)"
-        fetchCurrentWeather(property: property) { (currentWeather) in
-            guard let currentWeather = currentWeather else {
-                completion(nil)
-                return
-            }
-            
-            completion(currentWeather)
-        }
-    }
+    // current weather fetching logic for fetching by the location id
+       func fetchCurrentWeather(id: Int, completion: @escaping ((CurrentWeather?) -> Void)) {
+           let property = "id=\(id)"
+           fetchCurrentWeather(property: property) { (currentWeather) in
+               guard let currentWeather = currentWeather else {
+                   completion(nil)
+                   return
+               }
+               
+               completion(currentWeather)
+           }
+       }
+       
+       // current weather fetching logic for fetching by the location name
+       func fetchCurrentWeather(name: String, completion: @escaping ((CurrentWeather?) -> Void)) {
+           let property = "q=\(name)"
+           fetchCurrentWeather(property: property) { (currentWeather) in
+               guard let currentWeather = currentWeather else {
+                   completion(nil)
+                   return
+               }
+               
+               completion(currentWeather)
+           }
+       }
     
     // main current weather fetching logic
     private func fetchCurrentWeather(property: String, completion: @escaping ((CurrentWeather?) -> Void)) {
-        let resourceStringUrl = "\(baseUrlString)?\(property)&APPID=\(apiKey)"
+        let resourceStringUrl = "\(baseUrlString)weather?\(property)&APPID=\(apiKey)"
         guard let url = URL(string: resourceStringUrl) else {
             completion(nil)
             return
@@ -61,15 +109,14 @@ class WeatherService {
                 
                 guard
                     let jsonDict = json as? [String: Any],
-                    let weather = self.jsonToWeather(json: jsonDict["weather"] as! [Any]),
-                    let forecast = self.jsonToForecast(json: jsonDict["main"] as Any),
-                    let wind = self.jsonToWind(json: jsonDict["wind"] as Any),
-                    let currentWeather = self.jsonToCurrentWeather(json: jsonDict, forecast: forecast, weather: weather, wind: wind) else {
-                        completion(nil)
-                        return
+                    let currentWeather = self.jsonToCurrentWeather(json: jsonDict)
+                else {
+                    completion(nil)
+                    return
                 }
 
                 completion(currentWeather)
+                
             } catch {
                 completion(nil)
             }
@@ -85,7 +132,11 @@ class WeatherService {
             let description = jsonDict["description"] as? String,
             let icon = jsonDict["icon"] as? String,
             let id = jsonDict["id"] as? Int,
-            let main = jsonDict["main"] as? String else { return nil }
+            let main = jsonDict["main"] as? String
+        else {
+            return nil
+            
+        }
         
         return Weather(description: description, icon: icon, id: id, main: main)
         
@@ -99,7 +150,11 @@ class WeatherService {
             let pressure = jsonDict["pressure"] as? Int,
             let temperature = jsonDict["temp"] as? Double,
             let maxTemperature = jsonDict["temp_max"] as? Double,
-            let minTemperature = jsonDict["temp_min"] as? Double else { return nil }
+            let minTemperature = jsonDict["temp_min"] as? Double
+        else {
+            return nil
+            
+        }
         
         let feelsLike = Temperature(kelvin: feelsLikeTemperature)
         let temp = Temperature(kelvin: temperature)
@@ -109,7 +164,7 @@ class WeatherService {
         return Forecast(feelsLikeTemperature: feelsLike, humidity: humidity, pressure: pressure, temperature: temp, maxTemperature: maxTemp, minTemperature: minTemp)
         
     }
-    
+
     private func jsonToWind(json: Any) -> Wind? {
         guard
             let jsonDict = json as? [String: Any],
@@ -119,15 +174,19 @@ class WeatherService {
         return Wind(speed: speed, directionDegree: directionDegree)
     }
     
-    private func jsonToCurrentWeather(json: Any, forecast: Forecast, weather: Weather, wind: Wind) -> CurrentWeather? {
+    private func jsonToCurrentWeather(json: Any) -> CurrentWeather? {
         guard
             let jsonDict = json as? [String: Any],
             let id = jsonDict["id"] as? Int,
             let name = jsonDict["name"] as? String,
-            let timezone = jsonDict["timezone"] as? Int else { return nil }
+            let weather = self.jsonToWeather(json: jsonDict["weather"] as! [Any]),
+            let wind = self.jsonToWind(json: jsonDict["wind"] as Any),
+            let forecast = self.jsonToForecast(json: jsonDict["main"] as Any)
+        else {
+            return nil
+        }
         
-        return CurrentWeather(id: id, forecast: forecast, name: name, timezone: timezone, weather: weather, wind: wind)
-        
+        return CurrentWeather(id: id, forecast: forecast, name: name, weather: weather, wind: wind)
     }
     
 }
