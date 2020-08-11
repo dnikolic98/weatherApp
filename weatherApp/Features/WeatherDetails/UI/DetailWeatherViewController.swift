@@ -22,7 +22,6 @@ class DetailWeatherViewController: UIViewController {
     @IBOutlet private weak var minTempLabel: UILabel!
     @IBOutlet private weak var collectionViewHeightConstraint: NSLayoutConstraint!
     
-    
     convenience init(currentWeather: CurrentWeather) {
         self.init()
         
@@ -53,10 +52,13 @@ class DetailWeatherViewController: UIViewController {
         
         let forecast = currentWeather.forecast
         
-        weatherConditions.append(("feels like", Temperature.celsiusToString(temp: forecast.temperature.celsius)))
-        weatherConditions.append(("humidity",  "\(forecast.humidity) %"))
-        weatherConditions.append(("pressure",  "\(forecast.pressure) hPa"))
-        weatherConditions.append(("wind", "\(round(currentWeather.wind.speed * 3.6 * 10) / 10) km/h"))
+        let feelsLikeTemperature = Int(forecast.feelsLikeTemperature.celsius)
+        let windSpeed = currentWeather.wind.speed * 3.6
+        
+        weatherConditions.append((LocalizedStrings.feelsLike, String(format: LocalizedStrings.temperatureValueFormat, feelsLikeTemperature)))
+        weatherConditions.append((LocalizedStrings.humidity,  String(format: LocalizedStrings.percentageValueFormat, forecast.humidity)))
+        weatherConditions.append((LocalizedStrings.pressure,  String(format: LocalizedStrings.pressureValueFormat, forecast.pressure)))
+        weatherConditions.append((LocalizedStrings.wind, String(format: LocalizedStrings.speedValueFormat, windSpeed)))
     }
     
     private func numOfConditions() -> Int {
@@ -76,10 +78,10 @@ class DetailWeatherViewController: UIViewController {
         
         title = currentWeather.name
         
-        tempLabel.text = String(Temperature.celsiusToString(temp: forecast.temperature.celsius).dropLast(2))
+        tempLabel.text = String(String(format: LocalizedStrings.temperatureValueFormat, Int(forecast.temperature.celsius)).dropLast(2))
         weatherDescriptionLabel.text = currentWeather.weather.description.firstCapitalized
-        minTempLabel.text = Temperature.celsiusToString(temp: forecast.minTemperature.celsius)
-        maxTempLabel.text = Temperature.celsiusToString(temp: forecast.maxTemperature.celsius)
+        minTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, Int(forecast.minTemperature.celsius))
+        maxTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, Int(forecast.maxTemperature.celsius))
 
         let urlString = currentWeather.weather.iconUrlString
         if let url = URL(string: urlString) {
