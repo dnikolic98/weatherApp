@@ -8,6 +8,10 @@
 
 class CurrentWeatherListPresenter {
     
+    var numberOfCurrentWeather: Int {
+        currentWeatherList.count
+    }
+    
     private var currentWeatherList: [CurrentWeatherViewModel] = []
     
     func fetchCurrentWeatherList(completion: @escaping (([CurrentWeatherViewModel]?) -> Void)) {
@@ -25,11 +29,6 @@ class CurrentWeatherListPresenter {
             self.currentWeatherList = currentWeatherList.map { CurrentWeatherViewModel(currentWeather: $0) }
             completion(self.currentWeatherList)
         }
-    }
-    
-    
-    func numberOfCurrentWeather() -> Int {
-        return currentWeatherList.count
     }
     
     func currentWeather(atIndex index: Int) -> CurrentWeatherViewModel? {

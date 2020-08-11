@@ -11,7 +11,9 @@ import Kingfisher
 
 class DetailWeatherViewController: UIViewController {
     
-    private var detailWeatherPresenter: DetailWeatherPresenter!
+    private var detailWeatherPresenter: DetailWeatherPresenter?
+    private let padding = CGFloat(20)
+    private let rowHeight = CGFloat(100)
     
     @IBOutlet private weak var tempLabel: UILabel!
     @IBOutlet private weak var weatherIcon: UIImageView!
@@ -50,7 +52,7 @@ class DetailWeatherViewController: UIViewController {
         
         title = currentWeather.name
         
-        tempLabel.text = String(String(format: LocalizedStrings.temperatureValueFormat, currentWeather.temperature).dropLast(2))
+        tempLabel.text = String(format: LocalizedStrings.degreeValueFormat, currentWeather.temperature)
         weatherDescriptionLabel.text = currentWeather.weatherDescription.firstCapitalized
         minTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.minTemperature)
         maxTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.maxTemperature)
@@ -70,11 +72,10 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func createCollectionViewLayout() -> UICollectionViewLayout {
-        let padding = CGFloat(20)
         
         let layoutSize = NSCollectionLayoutSize(
             widthDimension: NSCollectionLayoutDimension.fractionalWidth(1),
-            heightDimension: NSCollectionLayoutDimension.estimated(100)
+            heightDimension: NSCollectionLayoutDimension.estimated(rowHeight)
         )
         
         let item = NSCollectionLayoutItem(layoutSize: layoutSize)
@@ -88,12 +89,10 @@ class DetailWeatherViewController: UIViewController {
         return UICollectionViewCompositionalLayout(section: section)
     }
     
-    private func setupCollectionViewHeight(){
-        let rows = detailWeatherPresenter.numberOfConditionRows()
-        let rowHeight = 100
-        let padding = 20
+    private func setupCollectionViewHeight() {
+        let numOfRows = detailWeatherPresenter?.numberOfConditionRows ?? 0
         
-        collectionViewHeightConstraint.constant = CGFloat(rowHeight * rows + padding * (rows + 1))
+        collectionViewHeightConstraint.constant = rowHeight * CGFloat(numOfRows) + padding * CGFloat(numOfRows + 1)
     }
     
 }
@@ -103,18 +102,17 @@ class DetailWeatherViewController: UIViewController {
 extension DetailWeatherViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return detailWeatherPresenter.numberOfConditions()
+        return detailWeatherPresenter?.numberOfConditions ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName, for: indexPath) as! WeatherConditionDetailCollectionViewCell
         
-        if let condition = detailWeatherPresenter.weatherCondition(atIndex: indexPath.row) {
-            cell.set(condition: condition.name, value: condition.value)
+        if let condition = detailWeatherPresenter?.weatherCondition(atIndex: indexPath.row) {
+            cell.set(conditionViewModel: condition)
         }
         
         return cell
     }
-    
     
 }

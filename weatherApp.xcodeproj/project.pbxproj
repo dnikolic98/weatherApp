@@ -31,6 +31,7 @@
 		A3BD78ED24E2B05C003723DE /* CurrentWeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BD78EC24E2B05C003723DE /* CurrentWeatherViewModel.swift */; };
 		A3BD78F024E2C81A003723DE /* CurrentWeatherListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BD78EF24E2C81A003723DE /* CurrentWeatherListPresenter.swift */; };
 		A3BD78F224E2CAD0003723DE /* DetailWeatherPresnter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BD78F124E2CAD0003723DE /* DetailWeatherPresnter.swift */; };
+		A3BD78F524E2DD9B003723DE /* ConditionInformationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BD78F424E2DD9B003723DE /* ConditionInformationViewModel.swift */; };
 		A3E516AC24DCAD600013F4CE /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E516AB24DCAD600013F4CE /* UIView+Extension.swift */; };
 		A3EC098424D8AB72007CDC4D /* CurrentWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EC098324D8AB72007CDC4D /* CurrentWeather.swift */; };
 		A3EC098824D8B336007CDC4D /* Forecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EC098724D8B336007CDC4D /* Forecast.swift */; };
@@ -63,6 +64,7 @@
 		A3BD78EC24E2B05C003723DE /* CurrentWeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeatherViewModel.swift; sourceTree = "<group>"; };
 		A3BD78EF24E2C81A003723DE /* CurrentWeatherListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeatherListPresenter.swift; sourceTree = "<group>"; };
 		A3BD78F124E2CAD0003723DE /* DetailWeatherPresnter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailWeatherPresnter.swift; sourceTree = "<group>"; };
+		A3BD78F424E2DD9B003723DE /* ConditionInformationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionInformationViewModel.swift; sourceTree = "<group>"; };
 		A3E516AB24DCAD600013F4CE /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		A3EC098324D8AB72007CDC4D /* CurrentWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeather.swift; sourceTree = "<group>"; };
 		A3EC098724D8B336007CDC4D /* Forecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forecast.swift; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 		A3BD78E624E2981D003723DE /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				A3BD78F324E2DD68003723DE /* ViewModels */,
 				A3BD78E724E29823003723DE /* Cell */,
 				A37C882F24D9773E007764FA /* DetailWeatherViewController.swift */,
 				A37C883024D9773E007764FA /* DetailWeatherViewController.xib */,
@@ -229,8 +232,8 @@
 		A3BD78E724E29823003723DE /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				A3A590B824DD4ED6007D19EE /* WeatherConditionDetailCollectionViewCell.xib */,
 				A3A590B724DD4ED6007D19EE /* WeatherConditionDetailCollectionViewCell.swift */,
+				A3A590B824DD4ED6007D19EE /* WeatherConditionDetailCollectionViewCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -256,6 +259,14 @@
 			isa = PBXGroup;
 			children = (
 				A3BD78EC24E2B05C003723DE /* CurrentWeatherViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A3BD78F324E2DD68003723DE /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A3BD78F424E2DD9B003723DE /* ConditionInformationViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -401,6 +412,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3A590B924DD4ED6007D19EE /* WeatherConditionDetailCollectionViewCell.swift in Sources */,
+				A3BD78F524E2DD9B003723DE /* ConditionInformationViewModel.swift in Sources */,
 				A37C883124D9773E007764FA /* DetailWeatherViewController.swift in Sources */,
 				A37C882A24D9535E007764FA /* WeatherTableViewCell.swift in Sources */,
 				A347B73924E2027A00DB5C85 /* UIColors+Extension.swift in Sources */,

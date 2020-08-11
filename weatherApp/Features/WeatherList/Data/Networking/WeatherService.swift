@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 class WeatherService {
     
     private let apiKey = "bfac26f5e35c596e0656c5847c49d349"

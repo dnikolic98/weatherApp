@@ -17,15 +17,21 @@ class WeatherConditionDetailCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var conditionLabel: UILabel!
     @IBOutlet private weak var valueLabel: UILabel!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
         
         layer.cornerRadius = 8
     }
     
-    func set(condition: String, value: String){
-        conditionLabel.text = condition.uppercased()
-        valueLabel.text = value
+    override init(frame: CGRect) {
+      super.init(frame: frame)
+      
+        layer.cornerRadius = 8
+    }
+    
+    func set(conditionViewModel: ConditionInformationViewModel){
+        conditionLabel.text = conditionViewModel.title.uppercased()
+        valueLabel.text = conditionViewModel.value
     }
 
 }

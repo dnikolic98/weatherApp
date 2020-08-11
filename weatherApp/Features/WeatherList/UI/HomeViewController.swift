@@ -113,7 +113,7 @@ class HomeViewController: UIViewController {
     }
     
     private func refreshTableViewHeight(){
-        let rows = currentWeatherListPresenter.numberOfCurrentWeather()
+        let rows = currentWeatherListPresenter.numberOfCurrentWeather
         
         tableViewHeightConstraint.constant = CGFloat(rows) * rowHeight
     }
@@ -126,7 +126,7 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return currentWeatherListPresenter.numberOfCurrentWeather()
+        return currentWeatherListPresenter.numberOfCurrentWeather
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
