@@ -26,6 +26,7 @@ class HomeViewController: UIViewController {
         setupTableView()
         setupData()
     }
+    
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         refreshTableView()
     }
@@ -69,7 +70,7 @@ class HomeViewController: UIViewController {
         return currentWeatherList.count
     }
     
-    private func currentWeather(atIndex index: Int) -> CurrentWeather? {
+    private func currentWeatherList(atIndex index: Int) -> CurrentWeather? {
         return currentWeatherList.at(index)
     }
     
@@ -82,14 +83,14 @@ class HomeViewController: UIViewController {
             textAttributes[NSAttributedString.Key.foregroundColor] = UIColor.white
             navigationController?.navigationBar.titleTextAttributes = textAttributes
             navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-            navigationController?.navigationBar.tintColor = UIColor.white;
+            navigationController?.navigationBar.tintColor = .white;
         }
         
         // remove navigationBar background
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
-        navigationController?.view.backgroundColor = UIColor.clear
+        navigationController?.view.backgroundColor = .clear
     }
     
     private func setupTableView() {
@@ -135,7 +136,7 @@ extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.typeName, for: indexPath) as! WeatherTableViewCell
         
-        if let currentWeather = currentWeather(atIndex: indexPath.row) {
+        if let currentWeather = currentWeatherList(atIndex: indexPath.row) {
             cell.set(withWeather: currentWeather)
         }
         
@@ -155,7 +156,7 @@ extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard let currentWeather = currentWeather(atIndex: indexPath.row) else { return }
+        guard let currentWeather = currentWeatherList(atIndex: indexPath.row) else { return }
         
         let detailViewController = DetailWeatherViewController(currentWeather: currentWeather)
         navigationController?.pushViewController(detailViewController, animated: true)

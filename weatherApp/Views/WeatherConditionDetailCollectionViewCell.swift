@@ -9,8 +9,13 @@
 import UIKit
 
 class WeatherConditionDetailCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var conditionLabel: UILabel!
-    @IBOutlet weak var valueLabel: UILabel!
+    
+    static var typeName: String {
+        return String(describing: self)
+    }
+    
+    @IBOutlet private weak var conditionLabel: UILabel!
+    @IBOutlet private weak var valueLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

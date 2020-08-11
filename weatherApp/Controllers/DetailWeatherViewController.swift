@@ -10,10 +10,9 @@ import UIKit
 import Kingfisher
 
 class DetailWeatherViewController: UIViewController {
-    private let cellReuseIdentifier = "cellReuseIdentifier"
     
-    private var currentWeather: CurrentWeather!
-    private var conditions: [(name: String, value: String)] = []
+    private var currentWeather: CurrentWeather?
+    private var weatherConditions: [(name: String, value: String)] = []
     
     @IBOutlet private weak var tempLabel: UILabel!
     @IBOutlet private weak var weatherIcon: UIImageView!
@@ -23,7 +22,6 @@ class DetailWeatherViewController: UIViewController {
     @IBOutlet private weak var minTempLabel: UILabel!
     @IBOutlet private weak var collectionViewHeightConstraint: NSLayoutConstraint!
     
-    //MARK: - Overrides
     
     convenience init(currentWeather: CurrentWeather) {
         self.init()
@@ -31,16 +29,15 @@ class DetailWeatherViewController: UIViewController {
         self.currentWeather = currentWeather
     }
     
+    //MARK: - Overrides
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setWeatherInformation()
+        setupWeatherConditions()
         setupCollectionView()
-        
-        if currentWeather != nil {
-            setWeatherInformation()
-            setupConditions()
-            setupCollectionViewHeight()
-        }
+        setupCollectionViewHeight()
     }
     
     override func viewWillLayoutSubviews() {
@@ -51,17 +48,19 @@ class DetailWeatherViewController: UIViewController {
     
     //MARK: CollectioView Data
     
-    private func setupConditions() {
+    private func setupWeatherConditions() {
+        guard let currentWeather = currentWeather else { return }
+        
         let forecast = currentWeather.forecast
         
-        conditions.append(("feels like", Temperature.celsiusToString(temp: forecast.temperature.celsius)))
-        conditions.append(("humidity",  "\(forecast.humidity) %"))
-        conditions.append(("pressure",  "\(forecast.pressure) hPa"))
-        conditions.append(("wind", "\(currentWeather.wind.speed * 3.6) km/h"))
+        weatherConditions.append(("feels like", Temperature.celsiusToString(temp: forecast.temperature.celsius)))
+        weatherConditions.append(("humidity",  "\(forecast.humidity) %"))
+        weatherConditions.append(("pressure",  "\(forecast.pressure) hPa"))
+        weatherConditions.append(("wind", "\(round(currentWeather.wind.speed * 3.6 * 10) / 10) km/h"))
     }
     
     private func numOfConditions() -> Int {
-        return conditions.count
+        return weatherConditions.count
     }
     
     private func numOfConditionRows() -> Int {
@@ -93,7 +92,7 @@ class DetailWeatherViewController: UIViewController {
         
         collectionView.collectionViewLayout = createCollectionViewLayout()
         collectionView.layer.cornerRadius = 10
-        collectionView.register(UINib(nibName: "WeatherConditionDetailCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: cellReuseIdentifier)
+        collectionView.register(UINib(nibName: WeatherConditionDetailCollectionViewCell.typeName, bundle: nil), forCellWithReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName)
     }
     
     private func createCollectionViewLayout() -> UICollectionViewLayout {
@@ -134,9 +133,9 @@ extension DetailWeatherViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseIdentifier, for: indexPath) as! WeatherConditionDetailCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName, for: indexPath) as! WeatherConditionDetailCollectionViewCell
         
-        let condition = conditions[indexPath.row]
+        let condition = weatherConditions[indexPath.row]
         cell.set(condition: condition.name, value: condition.value)
         return cell
     }

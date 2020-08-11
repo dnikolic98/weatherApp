@@ -45,9 +45,7 @@ class WeatherService {
                 }
                 
                 for data in dataList {
-                    guard
-                        let currentWeather = self.jsonToCurrentWeather(json: data)
-                    else {
+                    guard let currentWeather = self.jsonToCurrentWeather(json: data) else {
                         completion(nil)
                         return
                     }
@@ -135,7 +133,6 @@ class WeatherService {
             let main = jsonDict["main"] as? String
         else {
             return nil
-            
         }
         
         return Weather(description: description, icon: icon, id: id, main: main)
@@ -153,7 +150,6 @@ class WeatherService {
             let minTemperature = jsonDict["temp_min"] as? Double
         else {
             return nil
-            
         }
         
         let feelsLike = Temperature(kelvin: feelsLikeTemperature)
@@ -169,7 +165,10 @@ class WeatherService {
         guard
             let jsonDict = json as? [String: Any],
             let speed = jsonDict["speed"] as? Double,
-            let directionDegree = jsonDict["deg"] as? Int else { return nil }
+            let directionDegree = jsonDict["deg"] as? Int
+        else {
+            return nil
+        }
         
         return Wind(speed: speed, directionDegree: directionDegree)
     }

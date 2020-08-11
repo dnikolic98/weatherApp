@@ -7,6 +7,7 @@
 //
 
 struct Wind {
+    
     let speed: Double
     let directionDegree: Int
     
