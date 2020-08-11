@@ -12,10 +12,16 @@ class HomeViewController: UIViewController {
     
     private let rowHeight = CGFloat(100.0)
     private var refreshControl: UIRefreshControl!
-    private var currentWeatherList: [CurrentWeather] = []
+    private var currentWeatherListPresenter: CurrentWeatherListPresenter!
     
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
+    
+    convenience init(currentWeatherListViewModel: CurrentWeatherListPresenter) {
+        self.init()
+
+        self.currentWeatherListPresenter = currentWeatherListViewModel
+    }
     
     //MARK: - Overrides
     
@@ -24,7 +30,7 @@ class HomeViewController: UIViewController {
         
         setupNavigationBar()
         setupTableView()
-        setupData()
+        bindViewModel()
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -50,28 +56,18 @@ class HomeViewController: UIViewController {
     
     //MARK: - TableView Data
     
-    @objc private func setupData() {
-        let locationIds = Cities.allCases.map { $0.rawValue }
+    @objc private func bindViewModel() {
+        if currentWeatherListPresenter == nil {
+            currentWeatherListPresenter = CurrentWeatherListPresenter()
+        }
         
-        WeatherService().fetchSeveralCurrentWeather(id: locationIds) { [weak self] (currentWeatherList) in
-            guard
-                let self = self,
-                let currentWeatherList = currentWeatherList
-            else {
+        currentWeatherListPresenter.fetchCurrentWeatherList() { (currentWeatherList) in
+            guard let _ = currentWeatherList else {
                 return
             }
             
-            self.currentWeatherList = currentWeatherList
             self.refreshTableView()
         }
-    }
-    
-    private func numberOfCurrentWeather() -> Int {
-        return currentWeatherList.count
-    }
-    
-    private func currentWeatherList(atIndex index: Int) -> CurrentWeather? {
-        return currentWeatherList.at(index)
     }
     
     //MARK: - UI elements setup
@@ -101,7 +97,7 @@ class HomeViewController: UIViewController {
         tableView.isScrollEnabled = false
         
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(setupData), for: UIControl.Event.valueChanged)
+        refreshControl.addTarget(self, action: #selector(bindViewModel), for: UIControl.Event.valueChanged)
         tableView.refreshControl = refreshControl
         
         tableViewHeightConstraint.constant = CGFloat(0)
@@ -117,7 +113,7 @@ class HomeViewController: UIViewController {
     }
     
     private func refreshTableViewHeight(){
-        let rows = numberOfCurrentWeather()
+        let rows = currentWeatherListPresenter.numberOfCurrentWeather()
         
         tableViewHeightConstraint.constant = CGFloat(rows) * rowHeight
     }
@@ -130,13 +126,13 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numberOfCurrentWeather()
+        return currentWeatherListPresenter.numberOfCurrentWeather()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.typeName, for: indexPath) as! WeatherTableViewCell
         
-        if let currentWeather = currentWeatherList(atIndex: indexPath.row) {
+        if let currentWeather = currentWeatherListPresenter.currentWeather(atIndex: indexPath.row){
             cell.set(withWeather: currentWeather)
         }
         
@@ -156,7 +152,7 @@ extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard let currentWeather = currentWeatherList(atIndex: indexPath.row) else { return }
+        guard let currentWeather = currentWeatherListPresenter.currentWeather(atIndex: indexPath.row) else { return }
         
         let detailViewController = DetailWeatherViewController(currentWeather: currentWeather)
         navigationController?.pushViewController(detailViewController, animated: true)
