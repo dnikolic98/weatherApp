@@ -11,7 +11,7 @@ import UIKit
 class WeatherConditionDetailCollectionViewCell: UICollectionViewCell {
     
     static var typeName: String {
-        return String(describing: self)
+        String(describing: self)
     }
     
     @IBOutlet private weak var conditionLabel: UILabel!
@@ -29,7 +29,7 @@ class WeatherConditionDetailCollectionViewCell: UICollectionViewCell {
         layer.cornerRadius = 8
     }
     
-    func set(conditionViewModel: ConditionInformationViewModel){
+    func set(conditionViewModel: ConditionInformationViewModel) {
         conditionLabel.text = conditionViewModel.title.uppercased()
         valueLabel.text = conditionViewModel.value
     }

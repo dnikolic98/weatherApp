@@ -10,7 +10,7 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    private let rowHeight = CGFloat(100.0)
+    private let rowHeight: CGFloat = 100
     private var refreshControl: UIRefreshControl!
     private var currentWeatherListPresenter: CurrentWeatherListPresenter!
     
@@ -72,7 +72,7 @@ class HomeViewController: UIViewController {
     
     //MARK: - UI elements setup
     
-    private func setupNavigationBar(){
+    private func setupNavigationBar() {
         // set navigationBar title and back button color, title font size and back button text
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24.0)]
         if var textAttributes = navigationController?.navigationBar.titleTextAttributes {
@@ -112,7 +112,7 @@ class HomeViewController: UIViewController {
         }
     }
     
-    private func refreshTableViewHeight(){
+    private func refreshTableViewHeight() {
         let rows = currentWeatherListPresenter.numberOfCurrentWeather
         
         tableViewHeightConstraint.constant = CGFloat(rows) * rowHeight
@@ -132,7 +132,7 @@ extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.typeName, for: indexPath) as! WeatherTableViewCell
         
-        if let currentWeather = currentWeatherListPresenter.currentWeather(atIndex: indexPath.row){
+        if let currentWeather = currentWeatherListPresenter.currentWeather(atIndex: indexPath.row) {
             cell.set(withWeather: currentWeather)
         }
         

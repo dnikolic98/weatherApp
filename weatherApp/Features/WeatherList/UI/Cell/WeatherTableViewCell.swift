@@ -12,7 +12,7 @@ import Kingfisher
 class WeatherTableViewCell: UITableViewCell {
     
     static var typeName: String {
-        return String(describing: self)
+        String(describing: self)
     }
     
     @IBOutlet private weak var paddedView: UIView!
@@ -42,7 +42,7 @@ class WeatherTableViewCell: UITableViewCell {
         locationName.text = currentWeather.name
         weatherDescription.text = currentWeather.weatherDescription.firstCapitalized
         currentTemp.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.temperature)
-        minMaxTemp.text = minMaxFormat(min: currentWeather.minTemperature, max: currentWeather.maxTemperature)
+        minMaxTemp.text = minMaxTemperatureFormat(min: currentWeather.minTemperature, max: currentWeather.maxTemperature)
         
         let urlString = currentWeather.weatherIconUrlString
         if let url = URL(string: urlString) {
@@ -50,7 +50,7 @@ class WeatherTableViewCell: UITableViewCell {
         }
     }
     
-    private func minMaxFormat(min: Int, max: Int) -> String {
+    private func minMaxTemperatureFormat(min: Int, max: Int) -> String {
         let min = String(format: LocalizedStrings.temperatureValueFormat, min)
         let max = String(format: LocalizedStrings.temperatureValueFormat, max)
         return "\(max) / \(min)"

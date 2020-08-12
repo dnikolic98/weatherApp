@@ -12,8 +12,8 @@ import Kingfisher
 class DetailWeatherViewController: UIViewController {
     
     private var detailWeatherPresenter: DetailWeatherPresenter?
-    private let padding = CGFloat(20)
-    private let rowHeight = CGFloat(100)
+    private let padding: CGFloat = 20
+    private let rowHeight: CGFloat = 100
     
     @IBOutlet private weak var tempLabel: UILabel!
     @IBOutlet private weak var weatherIcon: UIImageView!
@@ -72,7 +72,6 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func createCollectionViewLayout() -> UICollectionViewLayout {
-        
         let layoutSize = NSCollectionLayoutSize(
             widthDimension: NSCollectionLayoutDimension.fractionalWidth(1),
             heightDimension: NSCollectionLayoutDimension.estimated(rowHeight)
