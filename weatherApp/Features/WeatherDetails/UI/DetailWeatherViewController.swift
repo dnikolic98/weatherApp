@@ -13,6 +13,8 @@ class DetailWeatherViewController: UIViewController {
     
     private var currentWeather: CurrentWeather?
     private var weatherConditions: [ConditionInformation] = []
+    private let padding: CGFloat = 20
+    private let rowHeight: CGFloat = 100
     private var numOfConditions: Int {
         weatherConditions.count
     }
@@ -101,11 +103,9 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func createCollectionViewLayout() -> UICollectionViewLayout {
-        let padding: CGFloat = 20
-        
         let layoutSize = NSCollectionLayoutSize(
             widthDimension: NSCollectionLayoutDimension.fractionalWidth(1),
-            heightDimension: NSCollectionLayoutDimension.estimated(100)
+            heightDimension: NSCollectionLayoutDimension.estimated(rowHeight)
         )
         
         let item = NSCollectionLayoutItem(layoutSize: layoutSize)
@@ -120,12 +120,9 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func setupCollectionViewHeight() {
-        let rows = numOfConditionRows
-        let rowHeight = 100
-        let padding = 20
+        let numOfRows = numOfConditionRows
         
-        collectionViewHeightConstraint.constant = CGFloat(rowHeight * rows + padding * (rows + 1))
-    }
+        collectionViewHeightConstraint.constant = rowHeight * CGFloat(numOfRows) + padding * CGFloat(numOfRows + 1)    }
     
 }
 
