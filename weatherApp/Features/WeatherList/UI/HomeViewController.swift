@@ -10,9 +10,12 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    private let rowHeight = CGFloat(100.0)
+    private let rowHeight: CGFloat = 100
     private var refreshControl: UIRefreshControl!
     private var currentWeatherList: [CurrentWeather] = []
+    private var numberOfCurrentWeather: Int {
+        currentWeatherList.count
+    }
     
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
@@ -22,7 +25,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupNavigationBar()
+        styleNavgiationBar()
         setupTableView()
         setupData()
     }
@@ -66,17 +69,13 @@ class HomeViewController: UIViewController {
         }
     }
     
-    private func numberOfCurrentWeather() -> Int {
-        return currentWeatherList.count
-    }
-    
     private func currentWeatherList(atIndex index: Int) -> CurrentWeather? {
         return currentWeatherList.at(index)
     }
     
     //MARK: - UI elements setup
     
-    private func setupNavigationBar(){
+    private func styleNavgiationBar(){
         // set navigationBar title and back button color, title font size and back button text
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24.0)]
         if var textAttributes = navigationController?.navigationBar.titleTextAttributes {
@@ -117,7 +116,7 @@ class HomeViewController: UIViewController {
     }
     
     private func refreshTableViewHeight(){
-        let rows = numberOfCurrentWeather()
+        let rows = numberOfCurrentWeather
         
         tableViewHeightConstraint.constant = CGFloat(rows) * rowHeight
     }
@@ -130,7 +129,7 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numberOfCurrentWeather()
+        return numberOfCurrentWeather
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

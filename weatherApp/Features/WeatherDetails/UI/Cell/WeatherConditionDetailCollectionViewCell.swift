@@ -23,9 +23,9 @@ class WeatherConditionDetailCollectionViewCell: UICollectionViewCell {
         layer.cornerRadius = 8
     }
     
-    func set(condition: String, value: String){
-        conditionLabel.text = condition.uppercased()
-        valueLabel.text = value
+    func set(condition: ConditionInformation) {
+        conditionLabel.text = condition.title.uppercased()
+        valueLabel.text = condition.value
     }
 
 }

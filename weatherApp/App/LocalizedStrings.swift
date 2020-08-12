@@ -24,4 +24,6 @@ class LocalizedStrings {
     
     static let temperatureValueFormat = "%d° C"
     
+    static let degreeValueFormat = "%d°"
+    
 }

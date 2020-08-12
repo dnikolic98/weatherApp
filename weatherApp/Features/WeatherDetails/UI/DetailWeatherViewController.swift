@@ -12,7 +12,13 @@ import Kingfisher
 class DetailWeatherViewController: UIViewController {
     
     private var currentWeather: CurrentWeather?
-    private var weatherConditions: [(name: String, value: String)] = []
+    private var weatherConditions: [ConditionInformation] = []
+    private var numOfConditions: Int {
+        weatherConditions.count
+    }
+    private var numOfConditionRows: Int {
+        numOfConditions / 2 + numOfConditions % 2
+    }
     
     @IBOutlet private weak var tempLabel: UILabel!
     @IBOutlet private weak var weatherIcon: UIImageView!
@@ -52,21 +58,18 @@ class DetailWeatherViewController: UIViewController {
         
         let forecast = currentWeather.forecast
         
-        let feelsLikeTemperature = Int(forecast.feelsLikeTemperature.celsius)
-        let windSpeed = currentWeather.wind.speed * 3.6
+        let feelsLikeTemperatureValue = Int(forecast.feelsLikeTemperature.celsius)
+        let windSpeedValue = currentWeather.wind.speed * 3.6
         
-        weatherConditions.append((LocalizedStrings.feelsLike, String(format: LocalizedStrings.temperatureValueFormat, feelsLikeTemperature)))
-        weatherConditions.append((LocalizedStrings.humidity,  String(format: LocalizedStrings.percentageValueFormat, forecast.humidity)))
-        weatherConditions.append((LocalizedStrings.pressure,  String(format: LocalizedStrings.pressureValueFormat, forecast.pressure)))
-        weatherConditions.append((LocalizedStrings.wind, String(format: LocalizedStrings.speedValueFormat, windSpeed)))
-    }
-    
-    private func numOfConditions() -> Int {
-        return weatherConditions.count
-    }
-    
-    private func numOfConditionRows() -> Int {
-        return numOfConditions() / 2 + numOfConditions() % 2
+        let feelsLikeTemperature = ConditionInformation(title: LocalizedStrings.feelsLike, value: String(format: LocalizedStrings.temperatureValueFormat, feelsLikeTemperatureValue))
+        let humidity =  ConditionInformation(title: LocalizedStrings.humidity, value: String(format: LocalizedStrings.percentageValueFormat, forecast.humidity))
+        let pressure = ConditionInformation(title: LocalizedStrings.pressure, value: String(format: LocalizedStrings.pressureValueFormat, forecast.pressure))
+        let windSpeed = ConditionInformation(title: LocalizedStrings.wind, value: String(format: LocalizedStrings.speedValueFormat, windSpeedValue))
+        
+        weatherConditions.append(feelsLikeTemperature)
+        weatherConditions.append(humidity)
+        weatherConditions.append(pressure)
+        weatherConditions.append(windSpeed)
     }
     
     //MARK: - UI elements setup
@@ -78,7 +81,7 @@ class DetailWeatherViewController: UIViewController {
         
         title = currentWeather.name
         
-        tempLabel.text = String(String(format: LocalizedStrings.temperatureValueFormat, Int(forecast.temperature.celsius)).dropLast(2))
+        tempLabel.text = String(format: LocalizedStrings.degreeValueFormat, Int(forecast.temperature.celsius))
         weatherDescriptionLabel.text = currentWeather.weather.description.firstCapitalized
         minTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, Int(forecast.minTemperature.celsius))
         maxTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, Int(forecast.maxTemperature.celsius))
@@ -98,7 +101,7 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func createCollectionViewLayout() -> UICollectionViewLayout {
-        let padding = CGFloat(20)
+        let padding: CGFloat = 20
         
         let layoutSize = NSCollectionLayoutSize(
             widthDimension: NSCollectionLayoutDimension.fractionalWidth(1),
@@ -117,7 +120,7 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func setupCollectionViewHeight(){
-        let rows = numOfConditionRows()
+        let rows = numOfConditionRows
         let rowHeight = 100
         let padding = 20
         
@@ -131,14 +134,14 @@ class DetailWeatherViewController: UIViewController {
 extension DetailWeatherViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return numOfConditions()
+        return numOfConditions
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName, for: indexPath) as! WeatherConditionDetailCollectionViewCell
         
         let condition = weatherConditions[indexPath.row]
-        cell.set(condition: condition.name, value: condition.value)
+        cell.set(condition: condition)
         return cell
     }
     
