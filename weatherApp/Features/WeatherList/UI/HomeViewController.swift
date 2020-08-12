@@ -28,7 +28,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupNavigationBar()
+        styleNavgiationBar()
         setupTableView()
         bindViewModel()
     }
@@ -72,7 +72,7 @@ class HomeViewController: UIViewController {
     
     //MARK: - UI elements setup
     
-    private func setupNavigationBar() {
+    private func styleNavgiationBar() {
         // set navigationBar title and back button color, title font size and back button text
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24.0)]
         if var textAttributes = navigationController?.navigationBar.titleTextAttributes {
@@ -119,7 +119,6 @@ class HomeViewController: UIViewController {
     }
     
 }
-
 
 //MARK: - TableView DataSource
 

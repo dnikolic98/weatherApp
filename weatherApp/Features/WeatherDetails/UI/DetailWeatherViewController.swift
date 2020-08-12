@@ -110,7 +110,6 @@ extension DetailWeatherViewController: UICollectionViewDataSource {
         if let condition = detailWeatherPresenter?.weatherCondition(atIndex: indexPath.row) {
             cell.set(conditionViewModel: condition)
         }
-        
         return cell
     }
     
