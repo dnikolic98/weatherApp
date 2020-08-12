@@ -9,12 +9,13 @@
 import UIKit
 import Kingfisher
 
-class SingleWeatherInformationCollectionViewCellCollectionViewCell: UICollectionViewCell {
+class SingleWeatherInformationCollectionViewCell: UICollectionViewCell {
     
     static var typeName: String {
         String(describing: self)
     }
     
+    @IBOutlet weak var headerLabel: UILabel!
     @IBOutlet private weak var weatherIcon: UIImageView!
     @IBOutlet private weak var mainInformationLabel: UILabel!
     @IBOutlet weak var cellTranslucentView: UIView!
@@ -23,11 +24,11 @@ class SingleWeatherInformationCollectionViewCellCollectionViewCell: UICollection
         cellTranslucentView.layer.cornerRadius = 8
     }
 
-    func set(currentWeather: CurrentWeatherViewModel) {
-//        mainInformationLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.temperature)
-        mainInformationLabel.text = "28°\n23°"
+    func set(weatherInfo: SingleWeatherInformationViewModel) {
+        headerLabel.text = weatherInfo.header
+        mainInformationLabel.text = weatherInfo.body
         
-        let urlString = currentWeather.weatherIconUrlString
+        let urlString = weatherInfo.iconUrlString
         if let url = URL(string: urlString) {
             weatherIcon.kf.setImage(with: url)
         }

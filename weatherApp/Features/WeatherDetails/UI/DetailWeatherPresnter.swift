@@ -15,25 +15,24 @@ class DetailWeatherPresenter {
     var numberOfConditionRows: Int {
         numberOfConditions / 2 + numberOfConditions % 2
     }
-    var numberOfFiveDays: Int {
+    var numberOfDays: Int {
         fiveDaysList.count
     }
     
     private var weatherConditionList: [ConditionInformationViewModel] = []
-    private var fiveDaysList: [CurrentWeatherViewModel] = []
+    private var fiveDaysList: [SingleWeatherInformationViewModel] = []
     
     init(currentWeather: CurrentWeatherViewModel) {
         self.currentWeather = currentWeather
         
         setWeatherConditionList()
-        set()
     }
     
     func weatherCondition(atIndex index: Int) -> ConditionInformationViewModel? {
         return weatherConditionList.at(index)
     }
     
-    func fiveDays(atIndex index: Int) -> CurrentWeatherViewModel? {
+    func fiveDays(atIndex index: Int) -> SingleWeatherInformationViewModel? {
         return fiveDaysList.at(index)
     }
     
@@ -49,14 +48,4 @@ class DetailWeatherPresenter {
         weatherConditionList.append(windSpeed)
     }
     
-    private func set() {
-        
-        fiveDaysList.append(currentWeather)
-        fiveDaysList.append(currentWeather)
-        fiveDaysList.append(currentWeather)
-        fiveDaysList.append(currentWeather)
-        fiveDaysList.append(currentWeather)
-        
-        print(numberOfFiveDays)
-    }
 }
