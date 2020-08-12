@@ -119,7 +119,7 @@ class DetailWeatherViewController: UIViewController {
         return UICollectionViewCompositionalLayout(section: section)
     }
     
-    private func setupCollectionViewHeight(){
+    private func setupCollectionViewHeight() {
         let rows = numOfConditionRows
         let rowHeight = 100
         let padding = 20
