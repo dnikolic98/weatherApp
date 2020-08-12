@@ -13,5 +13,6 @@ struct CurrentWeather {
     let forecast: Forecast
     let name: String
     let weather: Weather
-    
+    let wind: Wind
+
 }

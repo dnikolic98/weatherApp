@@ -45,9 +45,7 @@ class WeatherService {
                 }
                 
                 for data in dataList {
-                    guard
-                        let currentWeather = self.jsonToCurrentWeather(json: data)
-                    else {
+                    guard let currentWeather = self.jsonToCurrentWeather(json: data) else {
                         completion(nil)
                         return
                     }
@@ -116,6 +114,7 @@ class WeatherService {
                 }
 
                 completion(currentWeather)
+                
             } catch {
                 completion(nil)
             }
@@ -134,7 +133,6 @@ class WeatherService {
             let main = jsonDict["main"] as? String
         else {
             return nil
-            
         }
         
         return Weather(description: description, icon: icon, id: id, main: main)
@@ -152,7 +150,6 @@ class WeatherService {
             let minTemperature = jsonDict["temp_min"] as? Double
         else {
             return nil
-            
         }
         
         let feelsLike = Temperature(kelvin: feelsLikeTemperature)
@@ -163,6 +160,18 @@ class WeatherService {
         return Forecast(feelsLikeTemperature: feelsLike, humidity: humidity, pressure: pressure, temperature: temp, maxTemperature: maxTemp, minTemperature: minTemp)
         
     }
+
+    private func jsonToWind(json: Any) -> Wind? {
+        guard
+            let jsonDict = json as? [String: Any],
+            let speed = jsonDict["speed"] as? Double,
+            let directionDegree = jsonDict["deg"] as? Int
+        else {
+            return nil
+        }
+        
+        return Wind(speed: speed, directionDegree: directionDegree)
+    }
     
     private func jsonToCurrentWeather(json: Any) -> CurrentWeather? {
         guard
@@ -170,14 +179,13 @@ class WeatherService {
             let id = jsonDict["id"] as? Int,
             let name = jsonDict["name"] as? String,
             let weather = self.jsonToWeather(json: jsonDict["weather"] as! [Any]),
+            let wind = self.jsonToWind(json: jsonDict["wind"] as Any),
             let forecast = self.jsonToForecast(json: jsonDict["main"] as Any)
         else {
             return nil
-            
         }
         
-        return CurrentWeather(id: id, forecast: forecast, name: name, weather: weather)
-        
+        return CurrentWeather(id: id, forecast: forecast, name: name, weather: weather, wind: wind)
     }
     
 }

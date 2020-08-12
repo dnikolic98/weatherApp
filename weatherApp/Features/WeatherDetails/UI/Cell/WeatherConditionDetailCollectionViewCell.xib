@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="WeatherConditionDetailCollectionViewCell" customModule="weatherApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="181" height="99"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="181" height="99"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HUMIDITY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kto-gx-NHv">
+                        <rect key="frame" x="15" y="15" width="79.5" height="20"/>
+                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="0.69800836269014088" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="80 %" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8h1-Q1-y6L">
+                        <rect key="frame" x="15" y="50" width="58.5" height="29"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.19715558980281686" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="8h1-Q1-y6L" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="8Nu-C2-HHy"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="8h1-Q1-y6L" secondAttribute="bottom" constant="15" id="EcO-zz-K32"/>
+                <constraint firstItem="kto-gx-NHv" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="KEH-ct-gX6"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="kto-gx-NHv" secondAttribute="trailing" constant="15" id="R3c-Z3-CrN"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="8h1-Q1-y6L" secondAttribute="trailing" constant="15" id="gVb-Fb-M6X"/>
+                <constraint firstItem="8h1-Q1-y6L" firstAttribute="top" secondItem="kto-gx-NHv" secondAttribute="bottom" constant="15" id="o6G-1Z-InT"/>
+                <constraint firstItem="kto-gx-NHv" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="15" id="rnc-Q6-Zpw"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <size key="customSize" width="181" height="99"/>
+            <connections>
+                <outlet property="conditionLabel" destination="kto-gx-NHv" id="ulr-R0-B4z"/>
+                <outlet property="valueLabel" destination="8h1-Q1-y6L" id="Sd6-l3-sa5"/>
+            </connections>
+            <point key="canvasLocation" x="232.60869565217394" y="169.08482142857142"/>
+        </collectionViewCell>
+    </objects>
+</document>

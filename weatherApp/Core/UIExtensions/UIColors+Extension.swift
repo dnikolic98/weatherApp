@@ -10,11 +10,6 @@ import UIKit
 
 extension UIColor {
     
-    static let grayBlueTint = UIColor(hex: 0x859398)
-    static let darkNavyBlue = UIColor(hex: 0x283048)
-    static let darkPurple = UIColor(hex: 0x514A9D)
-    static let teal = UIColor(hex: 0x24C6DC)
-    
     // Create a UIColor from RGB
     convenience init(red: Int, green: Int, blue: Int, a: CGFloat = 1.0) {
         self.init(

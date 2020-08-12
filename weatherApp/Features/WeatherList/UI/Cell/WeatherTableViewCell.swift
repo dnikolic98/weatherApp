@@ -42,7 +42,7 @@ class WeatherTableViewCell: UITableViewCell {
         
         locationName.text = currentWeather.name
         weatherDescription.text = currentWeather.weather.description.firstCapitalized
-        currentTemp.text = Temperature.celsiusToString(temp: forecast.temperature.celsius)
+        currentTemp.text = String(format: LocalizedStrings.temperatureValueFormat, Int(forecast.temperature.celsius))
         minMaxTemp.text = minMaxFormat(min: forecast.minTemperature.celsius, max: forecast.maxTemperature.celsius)
         
         let urlString = currentWeather.weather.iconUrlString
@@ -52,8 +52,8 @@ class WeatherTableViewCell: UITableViewCell {
     }
     
     private func minMaxFormat(min: Double, max: Double) -> String {
-        let min = Temperature.celsiusToString(temp: min)
-        let max = Temperature.celsiusToString(temp: max)
+        let min = String(format: LocalizedStrings.temperatureValueFormat, Int(min))
+        let max = String(format: LocalizedStrings.temperatureValueFormat, Int(max))
         return "\(max) / \(min)"
     }
     
