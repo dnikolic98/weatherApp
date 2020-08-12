@@ -15,28 +15,48 @@ class DetailWeatherPresenter {
     var numberOfConditionRows: Int {
         numberOfConditions / 2 + numberOfConditions % 2
     }
+    var numberOfFiveDays: Int {
+        fiveDaysList.count
+    }
     
     private var weatherConditionList: [ConditionInformationViewModel] = []
+    private var fiveDaysList: [CurrentWeatherViewModel] = []
     
     init(currentWeather: CurrentWeatherViewModel) {
         self.currentWeather = currentWeather
         
         setWeatherConditionList()
+        set()
     }
     
     func weatherCondition(atIndex index: Int) -> ConditionInformationViewModel? {
-           return weatherConditionList.at(index)
-       }
-       
+        return weatherConditionList.at(index)
+    }
+    
+    func fiveDays(atIndex index: Int) -> CurrentWeatherViewModel? {
+        return fiveDaysList.at(index)
+    }
+    
     private func setWeatherConditionList() {
-           let feelsLikeTemperature = ConditionInformationViewModel(title: LocalizedStrings.feelsLike, value: String(format: LocalizedStrings.temperatureValueFormat, currentWeather.feelsLikeTemperature))
-           let humidity =  ConditionInformationViewModel(title: LocalizedStrings.humidity, value: String(format: LocalizedStrings.percentageValueFormat, currentWeather.humidity))
-           let pressure = ConditionInformationViewModel(title: LocalizedStrings.pressure, value: String(format: LocalizedStrings.pressureValueFormat, currentWeather.pressure))
-           let windSpeed = ConditionInformationViewModel(title: LocalizedStrings.wind, value: String(format: LocalizedStrings.speedValueFormat, currentWeather.windSpeed))
-           
-           weatherConditionList.append(feelsLikeTemperature)
-           weatherConditionList.append(humidity)
-           weatherConditionList.append(pressure)
-           weatherConditionList.append(windSpeed)
-       }
+        let feelsLikeTemperature = ConditionInformationViewModel(title: LocalizedStrings.feelsLike, value: String(format: LocalizedStrings.temperatureValueFormat, currentWeather.feelsLikeTemperature))
+        let humidity =  ConditionInformationViewModel(title: LocalizedStrings.humidity, value: String(format: LocalizedStrings.percentageValueFormat, currentWeather.humidity))
+        let pressure = ConditionInformationViewModel(title: LocalizedStrings.pressure, value: String(format: LocalizedStrings.pressureValueFormat, currentWeather.pressure))
+        let windSpeed = ConditionInformationViewModel(title: LocalizedStrings.wind, value: String(format: LocalizedStrings.speedValueFormat, currentWeather.windSpeed))
+        
+        weatherConditionList.append(feelsLikeTemperature)
+        weatherConditionList.append(humidity)
+        weatherConditionList.append(pressure)
+        weatherConditionList.append(windSpeed)
+    }
+    
+    private func set() {
+        
+        fiveDaysList.append(currentWeather)
+        fiveDaysList.append(currentWeather)
+        fiveDaysList.append(currentWeather)
+        fiveDaysList.append(currentWeather)
+        fiveDaysList.append(currentWeather)
+        
+        print(numberOfFiveDays)
+    }
 }
