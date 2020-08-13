@@ -12,7 +12,6 @@ import Kingfisher
 class DetailWeatherViewController: UIViewController {
     
     private var detailWeatherPresenter: DetailWeatherPresenter?
-    private var refreshControl: UIRefreshControl!
     private let detailsNumOfColumns = 2
     private let numberOfDays = 5
     private let padding: CGFloat = 10
@@ -57,8 +56,9 @@ class DetailWeatherViewController: UIViewController {
             guard let _ = currentWeatherList else {
                 return
             }
-            
-            self.refreshCollectionView()
+            DispatchQueue.main.async {
+                self.daysCollectionView.reloadData()
+            }
         }
     }
     
@@ -83,10 +83,6 @@ class DetailWeatherViewController: UIViewController {
     private func setupCollectionViews() {
         detailsCollectionView.dataSource = self
         daysCollectionView.dataSource = self
-        
-        refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refreshCollectionView), for: UIControl.Event.valueChanged)
-        daysCollectionView.refreshControl = refreshControl
         
         setupDetailsCollectionView()
         setupDaysCollectionView()
@@ -123,13 +119,6 @@ class DetailWeatherViewController: UIViewController {
         section.interGroupSpacing = padding
         
         return UICollectionViewCompositionalLayout(section: section)
-    }
-    
-    @objc private func refreshCollectionView() {
-        DispatchQueue.main.async {
-            self.daysCollectionView.reloadData()
-            self.refreshControl.endRefreshing()
-        }
     }
     
 }
