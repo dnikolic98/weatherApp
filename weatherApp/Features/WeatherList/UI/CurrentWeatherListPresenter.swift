@@ -8,11 +8,11 @@
 
 class CurrentWeatherListPresenter {
     
+    private var currentWeatherList: [CurrentWeatherViewModel] = []
+    
     var numberOfCurrentWeather: Int {
         currentWeatherList.count
     }
-    
-    private var currentWeatherList: [CurrentWeatherViewModel] = []
     
     func fetchCurrentWeatherList(completion: @escaping (([CurrentWeatherViewModel]?) -> Void)) {
         let locationIds = Cities.allCases.map { $0.rawValue }

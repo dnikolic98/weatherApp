@@ -16,14 +16,12 @@ struct DailyTemperature: Codable {
     let night: Double
     
     private enum CodingKeys : String, CodingKey {
-        
         case min = "min"
         case max = "max"
         case morning = "morn"
         case day = "day"
         case evening = "eve"
         case night = "night"
-        
     }
     
 }

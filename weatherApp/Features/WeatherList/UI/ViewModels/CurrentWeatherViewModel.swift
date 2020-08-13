@@ -26,13 +26,13 @@ struct CurrentWeatherViewModel {
         name = currentWeather.name
         humidity = currentWeather.forecast.humidity
         pressure = currentWeather.forecast.pressure
-        temperature = Int(currentWeather.forecast.temperature.celsius)
-        feelsLikeTemperature = Int(currentWeather.forecast.feelsLikeTemperature.celsius)
-        maxTemperature = Int(currentWeather.forecast.maxTemperature.celsius)
-        minTemperature = Int(currentWeather.forecast.minTemperature.celsius)
+        temperature = Int(currentWeather.forecast.temperature)
+        feelsLikeTemperature = Int(currentWeather.forecast.feelsLikeTemperature)
+        maxTemperature = Int(currentWeather.forecast.maxTemperature)
+        minTemperature = Int(currentWeather.forecast.minTemperature)
         windSpeed = currentWeather.wind.speed
-        weatherDescription = currentWeather.weather.description
-        weatherIconUrlString = currentWeather.weather.iconUrlString
+        weatherDescription = currentWeather.weather[0].description
+        weatherIconUrlString = currentWeather.weather[0].iconUrlString
         coord = currentWeather.coord
     }
     

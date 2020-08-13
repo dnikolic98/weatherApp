@@ -11,8 +11,7 @@ struct ForecastedWeather: Codable {
     let forecastedWeather: [DailyWeather]
     
     private enum CodingKeys : String, CodingKey {
-        
         case forecastedWeather = "daily"
-        
     }
+    
 }

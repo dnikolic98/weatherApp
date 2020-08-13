@@ -6,14 +6,21 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
-
-struct Forecast {
+struct Forecast: Codable {
     
-    let feelsLikeTemperature: TemperatureTemp
+    let feelsLikeTemperature: Double
     let humidity: Int
     let pressure: Int
-    let temperature: TemperatureTemp
-    let maxTemperature: TemperatureTemp
-    let minTemperature: TemperatureTemp
+    let temperature: Double
+    let maxTemperature: Double
+    let minTemperature: Double
     
+    private enum CodingKeys : String, CodingKey {
+        case feelsLikeTemperature = "feels_like"
+        case humidity = "humidity"
+        case pressure = "pressure"
+        case temperature = "temp"
+        case maxTemperature = "temp_max"
+        case minTemperature = "temp_min"
+    }
 }

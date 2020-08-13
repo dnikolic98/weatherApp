@@ -20,7 +20,6 @@ struct DailyWeather: Codable {
     
     
     private enum CodingKeys : String, CodingKey {
-        
         case forecastTime = "dt"
         case sunrise = "sunrise"
         case sunset = "sunset"
@@ -28,6 +27,5 @@ struct DailyWeather: Codable {
         case pressure = "pressure"
         case humidity = "humidity"
         case weather = "weather"
-        
     }
 }

@@ -8,7 +8,12 @@
 
 struct Coordinates: Codable {
     
-    let lat: Double
-    let lon: Double
+    let latitude: Double
+    let longitude: Double
+    
+    private enum CodingKeys : String, CodingKey {
+        case latitude = "lat"
+        case longitude = "lon"
+    }
     
 }

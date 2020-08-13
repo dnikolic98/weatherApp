@@ -26,4 +26,5 @@ class LocalizedStrings {
     
     static let degreeValueFormat = "%d°"
     
+    static let units = "metric"
 }
