@@ -8,6 +8,8 @@
 
 class DetailWeatherPresenter {
     
+    private var weatherConditionList: [ConditionInformationViewModel] = []
+    
     let currentWeather: CurrentWeatherViewModel
     var numberOfConditions: Int {
         weatherConditionList.count
@@ -15,8 +17,6 @@ class DetailWeatherPresenter {
     var numberOfConditionRows: Int {
         numberOfConditions / 2 + numberOfConditions % 2
     }
-    
-    private var weatherConditionList: [ConditionInformationViewModel] = []
     
     init(currentWeather: CurrentWeatherViewModel) {
         self.currentWeather = currentWeather
@@ -44,4 +44,5 @@ class DetailWeatherPresenter {
         weatherConditionList.append(pressure)
         weatherConditionList.append(windSpeed)
     }
+    
 }

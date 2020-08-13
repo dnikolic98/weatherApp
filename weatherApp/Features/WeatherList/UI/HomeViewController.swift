@@ -15,12 +15,12 @@ class HomeViewController: UIViewController {
     private var currentWeatherListPresenter: CurrentWeatherListPresenter!
     
     @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
     
-    convenience init(currentWeatherListViewModel: CurrentWeatherListPresenter) {
+    convenience init(currentWeatherListPresenter: CurrentWeatherListPresenter) {
         self.init()
 
-        self.currentWeatherListPresenter = currentWeatherListViewModel
+        self.currentWeatherListPresenter = currentWeatherListPresenter
     }
     
     //MARK: - Overrides
@@ -57,10 +57,6 @@ class HomeViewController: UIViewController {
     //MARK: - TableView Data
     
     @objc private func bindViewModel() {
-        if currentWeatherListPresenter == nil {
-            currentWeatherListPresenter = CurrentWeatherListPresenter()
-        }
-        
         currentWeatherListPresenter.fetchCurrentWeatherList() { (currentWeatherList) in
             guard let _ = currentWeatherList else {
                 return
