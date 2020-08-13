@@ -23,6 +23,13 @@ class SingleWeatherInformationCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         cellTranslucentView.layer.cornerRadius = 8
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        headerLabel.text = ""
+        mainInformationLabel.text = ""
+        weatherIcon?.image = nil
+    }
 
     func set(weatherInfo: SingleWeatherInformationViewModel) {
         headerLabel.text = weatherInfo.header

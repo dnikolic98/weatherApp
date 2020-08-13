@@ -10,6 +10,7 @@
 struct CurrentWeather {
     
     let id: Int
+    let coord: Coordinates
     let forecast: Forecast
     let name: String
     let weather: Weather

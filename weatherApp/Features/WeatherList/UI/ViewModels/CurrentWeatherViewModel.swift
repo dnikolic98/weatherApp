@@ -19,6 +19,7 @@ struct CurrentWeatherViewModel {
     let windSpeed: Double
     let weatherDescription: String
     let weatherIconUrlString: String
+    let coord: Coordinates
     
     init(currentWeather: CurrentWeather) {
         id = currentWeather.id
@@ -32,6 +33,7 @@ struct CurrentWeatherViewModel {
         windSpeed = currentWeather.wind.speed
         weatherDescription = currentWeather.weather.description
         weatherIconUrlString = currentWeather.weather.iconUrlString
+        coord = currentWeather.coord
     }
     
 }

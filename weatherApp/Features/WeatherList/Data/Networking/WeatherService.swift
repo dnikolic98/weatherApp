@@ -15,6 +15,31 @@ class WeatherService {
     
     //MARK: - Fetching
     
+    func fetchForcastWeather(id: Int, coord: Coordinates, completion: @escaping ((ForecastedWeather?) -> Void)) {
+        let resourceStringUrl = "\(baseUrlString)/onecall?exclude=current,minutely&lat=\(coord.lat)&lon=\(coord.lon)&units=metric&appid=\(apiKey)"
+        
+        guard let url = URL(string: resourceStringUrl) else {
+            completion(nil)
+            return
+        }
+        let request = URLRequest(url: url)
+        
+        let dataTask = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data else {
+                completion(nil)
+                return
+            }
+            
+            do {
+                let forecastedWeather = try JSONDecoder().decode(ForecastedWeather.self, from: data)
+                completion(forecastedWeather)
+            } catch {
+                completion(nil)
+            }
+        }
+        dataTask.resume()
+    }
+    
     func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeather]?) -> Void)) {
         var currentWeatherList: [CurrentWeather] = []
         
@@ -151,10 +176,10 @@ class WeatherService {
             return nil
         }
         
-        let feelsLike = Temperature(kelvin: feelsLikeTemperature)
-        let temp = Temperature(kelvin: temperature)
-        let maxTemp = Temperature(kelvin: maxTemperature)
-        let minTemp = Temperature(kelvin: minTemperature)
+        let feelsLike = TemperatureTemp(kelvin: feelsLikeTemperature)
+        let temp = TemperatureTemp(kelvin: temperature)
+        let maxTemp = TemperatureTemp(kelvin: maxTemperature)
+        let minTemp = TemperatureTemp(kelvin: minTemperature)
         
         return Forecast(feelsLikeTemperature: feelsLike, humidity: humidity, pressure: pressure, temperature: temp, maxTemperature: maxTemp, minTemperature: minTemp)
         
@@ -172,19 +197,33 @@ class WeatherService {
         return Wind(speed: speed, directionDegree: directionDegree)
     }
     
+    private func jsonToCoord(json: Any) -> Coordinates? {
+        guard
+            let jsonDict = json as? [String: Any],
+            let lat = jsonDict["lat"] as? Double,
+            let lon = jsonDict["lon"] as? Double
+        else {
+            return nil
+        }
+        
+        return Coordinates(lat: lat, lon: lon)
+    }
+    
     private func jsonToCurrentWeather(json: Any) -> CurrentWeather? {
         guard
             let jsonDict = json as? [String: Any],
             let id = jsonDict["id"] as? Int,
             let name = jsonDict["name"] as? String,
             let weather = self.jsonToWeather(json: jsonDict["weather"] as! [Any]),
+            let coord = self.jsonToCoord(json: jsonDict["coord"] as Any),
             let wind = self.jsonToWind(json: jsonDict["wind"] as Any),
+            
             let forecast = self.jsonToForecast(json: jsonDict["main"] as Any)
         else {
             return nil
         }
         
-        return CurrentWeather(id: id, forecast: forecast, name: name, weather: weather, wind: wind)
+        return CurrentWeather(id: id, coord: coord, forecast: forecast, name: name, weather: weather, wind: wind)
     }
     
 }

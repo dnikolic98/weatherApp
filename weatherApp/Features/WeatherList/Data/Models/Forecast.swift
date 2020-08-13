@@ -9,11 +9,11 @@
 
 struct Forecast {
     
-    let feelsLikeTemperature: Temperature
+    let feelsLikeTemperature: TemperatureTemp
     let humidity: Int
     let pressure: Int
-    let temperature: Temperature
-    let maxTemperature: Temperature
-    let minTemperature: Temperature
+    let temperature: TemperatureTemp
+    let maxTemperature: TemperatureTemp
+    let minTemperature: TemperatureTemp
     
 }

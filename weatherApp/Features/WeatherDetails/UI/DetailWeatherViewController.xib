@@ -9,10 +9,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DetailWeatherViewController" customModule="weatherApp" customModuleProvider="target">
             <connections>
+                <outlet property="daysCollectionView" destination="1mJ-k9-tv1" id="pSh-z0-1tJ"/>
                 <outlet property="detailsCollectionView" destination="b3T-kv-4cc" id="MQJ-zz-NRP"/>
                 <outlet property="detailsCollectionViewHeightConstraint" destination="N8g-Fi-v6y" id="p4m-mL-tM6"/>
-                <outlet property="fiveDaysCollectionView" destination="1mJ-k9-tv1" id="cCC-OU-1Ai"/>
-                <outlet property="fiveDaysCollectionViewHeightConstraint" destination="i22-B6-DVG" id="RIb-gI-fkD"/>
                 <outlet property="maxTempLabel" destination="W5k-7C-Z2O" id="uZT-tL-wwB"/>
                 <outlet property="minTempLabel" destination="NW9-y9-rLd" id="Clj-ON-NKD"/>
                 <outlet property="tempLabel" destination="Fre-Dn-frW" id="N9z-B1-QaU"/>

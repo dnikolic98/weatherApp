@@ -19,6 +19,7 @@ class DetailWeatherPresenter {
         fiveDaysList.count
     }
     
+    private var sevenDayForecast: [DailyForecastViewModel] = []
     private var weatherConditionList: [ConditionInformationViewModel] = []
     private var fiveDaysList: [SingleWeatherInformationViewModel] = []
     
@@ -46,6 +47,36 @@ class DetailWeatherPresenter {
         weatherConditionList.append(humidity)
         weatherConditionList.append(pressure)
         weatherConditionList.append(windSpeed)
+    }
+    
+    private func setFiveDayList() {
+        guard sevenDayForecast.count >= 7 else { return }
+        
+        for forecast in sevenDayForecast[1...5] {
+            let minTempValue = String(format: LocalizedStrings.degreeValueFormat, forecast.minTemperature)
+            let maxTempValue = String(format: LocalizedStrings.degreeValueFormat, forecast.maxTemperature)
+            let temperature = "\(maxTempValue)\n\(minTempValue)"
+            let day = forecast.forecastTime.dayOfWeek().uppercased()
+            fiveDaysList.append(SingleWeatherInformationViewModel(header: day, body: temperature, iconUrlString: forecast.weatherIconUrlString))
+        }
+    }
+    
+    func fetchFiveDaysList(completion: @escaping (([SingleWeatherInformationViewModel]?) -> Void)) {
+        WeatherService().fetchForcastWeather(id: currentWeather.id, coord: currentWeather.coord) { [weak self] (fiveDaysForecast) in
+            guard
+                let self = self,
+                let fiveDaysForecast = fiveDaysForecast
+            else {
+                completion(nil)
+                return
+            }
+            
+            self.sevenDayForecast = fiveDaysForecast.forecastedWeather.map { DailyForecastViewModel(currentWeather: self.currentWeather, dailyWeather: $0) }
+            
+            
+            self.setFiveDayList()
+            completion(self.fiveDaysList)
+        }
     }
     
 }

@@ -6,7 +6,7 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
-struct Temperature {
+struct TemperatureTemp {
     
     let kelvin: Double
     var celsius: Double {

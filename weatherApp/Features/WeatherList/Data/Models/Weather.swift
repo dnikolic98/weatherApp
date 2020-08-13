@@ -6,7 +6,7 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
-struct Weather {
+struct Weather: Codable {
     
     let description: String
     let icon: String

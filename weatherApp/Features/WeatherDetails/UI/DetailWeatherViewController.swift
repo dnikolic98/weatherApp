@@ -12,10 +12,12 @@ import Kingfisher
 class DetailWeatherViewController: UIViewController {
     
     private var detailWeatherPresenter: DetailWeatherPresenter?
+    private var refreshControl: UIRefreshControl!
     private let detailsNumOfColumns = 2
+    private let numberOfDays = 5
     private let padding: CGFloat = 10
     private let detailsCollectioViewRowHeight: CGFloat = 100
-    private let fiveDaysCollectioViewRowHeight: CGFloat = 140
+    private let daysCollectioViewRowHeight: CGFloat = 140
     
     @IBOutlet private weak var tempLabel: UILabel!
     @IBOutlet private weak var weatherIcon: UIImageView!
@@ -24,7 +26,7 @@ class DetailWeatherViewController: UIViewController {
     @IBOutlet private weak var minTempLabel: UILabel!
     @IBOutlet private weak var detailsCollectionView: UICollectionView!
     @IBOutlet private weak var detailsCollectionViewHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var fiveDaysCollectionView: UICollectionView!
+    @IBOutlet private weak var daysCollectionView: UICollectionView!
     
     convenience init(currentWeather: CurrentWeatherViewModel) {
         self.init()
@@ -39,12 +41,25 @@ class DetailWeatherViewController: UIViewController {
         
         setWeatherInformation()
         setupCollectionViews()
+        bindViewModel()
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
         view.setGradientBackground(startColor: .grayBlueTint, endColor: .darkNavyBlue)
+    }
+    
+    private func bindViewModel() {
+        guard let detailWeatherPresenter = detailWeatherPresenter else { return }
+        
+        detailWeatherPresenter.fetchFiveDaysList() { (currentWeatherList) in
+            guard let _ = currentWeatherList else {
+                return
+            }
+            
+            self.refreshCollectionView()
+        }
     }
     
     //MARK: - UI elements setup
@@ -67,10 +82,14 @@ class DetailWeatherViewController: UIViewController {
     
     private func setupCollectionViews() {
         detailsCollectionView.dataSource = self
-        fiveDaysCollectionView.dataSource = self
+        daysCollectionView.dataSource = self
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshCollectionView), for: UIControl.Event.valueChanged)
+        daysCollectionView.refreshControl = refreshControl
         
         setupDetailsCollectionView()
-        setupFiveDaysCollectionView()
+        setupDaysCollectionView()
     }
     
     private func setupDetailsCollectionView() {
@@ -83,12 +102,10 @@ class DetailWeatherViewController: UIViewController {
         detailsCollectionViewHeightConstraint.constant = detailsCollectioViewRowHeight * CGFloat(numOfRows) + padding * CGFloat(numOfRows + 1)
     }
     
-    private func setupFiveDaysCollectionView() {
-        let numberOfDays = detailWeatherPresenter?.numberOfDays ?? 0
-        
-        fiveDaysCollectionView.collectionViewLayout = createCollectionViewLayout(rowHeight: fiveDaysCollectioViewRowHeight, columns: numberOfDays)
-        fiveDaysCollectionView.layer.cornerRadius = 10
-        fiveDaysCollectionView.register(UINib(nibName: SingleWeatherInformationCollectionViewCell.typeName, bundle: nil), forCellWithReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName)
+    private func setupDaysCollectionView() {
+        daysCollectionView.collectionViewLayout = createCollectionViewLayout(rowHeight: daysCollectioViewRowHeight, columns: numberOfDays)
+        daysCollectionView.layer.cornerRadius = 10
+        daysCollectionView.register(UINib(nibName: SingleWeatherInformationCollectionViewCell.typeName, bundle: nil), forCellWithReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName)
     }
     
     private func createCollectionViewLayout(rowHeight: CGFloat, columns: Int) -> UICollectionViewLayout {
@@ -106,6 +123,13 @@ class DetailWeatherViewController: UIViewController {
         section.interGroupSpacing = padding
         
         return UICollectionViewCompositionalLayout(section: section)
+    }
+    
+    @objc private func refreshCollectionView() {
+        DispatchQueue.main.async {
+            self.daysCollectionView.reloadData()
+            self.refreshControl.endRefreshing()
+        }
     }
     
 }
