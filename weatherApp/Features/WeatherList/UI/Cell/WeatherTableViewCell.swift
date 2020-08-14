@@ -82,7 +82,6 @@ class WeatherTableViewCell: UITableViewCell {
         locationNameLabel.adjustsFontSizeToFitWidth = true
         locationNameLabel.minimumScaleFactor = 0.5
         locationNameLabel.textColor = .white
-        locationNameLabel.translatesAutoresizingMaskIntoConstraints = false
     }
     
     private func styleWeatherDescriptionLabel() {
@@ -98,7 +97,6 @@ class WeatherTableViewCell: UITableViewCell {
         currentTempLabel.adjustsFontSizeToFitWidth = true
         currentTempLabel.minimumScaleFactor = 0.5
         currentTempLabel.textColor = .white
-        currentTempLabel.translatesAutoresizingMaskIntoConstraints = false
     }
     
     private func styleMinMaxTempLabel() {
@@ -106,7 +104,6 @@ class WeatherTableViewCell: UITableViewCell {
         minMaxTempLabel.adjustsFontSizeToFitWidth = true
         minMaxTempLabel.minimumScaleFactor = 0.5
         minMaxTempLabel.textColor = .white
-        minMaxTempLabel.translatesAutoresizingMaskIntoConstraints = false
     }
     
     private func setLayerMask() {
@@ -132,6 +129,10 @@ class WeatherTableViewCell: UITableViewCell {
 
     private func setupLayout() {
         weatherIcon.translatesAutoresizingMaskIntoConstraints = false
+        locationNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        currentTempLabel.translatesAutoresizingMaskIntoConstraints = false
+        minMaxTempLabel.translatesAutoresizingMaskIntoConstraints = false
+
 
         heightAnchor.constraint(equalToConstant: WeatherTableViewCell.height).isActive = true
         
