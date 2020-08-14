@@ -19,6 +19,7 @@ class DetailWeatherPresenter {
     var numberOfConditionRows: Int {
         numberOfConditions / 2 + numberOfConditions % 2
     }
+    
     var numberOfDays: Int {
         fiveDaysList.count
     }
@@ -32,7 +33,7 @@ class DetailWeatherPresenter {
     func weatherCondition(atIndex index: Int) -> ConditionInformationViewModel? {
         return weatherConditionList.at(index)
     }
-    
+
     func fiveDays(atIndex index: Int) -> SingleWeatherInformationViewModel? {
         return fiveDaysList.at(index)
     }
@@ -78,5 +79,5 @@ class DetailWeatherPresenter {
             fiveDaysList.append(SingleWeatherInformationViewModel(header: day, body: temperature, iconUrlString: forecast.weatherIconUrlString))
         }
     }
-    
+
 }

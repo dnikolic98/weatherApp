@@ -15,12 +15,12 @@ class HomeViewController: UIViewController {
     private var currentWeatherListPresenter: CurrentWeatherListPresenter!
     
     @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
     
-    convenience init(currentWeatherListViewModel: CurrentWeatherListPresenter) {
+    convenience init(currentWeatherListPresenter: CurrentWeatherListPresenter) {
         self.init()
 
-        self.currentWeatherListPresenter = currentWeatherListViewModel
+        self.currentWeatherListPresenter = currentWeatherListPresenter
     }
     
     //MARK: - Overrides
@@ -28,7 +28,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupNavigationBar()
+        styleNavgiationBar()
         setupTableView()
         bindViewModel()
     }
@@ -57,10 +57,6 @@ class HomeViewController: UIViewController {
     //MARK: - TableView Data
     
     @objc private func bindViewModel() {
-        if currentWeatherListPresenter == nil {
-            currentWeatherListPresenter = CurrentWeatherListPresenter()
-        }
-        
         currentWeatherListPresenter.fetchCurrentWeatherList() { (currentWeatherList) in
             guard let _ = currentWeatherList else {
                 return
@@ -72,7 +68,7 @@ class HomeViewController: UIViewController {
     
     //MARK: - UI elements setup
     
-    private func setupNavigationBar() {
+    private func styleNavgiationBar() {
         // set navigationBar title and back button color, title font size and back button text
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24.0)]
         if var textAttributes = navigationController?.navigationBar.titleTextAttributes {
@@ -119,7 +115,6 @@ class HomeViewController: UIViewController {
     }
     
 }
-
 
 //MARK: - TableView DataSource
 
