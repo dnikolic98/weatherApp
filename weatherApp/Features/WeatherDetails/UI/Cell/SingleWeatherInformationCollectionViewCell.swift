@@ -83,8 +83,8 @@ class SingleWeatherInformationCollectionViewCell: UICollectionViewCell {
     
     private func setupSubviews() {
         addSubview(headerLabel)
-        addSubview(mainInformationLabel)
         addSubview(translucentView)
+        addSubview(mainInformationLabel)
         addSubview(weatherIcon)
     }
     
