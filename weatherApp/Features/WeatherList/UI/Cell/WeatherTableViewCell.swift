@@ -11,38 +11,46 @@ import Kingfisher
 
 class WeatherTableViewCell: UITableViewCell {
     
+    private let locationNameLabel = UILabel()
+    private let weatherDescriptionLabel = UILabel()
+    private let currentTempLabel = UILabel()
+    private let minMaxTempLabel = UILabel()
+    private let weatherIcon = UIImageView()
+    
+    static let height: CGFloat = 100
     static var typeName: String {
         String(describing: self)
     }
     
-    @IBOutlet private weak var paddedView: UIView!
-    @IBOutlet private weak var weatherIcon: UIImageView!
-    @IBOutlet private weak var locationName: UILabel!
-    @IBOutlet private weak var weatherDescription: UILabel!
-    @IBOutlet private weak var currentTemp: UILabel!
-    @IBOutlet private weak var minMaxTemp: UILabel!
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        commonInit()
+    }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        weatherDescription.text = ""
-        minMaxTemp.text = ""
-        currentTemp.text = ""
-        locationName.text = ""
-        weatherIcon?.image = nil
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        commonInit()
     }
     
     override func layoutSubviews() {
         setLayerMask()
     }
     
-    //MARK: - UI elements setup
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        weatherDescriptionLabel.text = ""
+        minMaxTempLabel.text = ""
+        currentTempLabel.text = ""
+        locationNameLabel.text = ""
+        weatherIcon.image = nil
+    }
     
     func set(withWeather currentWeather: CurrentWeatherViewModel) {
-        
-        locationName.text = currentWeather.name
-        weatherDescription.text = currentWeather.weatherDescription.firstCapitalized
-        currentTemp.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.temperature)
-        minMaxTemp.text = minMaxTemperatureFormat(min: currentWeather.minTemperature, max: currentWeather.maxTemperature)
+        locationNameLabel.text = currentWeather.name
+        weatherDescriptionLabel.text = currentWeather.weatherDescription.firstCapitalized
+        currentTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.temperature)
+        minMaxTempLabel.text = minMaxTemperatureFormat(min: currentWeather.minTemperature, max: currentWeather.maxTemperature)
         
         let urlString = currentWeather.weatherIconUrlString
         if let url = URL(string: urlString) {
@@ -56,6 +64,51 @@ class WeatherTableViewCell: UITableViewCell {
         return "\(max) / \(min)"
     }
     
+    //MARK: - Styling UI Elements
+    
+    private func commonInit() {
+        setupSubviews()
+        styleLocationNameLabel()
+        styleWeatherDescriptionLabel()
+        styleCurrentTempLabel()
+        styleMinMaxTempLabel()
+        setupLayout()
+        
+        backgroundColor = .white15
+    }
+    
+    private func styleLocationNameLabel() {
+        locationNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        locationNameLabel.adjustsFontSizeToFitWidth = true
+        locationNameLabel.minimumScaleFactor = 0.5
+        locationNameLabel.textColor = .white
+        locationNameLabel.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func styleWeatherDescriptionLabel() {
+        weatherDescriptionLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        weatherDescriptionLabel.adjustsFontSizeToFitWidth = true
+        weatherDescriptionLabel.minimumScaleFactor = 0.5
+        weatherDescriptionLabel.textColor = .white
+        weatherDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func styleCurrentTempLabel() {
+        currentTempLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        currentTempLabel.adjustsFontSizeToFitWidth = true
+        currentTempLabel.minimumScaleFactor = 0.5
+        currentTempLabel.textColor = .white
+        currentTempLabel.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func styleMinMaxTempLabel() {
+        minMaxTempLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        minMaxTempLabel.adjustsFontSizeToFitWidth = true
+        minMaxTempLabel.minimumScaleFactor = 0.5
+        minMaxTempLabel.textColor = .white
+        minMaxTempLabel.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
     private func setLayerMask() {
         let verticalPadding: CGFloat = 10
         let horizontalPadding: CGFloat = 20
@@ -66,5 +119,44 @@ class WeatherTableViewCell: UITableViewCell {
         maskLayer.frame = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.width, height: bounds.height).insetBy(dx: horizontalPadding / 2, dy: verticalPadding / 2)
         layer.mask = maskLayer
     }
+    
+    //MARK: - Setting Up Layout
+    
+    private func setupSubviews() {
+        contentView.addSubview(locationNameLabel)
+        contentView.addSubview(weatherDescriptionLabel)
+        contentView.addSubview(currentTempLabel)
+        contentView.addSubview(minMaxTempLabel)
+        contentView.addSubview(weatherIcon)
+    }
+
+    private func setupLayout() {
+        weatherIcon.translatesAutoresizingMaskIntoConstraints = false
+
+        heightAnchor.constraint(equalToConstant: WeatherTableViewCell.height).isActive = true
+        
+        weatherIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        weatherIcon.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        weatherIcon.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 25).isActive = true
+        weatherIcon.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -25).isActive = true
+        weatherIcon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25).isActive = true
+        
+        locationNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 25).isActive = true
+        locationNameLabel.leadingAnchor.constraint(equalTo: weatherIcon.trailingAnchor, constant: 10).isActive = true
+        
+        weatherDescriptionLabel.topAnchor.constraint(equalTo: locationNameLabel.bottomAnchor, constant: 10).isActive = true
+        weatherDescriptionLabel.leadingAnchor.constraint(equalTo: weatherIcon.trailingAnchor, constant: 10).isActive = true
+        weatherDescriptionLabel.bottomAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: -25).isActive = true
+
+        currentTempLabel.leadingAnchor.constraint(greaterThanOrEqualTo: locationNameLabel.trailingAnchor, constant: 20).isActive = true
+        currentTempLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 25).isActive = true
+        currentTempLabel.centerXAnchor.constraint(equalTo: minMaxTempLabel.centerXAnchor).isActive = true
+        
+        minMaxTempLabel.leadingAnchor.constraint(greaterThanOrEqualTo: weatherDescriptionLabel.trailingAnchor, constant: 20).isActive = true
+        minMaxTempLabel.topAnchor.constraint(equalTo: currentTempLabel.bottomAnchor, constant: 10).isActive = true
+        minMaxTempLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25).isActive = true
+        minMaxTempLabel.bottomAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: -25).isActive = true
+    }
+    
 }
 

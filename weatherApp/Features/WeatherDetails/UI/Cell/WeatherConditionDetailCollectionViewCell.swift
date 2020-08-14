@@ -34,6 +34,8 @@ class WeatherConditionDetailCollectionViewCell: UICollectionViewCell {
         valueLabel.text = conditionViewModel.value
     }
     
+    //MARK: - Styling UI Elements
+    
     private func commonInit() {
         setupSubviews()
         styleConditionLabel()
@@ -54,6 +56,8 @@ class WeatherConditionDetailCollectionViewCell: UICollectionViewCell {
         valueLabel.textColor = .white
     }
     
+    //MARK: - Setting Up Layout
+    
     private func setupSubviews() {
         contentView.addSubview(conditionLabel)
         contentView.addSubview(valueLabel)
@@ -66,10 +70,9 @@ class WeatherConditionDetailCollectionViewCell: UICollectionViewCell {
         conditionLabel.autoPinEdge(.trailing, to: .trailing, of: contentView, withOffset: 15)
         conditionLabel.autoPinEdge(.leading, to: .leading, of: contentView, withOffset: 15)
         
-        valueLabel.autoPinEdge(.top, to: .top, of: conditionLabel, withOffset: 15)
+        valueLabel.autoPinEdge(.top, to: .bottom, of: conditionLabel, withOffset: 15)
         valueLabel.autoPinEdge(.trailing, to: .trailing, of: contentView, withOffset: 15)
         valueLabel.autoPinEdge(.leading, to: .leading, of: contentView, withOffset: 15)
-        valueLabel.autoPinEdge(.bottom, to: .bottom, of: contentView, withOffset: 15)
     }
     
 }

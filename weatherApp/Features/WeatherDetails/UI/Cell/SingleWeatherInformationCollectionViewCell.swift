@@ -49,6 +49,8 @@ class SingleWeatherInformationCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    //MARK: - Styling UI Elements
+    
     private func commonInit() {
         setupSubviews()
         styleHeaderLabel()
@@ -65,6 +67,8 @@ class SingleWeatherInformationCollectionViewCell: UICollectionViewCell {
     
     private func styleMainInformationLabel() {
         mainInformationLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        mainInformationLabel.adjustsFontSizeToFitWidth = true
+        mainInformationLabel.minimumScaleFactor = 0.5
         mainInformationLabel.textColor = .white
         mainInformationLabel.numberOfLines = 0
         mainInformationLabel.textAlignment = .center
@@ -74,6 +78,8 @@ class SingleWeatherInformationCollectionViewCell: UICollectionViewCell {
         translucentView.backgroundColor = .black20
         translucentView.layer.cornerRadius = 8
     }
+    
+    //MARK: - Setting Up Layout
     
     private func setupSubviews() {
         addSubview(headerLabel)
