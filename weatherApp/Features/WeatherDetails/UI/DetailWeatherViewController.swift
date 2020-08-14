@@ -12,11 +12,11 @@ import Kingfisher
 class DetailWeatherViewController: UIViewController {
     
     private var detailWeatherPresenter: DetailWeatherPresenter?
+    private let detailsCollectioViewRowHeight = WeatherConditionDetailCollectionViewCell.height
+    private let daysCollectioViewRowHeight = SingleWeatherInformationCollectionViewCell.height
     private let detailsNumOfColumns = 2
     private let numberOfDays = 5
     private let padding: CGFloat = 10
-    private let detailsCollectioViewRowHeight: CGFloat = 100
-    private let daysCollectioViewRowHeight: CGFloat = 140
     
     @IBOutlet private weak var tempLabel: UILabel!
     @IBOutlet private weak var weatherIcon: UIImageView!
@@ -101,7 +101,7 @@ class DetailWeatherViewController: UIViewController {
     private func setupDaysCollectionView() {
         daysCollectionView.collectionViewLayout = createCollectionViewLayout(rowHeight: daysCollectioViewRowHeight, columns: numberOfDays)
         daysCollectionView.layer.cornerRadius = 10
-        daysCollectionView.register(UINib(nibName: SingleWeatherInformationCollectionViewCell.typeName, bundle: nil), forCellWithReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName)
+        daysCollectionView.register(SingleWeatherInformationCollectionViewCell.self, forCellWithReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName)
     }
     
     private func createCollectionViewLayout(rowHeight: CGFloat, columns: Int) -> UICollectionViewLayout {
