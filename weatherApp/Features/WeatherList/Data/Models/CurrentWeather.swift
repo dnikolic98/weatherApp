@@ -24,4 +24,5 @@ struct CurrentWeather: Codable {
         case weather = "weather"
         case wind = "wind"
     }
+    
 }

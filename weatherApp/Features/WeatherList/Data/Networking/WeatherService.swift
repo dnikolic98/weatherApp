@@ -15,8 +15,8 @@ class WeatherService {
     
     //MARK: - Fetching
     
-    func fetchForcastWeather(id: Int, coord: Coordinates, completion: @escaping ((ForecastedWeather?) -> Void)) {
-        let resourceStringUrl = "\(baseUrlString)onecall?exclude=current,minutely&lat=\(coord.latitude)&lon=\(coord.longitude)&units=metric&appid=\(apiKey)"
+    func fetchForcastWeather(coord: Coordinates, completion: @escaping ((ForecastedWeather?) -> Void)) {
+        let resourceStringUrl = "\(baseUrlString)onecall?exclude=current,minutely&lat=\(coord.latitude)&lon=\(coord.longitude)&units=\(LocalizedStrings.units)&appid=\(apiKey)"
         
         guard let url = URL(string: resourceStringUrl) else {
             completion(nil)
@@ -66,5 +66,6 @@ class WeatherService {
         }
         dataTask.resume()
     }
+    
 }
 

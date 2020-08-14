@@ -38,7 +38,7 @@ class DetailWeatherPresenter {
     }
     
     func fetchFiveDaysList(completion: @escaping ((ForecastedWeather?) -> Void)) {
-        WeatherService().fetchForcastWeather(id: currentWeather.id, coord: currentWeather.coord) { [weak self] (fiveDaysForecast) in
+        WeatherService().fetchForcastWeather(coord: currentWeather.coord) { [weak self] (fiveDaysForecast) in
             guard
                 let self = self,
                 let fiveDaysForecast = fiveDaysForecast

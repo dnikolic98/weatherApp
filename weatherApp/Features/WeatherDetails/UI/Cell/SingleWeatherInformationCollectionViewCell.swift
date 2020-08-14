@@ -40,4 +40,5 @@ class SingleWeatherInformationCollectionViewCell: UICollectionViewCell {
             weatherIcon.kf.setImage(with: url)
         }
     }
+    
 }

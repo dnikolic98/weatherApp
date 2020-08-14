@@ -15,4 +15,5 @@ struct Wind: Codable {
         case speed = "speed"
         case directionDegree = "deg"
     }
+    
 }

@@ -154,7 +154,6 @@ extension DetailWeatherViewController: UICollectionViewDataSource {
             }
             return cell
         }
-        
     }
     
 }

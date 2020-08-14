@@ -23,4 +23,5 @@ struct Forecast: Codable {
         case maxTemperature = "temp_max"
         case minTemperature = "temp_min"
     }
+    
 }
