@@ -11,16 +11,9 @@ import Kingfisher
 
 class DetailWeatherViewController: UIViewController {
     
-    private var currentWeather: CurrentWeather?
-    private var weatherConditions: [ConditionInformation] = []
+    private var detailWeatherPresenter: DetailWeatherPresenter?
     private let padding: CGFloat = 20
     private let rowHeight: CGFloat = 100
-    private var numOfConditions: Int {
-        weatherConditions.count
-    }
-    private var numOfConditionRows: Int {
-        numOfConditions / 2 + numOfConditions % 2
-    }
     
     @IBOutlet private weak var tempLabel: UILabel!
     @IBOutlet private weak var weatherIcon: UIImageView!
@@ -30,10 +23,10 @@ class DetailWeatherViewController: UIViewController {
     @IBOutlet private weak var minTempLabel: UILabel!
     @IBOutlet private weak var collectionViewHeightConstraint: NSLayoutConstraint!
     
-    convenience init(currentWeather: CurrentWeather) {
+    convenience init(currentWeather: CurrentWeatherViewModel) {
         self.init()
         
-        self.currentWeather = currentWeather
+        self.detailWeatherPresenter = DetailWeatherPresenter(currentWeather: currentWeather)
     }
     
     //MARK: - Overrides
@@ -42,7 +35,6 @@ class DetailWeatherViewController: UIViewController {
         super.viewDidLoad()
         
         setWeatherInformation()
-        setupWeatherConditions()
         setupCollectionView()
         setupCollectionViewHeight()
     }
@@ -53,42 +45,19 @@ class DetailWeatherViewController: UIViewController {
         view.setGradientBackground(startColor: .grayBlueTint, endColor: .darkNavyBlue)
     }
     
-    //MARK: CollectioView Data
-    
-    private func setupWeatherConditions() {
-        guard let currentWeather = currentWeather else { return }
-        
-        let forecast = currentWeather.forecast
-        
-        let feelsLikeTemperatureValue = Int(forecast.feelsLikeTemperature.celsius)
-        let windSpeedValue = currentWeather.wind.speed * 3.6
-        
-        let feelsLikeTemperature = ConditionInformation(title: LocalizedStrings.feelsLike, value: String(format: LocalizedStrings.temperatureValueFormat, feelsLikeTemperatureValue))
-        let humidity =  ConditionInformation(title: LocalizedStrings.humidity, value: String(format: LocalizedStrings.percentageValueFormat, forecast.humidity))
-        let pressure = ConditionInformation(title: LocalizedStrings.pressure, value: String(format: LocalizedStrings.pressureValueFormat, forecast.pressure))
-        let windSpeed = ConditionInformation(title: LocalizedStrings.wind, value: String(format: LocalizedStrings.speedValueFormat, windSpeedValue))
-        
-        weatherConditions.append(feelsLikeTemperature)
-        weatherConditions.append(humidity)
-        weatherConditions.append(pressure)
-        weatherConditions.append(windSpeed)
-    }
-    
     //MARK: - UI elements setup
     
     private func setWeatherInformation() {
-        guard let currentWeather = currentWeather else { return }
-        
-        let forecast = currentWeather.forecast
+        guard let currentWeather = detailWeatherPresenter?.currentWeather else { return }
         
         title = currentWeather.name
         
-        tempLabel.text = String(format: LocalizedStrings.degreeValueFormat, Int(forecast.temperature.celsius))
-        weatherDescriptionLabel.text = currentWeather.weather.description.firstCapitalized
-        minTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, Int(forecast.minTemperature.celsius))
-        maxTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, Int(forecast.maxTemperature.celsius))
+        tempLabel.text = String(format: LocalizedStrings.degreeValueFormat, currentWeather.temperature)
+        weatherDescriptionLabel.text = currentWeather.weatherDescription.firstCapitalized
+        minTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.minTemperature)
+        maxTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.maxTemperature)
 
-        let urlString = currentWeather.weather.iconUrlString
+        let urlString = currentWeather.weatherIconUrlString
         if let url = URL(string: urlString) {
             weatherIcon.kf.setImage(with: url)
         }
@@ -120,9 +89,10 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func setupCollectionViewHeight() {
-        let numOfRows = numOfConditionRows
+        let numOfRows = detailWeatherPresenter?.numberOfConditionRows ?? 0
         
-        collectionViewHeightConstraint.constant = rowHeight * CGFloat(numOfRows) + padding * CGFloat(numOfRows + 1)    }
+        collectionViewHeightConstraint.constant = rowHeight * CGFloat(numOfRows) + padding * CGFloat(numOfRows + 1)
+    }
     
 }
 
@@ -131,16 +101,16 @@ class DetailWeatherViewController: UIViewController {
 extension DetailWeatherViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return numOfConditions
+        return detailWeatherPresenter?.numberOfConditions ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName, for: indexPath) as! WeatherConditionDetailCollectionViewCell
         
-        let condition = weatherConditions[indexPath.row]
-        cell.set(condition: condition)
+        if let condition = detailWeatherPresenter?.weatherCondition(atIndex: indexPath.row) {
+            cell.set(conditionViewModel: condition)
+        }
         return cell
     }
-    
     
 }
