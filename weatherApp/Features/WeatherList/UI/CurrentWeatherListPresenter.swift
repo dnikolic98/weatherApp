@@ -9,6 +9,13 @@
 class CurrentWeatherListPresenter {
     
     private var currentWeatherList: [CurrentWeatherViewModel] = []
+    private let weatherService: WeatherServiceProtocol
+    private let navigationService: NavigationService
+    
+    init(weatherService: WeatherServiceProtocol, navigationService: NavigationService) {
+        self.weatherService = weatherService
+        self.navigationService = navigationService
+    }
     
     var numberOfCurrentWeather: Int {
         currentWeatherList.count
@@ -17,7 +24,7 @@ class CurrentWeatherListPresenter {
     func fetchCurrentWeatherList(completion: @escaping (([CurrentWeatherViewModel]?) -> Void)) {
         let locationIds = Cities.allCases.map { $0.rawValue }
         
-        WeatherService().fetchSeveralCurrentWeather(id: locationIds) { [weak self] (currentWeatherList) in
+        weatherService.fetchSeveralCurrentWeather(id: locationIds) { [weak self] (currentWeatherList) in
             guard
                 let self = self,
                 let currentWeatherList = currentWeatherList
@@ -33,6 +40,11 @@ class CurrentWeatherListPresenter {
     
     func currentWeather(atIndex index: Int) -> CurrentWeatherViewModel? {
         return currentWeatherList.at(index)
+    }
+    
+    
+    func handlePushDetailWeatherViewController(currentWeather: CurrentWeatherViewModel) {
+        navigationService.pushDetailWeatherViewController(currentWeather: currentWeather)
     }
     
 }

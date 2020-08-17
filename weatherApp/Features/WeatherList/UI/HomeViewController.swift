@@ -149,8 +149,7 @@ extension HomeViewController: UITableViewDelegate {
         
         guard let currentWeather = currentWeatherListPresenter.currentWeather(atIndex: indexPath.row) else { return }
         
-        let detailViewController = DetailWeatherViewController(currentWeather: currentWeather)
-        navigationController?.pushViewController(detailViewController, animated: true)
+        currentWeatherListPresenter.handlePushDetailWeatherViewController(currentWeather: currentWeather)
     }
     
 }
