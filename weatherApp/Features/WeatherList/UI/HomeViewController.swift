@@ -10,7 +10,7 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    private let rowHeight: CGFloat = 100
+    private let rowHeight = WeatherTableViewCell.height
     private var refreshControl: UIRefreshControl!
     private var currentWeatherListPresenter: CurrentWeatherListPresenter!
     
@@ -97,7 +97,7 @@ class HomeViewController: UIViewController {
         tableView.refreshControl = refreshControl
         
         tableViewHeightConstraint.constant = CGFloat(0)
-        tableView.register(UINib(nibName: WeatherTableViewCell.typeName, bundle: nil), forCellReuseIdentifier: WeatherTableViewCell.typeName)
+        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.typeName)
     }
     
     private func refreshTableView() {

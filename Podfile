@@ -3,4 +3,5 @@ use_frameworks!
 
 target 'weatherApp' do
   pod 'Kingfisher', '~> 5.0'
+  pod 'PureLayout'
 end

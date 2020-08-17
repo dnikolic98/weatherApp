@@ -12,16 +12,20 @@ import Kingfisher
 class DetailWeatherViewController: UIViewController {
     
     private var detailWeatherPresenter: DetailWeatherPresenter?
-    private let padding: CGFloat = 20
-    private let rowHeight: CGFloat = 100
+    private let detailsCollectioViewRowHeight = WeatherConditionDetailCollectionViewCell.height
+    private let daysCollectioViewRowHeight = SingleWeatherInformationCollectionViewCell.height
+    private let detailsNumOfColumns = 2
+    private let numberOfDays = 5
+    private let padding: CGFloat = 10
     
     @IBOutlet private weak var tempLabel: UILabel!
     @IBOutlet private weak var weatherIcon: UIImageView!
     @IBOutlet private weak var weatherDescriptionLabel: UILabel!
-    @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var maxTempLabel: UILabel!
     @IBOutlet private weak var minTempLabel: UILabel!
-    @IBOutlet private weak var collectionViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var detailsCollectionView: UICollectionView!
+    @IBOutlet private weak var detailsCollectionViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var daysCollectionView: UICollectionView!
     
     convenience init(currentWeather: CurrentWeatherViewModel) {
         self.init()
@@ -35,14 +39,27 @@ class DetailWeatherViewController: UIViewController {
         super.viewDidLoad()
         
         setWeatherInformation()
-        setupCollectionView()
-        setupCollectionViewHeight()
+        setupCollectionViews()
+        bindViewModel()
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-
+        
         view.setGradientBackground(startColor: .grayBlueTint, endColor: .darkNavyBlue)
+    }
+    
+    private func bindViewModel() {
+        guard let detailWeatherPresenter = detailWeatherPresenter else { return }
+        
+        detailWeatherPresenter.fetchFiveDaysList() { (currentWeatherList) in
+            guard let _ = currentWeatherList else {
+                return
+            }
+            DispatchQueue.main.async {
+                self.daysCollectionView.reloadData()
+            }
+        }
     }
     
     //MARK: - UI elements setup
@@ -56,29 +73,45 @@ class DetailWeatherViewController: UIViewController {
         weatherDescriptionLabel.text = currentWeather.weatherDescription.firstCapitalized
         minTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.minTemperature)
         maxTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.maxTemperature)
-
+        
         let urlString = currentWeather.weatherIconUrlString
         if let url = URL(string: urlString) {
             weatherIcon.kf.setImage(with: url)
         }
     }
     
-    private func setupCollectionView() {
-        collectionView.dataSource = self
+    private func setupCollectionViews() {
+        detailsCollectionView.dataSource = self
+        daysCollectionView.dataSource = self
         
-        collectionView.collectionViewLayout = createCollectionViewLayout()
-        collectionView.layer.cornerRadius = 10
-        collectionView.register(UINib(nibName: WeatherConditionDetailCollectionViewCell.typeName, bundle: nil), forCellWithReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName)
+        setupDetailsCollectionView()
+        setupDaysCollectionView()
     }
     
-    private func createCollectionViewLayout() -> UICollectionViewLayout {
+    private func setupDetailsCollectionView() {
+        let numOfRows = detailWeatherPresenter?.numberOfConditionRows ?? 0
+        
+        detailsCollectionView.collectionViewLayout = createCollectionViewLayout(rowHeight: detailsCollectioViewRowHeight, columns: detailsNumOfColumns)
+        detailsCollectionView.layer.cornerRadius = 10
+        detailsCollectionView.register(WeatherConditionDetailCollectionViewCell.self, forCellWithReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName)
+        
+        detailsCollectionViewHeightConstraint.constant = detailsCollectioViewRowHeight * CGFloat(numOfRows) + padding * CGFloat(numOfRows + 1)
+    }
+    
+    private func setupDaysCollectionView() {
+        daysCollectionView.collectionViewLayout = createCollectionViewLayout(rowHeight: daysCollectioViewRowHeight, columns: numberOfDays)
+        daysCollectionView.layer.cornerRadius = 10
+        daysCollectionView.register(SingleWeatherInformationCollectionViewCell.self, forCellWithReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName)
+    }
+    
+    private func createCollectionViewLayout(rowHeight: CGFloat, columns: Int) -> UICollectionViewLayout {
         let layoutSize = NSCollectionLayoutSize(
             widthDimension: NSCollectionLayoutDimension.fractionalWidth(1),
             heightDimension: NSCollectionLayoutDimension.estimated(rowHeight)
         )
         
         let item = NSCollectionLayoutItem(layoutSize: layoutSize)
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: layoutSize, subitem: item, count: 2)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: layoutSize, subitem: item, count: columns)
         group.interItemSpacing = .fixed(padding)
         
         let section = NSCollectionLayoutSection(group: group)
@@ -88,12 +121,6 @@ class DetailWeatherViewController: UIViewController {
         return UICollectionViewCompositionalLayout(section: section)
     }
     
-    private func setupCollectionViewHeight() {
-        let numOfRows = detailWeatherPresenter?.numberOfConditionRows ?? 0
-        
-        collectionViewHeightConstraint.constant = rowHeight * CGFloat(numOfRows) + padding * CGFloat(numOfRows + 1)
-    }
-    
 }
 
 //MARK: - CollectionView DataSource
@@ -101,16 +128,32 @@ class DetailWeatherViewController: UIViewController {
 extension DetailWeatherViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return detailWeatherPresenter?.numberOfConditions ?? 0
+        
+        if collectionView == detailsCollectionView {
+            return detailWeatherPresenter?.numberOfConditions ?? 0
+        } else {
+            return detailWeatherPresenter?.numberOfDays ?? 0
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName, for: indexPath) as! WeatherConditionDetailCollectionViewCell
         
-        if let condition = detailWeatherPresenter?.weatherCondition(atIndex: indexPath.row) {
-            cell.set(conditionViewModel: condition)
+        if collectionView == detailsCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName, for: indexPath) as! WeatherConditionDetailCollectionViewCell
+            
+            if let condition = detailWeatherPresenter?.weatherCondition(atIndex: indexPath.row) {
+                cell.set(conditionViewModel: condition)
+            }
+            return cell
+            
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName, for: indexPath) as! SingleWeatherInformationCollectionViewCell
+            
+            if let weatherInfo = detailWeatherPresenter?.fiveDays(atIndex: indexPath.row) {
+                cell.set(weatherInfo: weatherInfo)
+            }
+            return cell
         }
-        return cell
     }
     
 }

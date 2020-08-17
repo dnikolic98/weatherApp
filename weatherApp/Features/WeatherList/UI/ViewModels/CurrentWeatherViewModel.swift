@@ -19,19 +19,21 @@ struct CurrentWeatherViewModel {
     let windSpeed: Double
     let weatherDescription: String
     let weatherIconUrlString: String
+    let coord: Coordinates
     
     init(currentWeather: CurrentWeather) {
         id = currentWeather.id
         name = currentWeather.name
         humidity = currentWeather.forecast.humidity
         pressure = currentWeather.forecast.pressure
-        temperature = Int(currentWeather.forecast.temperature.celsius)
-        feelsLikeTemperature = Int(currentWeather.forecast.feelsLikeTemperature.celsius)
-        maxTemperature = Int(currentWeather.forecast.maxTemperature.celsius)
-        minTemperature = Int(currentWeather.forecast.minTemperature.celsius)
+        temperature = Int(currentWeather.forecast.temperature)
+        feelsLikeTemperature = Int(currentWeather.forecast.feelsLikeTemperature)
+        maxTemperature = Int(currentWeather.forecast.maxTemperature)
+        minTemperature = Int(currentWeather.forecast.minTemperature)
         windSpeed = currentWeather.wind.speed
-        weatherDescription = currentWeather.weather.description
-        weatherIconUrlString = currentWeather.weather.iconUrlString
+        weatherDescription = currentWeather.weather.at(0)?.description ?? ""
+        weatherIconUrlString = currentWeather.weather.at(0)?.iconUrlString ?? ""
+        coord = currentWeather.coord
     }
     
 }

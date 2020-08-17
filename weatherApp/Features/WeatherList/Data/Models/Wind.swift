@@ -6,9 +6,14 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
-struct Wind {
+struct Wind: Codable {
     
     let speed: Double
     let directionDegree: Int
+    
+    private enum CodingKeys : String, CodingKey {
+        case speed = "speed"
+        case directionDegree = "deg"
+    }
     
 }
