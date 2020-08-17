@@ -64,15 +64,17 @@ class WeatherConditionDetailCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupLayout() {
+        let offset: CGFloat = 15
+        
         heightAnchor.constraint(equalToConstant: WeatherConditionDetailCollectionViewCell.height).isActive = true
         
-        conditionLabel.autoPinEdge(.top, to: .top, of: contentView, withOffset: 15)
-        conditionLabel.autoPinEdge(.trailing, to: .trailing, of: contentView, withOffset: 15)
-        conditionLabel.autoPinEdge(.leading, to: .leading, of: contentView, withOffset: 15)
+        conditionLabel.autoPinEdge(.top, to: .top, of: contentView, withOffset: offset)
+        conditionLabel.autoPinEdge(.trailing, to: .trailing, of: contentView, withOffset: offset)
+        conditionLabel.autoPinEdge(.leading, to: .leading, of: contentView, withOffset: offset)
         
-        valueLabel.autoPinEdge(.top, to: .bottom, of: conditionLabel, withOffset: 15)
-        valueLabel.autoPinEdge(.trailing, to: .trailing, of: contentView, withOffset: 15)
-        valueLabel.autoPinEdge(.leading, to: .leading, of: contentView, withOffset: 15)
+        valueLabel.autoPinEdge(.top, to: .bottom, of: conditionLabel, withOffset: offset)
+        valueLabel.autoPinEdge(.trailing, to: .trailing, of: contentView, withOffset: offset)
+        valueLabel.autoPinEdge(.leading, to: .leading, of: contentView, withOffset: offset)
     }
     
 }

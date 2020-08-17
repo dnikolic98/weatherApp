@@ -31,8 +31,8 @@ struct CurrentWeatherViewModel {
         maxTemperature = Int(currentWeather.forecast.maxTemperature)
         minTemperature = Int(currentWeather.forecast.minTemperature)
         windSpeed = currentWeather.wind.speed
-        weatherDescription = currentWeather.weather[0].description
-        weatherIconUrlString = currentWeather.weather[0].iconUrlString
+        weatherDescription = currentWeather.weather.at(0)?.description ?? ""
+        weatherIconUrlString = currentWeather.weather.at(0)?.iconUrlString ?? ""
         coord = currentWeather.coord
     }
     

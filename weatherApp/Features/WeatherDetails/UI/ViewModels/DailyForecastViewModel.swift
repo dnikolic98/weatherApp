@@ -38,8 +38,8 @@ struct DailyForecastViewModel {
         dayTemperature = Int(dailyWeather.temperature.day)
         morningTemperature = Int(dailyWeather.temperature.morning)
         nightTemperature = Int(dailyWeather.temperature.night)
-        weatherDescription = dailyWeather.weather[0].description
-        weatherIconUrlString = dailyWeather.weather[0].iconUrlString
+        weatherDescription = dailyWeather.weather.at(0)?.description ?? ""
+        weatherIconUrlString = dailyWeather.weather.at(0)?.iconUrlString ?? ""
         sunrise = dailyWeather.sunrise
         sunset = dailyWeather.sunset
         forecastTime = Date(timeIntervalSince1970: TimeInterval(dailyWeather.forecastTime))

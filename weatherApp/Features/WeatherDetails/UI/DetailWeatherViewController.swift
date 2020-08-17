@@ -129,7 +129,7 @@ extension DetailWeatherViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if collectionView == self.detailsCollectionView {
+        if collectionView == detailsCollectionView {
             return detailWeatherPresenter?.numberOfConditions ?? 0
         } else {
             return detailWeatherPresenter?.numberOfDays ?? 0
@@ -138,7 +138,7 @@ extension DetailWeatherViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if collectionView == self.detailsCollectionView {
+        if collectionView == detailsCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName, for: indexPath) as! WeatherConditionDetailCollectionViewCell
             
             if let condition = detailWeatherPresenter?.weatherCondition(atIndex: indexPath.row) {
