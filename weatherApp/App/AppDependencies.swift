@@ -8,6 +8,6 @@
 
 class AppDependencies {
     
-    let weatherService = WeatherService()
+    lazy var weatherService: WeatherServiceProtocol = WeatherService()
     
 }

@@ -10,29 +10,28 @@ import UIKit
 
 class NavigationService {
     
-    private let appDependencies = AppDependencies()
-    private let navigationController = UINavigationController()
-    private var window: UIWindow!
+    private let appDependencies: AppDependencies
+    private weak var navigationController: UINavigationController?
     
-    init(window: UIWindow) {
-        presentInWindow(window: window)
-        pushHomeViewController()
+    init(navigationController: UINavigationController, appDependencies: AppDependencies) {
+        self.navigationController = navigationController
+        self.appDependencies = appDependencies
     }
     
-    func pushHomeViewController() {
-        let presenter = CurrentWeatherListPresenter(weatherService: appDependencies.weatherService, navigationService: self)
-        navigationController.pushViewController(HomeViewController(currentWeatherListPresenter: presenter), animated: true)
-    }
-    
-    func pushDetailWeatherViewController(currentWeather: CurrentWeatherViewModel) {
-        let presenter = DetailWeatherPresenter(currentWeather: currentWeather, weatherService: appDependencies.weatherService, navigationService: self)
-        navigationController.pushViewController(DetailWeatherViewController(detailWeatherPresenter: presenter), animated: true)
-    }
-    
-    private func presentInWindow(window: UIWindow){
-        self.window = window
+    func presentInWindow(window: UIWindow){
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
+        goToHome()
+    }
+    
+    func goToHome() {
+        let presenter = CurrentWeatherListPresenter(weatherService: appDependencies.weatherService, navigationService: self)
+        navigationController?.pushViewController(HomeViewController(currentWeatherListPresenter: presenter), animated: true)
+    }
+    
+    func goToDetailWeather(currentWeather: CurrentWeatherViewModel) {
+        let presenter = DetailWeatherPresenter(currentWeather: currentWeather, weatherService: appDependencies.weatherService, navigationService: self)
+        navigationController?.pushViewController(DetailWeatherViewController(detailWeatherPresenter: presenter), animated: true)
     }
     
 }

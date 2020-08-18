@@ -44,7 +44,7 @@ class CurrentWeatherListPresenter {
     
     
     func handlePushDetailWeatherViewController(currentWeather: CurrentWeatherViewModel) {
-        navigationService.pushDetailWeatherViewController(currentWeather: currentWeather)
+        navigationService.goToDetailWeather(currentWeather: currentWeather)
     }
     
 }
