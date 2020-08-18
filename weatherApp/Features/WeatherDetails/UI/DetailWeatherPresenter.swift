@@ -9,7 +9,6 @@
 class DetailWeatherPresenter {
     
     private let weatherService: WeatherServiceProtocol
-    private let navigationService: NavigationService
     private var sevenDayForecast: [DailyForecastViewModel] = []
     private var weatherConditionList: [ConditionInformationViewModel] = []
     private var fiveDaysList: [SingleWeatherInformationViewModel] = []
@@ -25,10 +24,9 @@ class DetailWeatherPresenter {
         fiveDaysList.count
     }
     
-    init(currentWeather: CurrentWeatherViewModel, weatherService: WeatherServiceProtocol, navigationService: NavigationService) {
+    init(currentWeather: CurrentWeatherViewModel, weatherService: WeatherServiceProtocol) {
         self.currentWeather = currentWeather
         self.weatherService = weatherService
-        self.navigationService = navigationService
 
         setWeatherConditionList()
     }

@@ -30,7 +30,7 @@ class NavigationService {
     }
     
     func goToDetailWeather(currentWeather: CurrentWeatherViewModel) {
-        let presenter = DetailWeatherPresenter(currentWeather: currentWeather, weatherService: appDependencies.weatherService, navigationService: self)
+        let presenter = DetailWeatherPresenter(currentWeather: currentWeather, weatherService: appDependencies.weatherService)
         navigationController?.pushViewController(DetailWeatherViewController(detailWeatherPresenter: presenter), animated: true)
     }
     
