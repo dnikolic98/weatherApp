@@ -8,6 +8,12 @@
 
 class AppDependencies {
     
-    lazy var weatherService: WeatherServiceProtocol = WeatherService()
+    lazy var weatherService: WeatherServiceProtocol = {
+        WeatherService()
+    }()
     
+    lazy var weatherRepository: WeatherRepository = {
+        WeatherRepository(weatherService: weatherService)
+    }()
+
 }
