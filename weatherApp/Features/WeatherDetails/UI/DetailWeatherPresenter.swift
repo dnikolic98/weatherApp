@@ -8,6 +8,7 @@
 
 class DetailWeatherPresenter {
     
+    private let weatherService: WeatherServiceProtocol
     private var sevenDayForecast: [DailyForecastViewModel] = []
     private var weatherConditionList: [ConditionInformationViewModel] = []
     private var fiveDaysList: [SingleWeatherInformationViewModel] = []
@@ -19,13 +20,13 @@ class DetailWeatherPresenter {
     var numberOfConditionRows: Int {
         numberOfConditions / 2 + numberOfConditions % 2
     }
-    
     var numberOfDays: Int {
         fiveDaysList.count
     }
     
-    init(currentWeather: CurrentWeatherViewModel) {
+    init(currentWeather: CurrentWeatherViewModel, weatherService: WeatherServiceProtocol) {
         self.currentWeather = currentWeather
+        self.weatherService = weatherService
 
         setWeatherConditionList()
     }
@@ -39,7 +40,7 @@ class DetailWeatherPresenter {
     }
     
     func fetchFiveDaysList(completion: @escaping ((ForecastedWeather?) -> Void)) {
-        WeatherService().fetchForcastWeather(coord: currentWeather.coord) { [weak self] (fiveDaysForecast) in
+        weatherService.fetchForcastWeather(coord: currentWeather.coord) { [weak self] (fiveDaysForecast) in
             guard
                 let self = self,
                 let fiveDaysForecast = fiveDaysForecast
@@ -84,5 +85,5 @@ class DetailWeatherPresenter {
             fiveDaysList.append(SingleWeatherInformationViewModel(header: day, body: temperature, iconUrlString: forecast.weatherIconUrlString))
         }
     }
-
+    
 }
