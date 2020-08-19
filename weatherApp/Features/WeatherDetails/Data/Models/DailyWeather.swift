@@ -28,4 +28,5 @@ struct DailyWeather: Codable {
         case humidity = "humidity"
         case weather = "weather"
     }
+    
 }
