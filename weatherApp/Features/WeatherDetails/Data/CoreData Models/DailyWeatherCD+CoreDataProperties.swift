@@ -18,6 +18,7 @@ extension DailyWeatherCD {
 
     @NSManaged public var forecastTime: Int64
     @NSManaged public var humidity: Int64
+    @NSManaged public var id: Int64
     @NSManaged public var pressure: Double
     @NSManaged public var sunrise: Int64
     @NSManaged public var sunset: Int64

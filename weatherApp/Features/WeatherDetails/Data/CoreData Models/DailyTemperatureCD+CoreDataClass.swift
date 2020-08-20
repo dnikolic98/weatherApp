@@ -33,22 +33,18 @@ public class DailyTemperatureCD: NSManagedObject {
         }
     }
     
-    class func createFrom(weather: Weather, currentWeather: CurrentWeatherCD) -> DailyTemperatureCD? {
-        guard let weatherCD = firstOrCreate(withCurrentWeather: currentWeather) else { return nil }
+    class func createFrom(dailyTemperature: DailyTemperature, dailyWeather: DailyWeatherCD) -> DailyTemperatureCD? {
+        guard let dailyTemperatureCD = firstOrCreate(withDailyWeather: dailyWeather) else { return nil }
         
-        weatherCD.currentWeather = currentWeather
-        weatherCD.icon = weather.icon
-        weatherCD.iconsUrlString = weather.iconUrlString
-        weatherCD.overview = weather.overview
+        dailyTemperatureCD.dailyWeather = dailyWeather
+        dailyTemperatureCD.day = dailyTemperature.day
+        dailyTemperatureCD.evening = dailyTemperature.evening
+        dailyTemperatureCD.morning = dailyTemperature.morning
+        dailyTemperatureCD.max = dailyTemperature.max
+        dailyTemperatureCD.min = dailyTemperature.min
+        dailyTemperatureCD.night = dailyTemperature.night
         
-        do {
-            let context = CoreData.shared.persistentContainer.viewContext
-            try context.save()
-            return weatherCD
-        } catch {
-            print("Failed saving")
-            return nil
-        }
+        return dailyTemperatureCD
     }
     
 }

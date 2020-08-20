@@ -16,9 +16,9 @@ extension WeatherCD {
         return NSFetchRequest<WeatherCD>(entityName: "WeatherCD")
     }
 
-    @NSManaged public var icon: String?
-    @NSManaged public var iconsUrlString: String?
-    @NSManaged public var overview: String?
+    @NSManaged public var icon: String
+    @NSManaged public var iconsUrlString: String
+    @NSManaged public var overview: String
     @NSManaged public var currentWeather: CurrentWeatherCD?
     @NSManaged public var dailyWeather: DailyWeatherCD?
 

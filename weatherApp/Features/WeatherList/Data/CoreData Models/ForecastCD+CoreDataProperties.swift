@@ -22,6 +22,6 @@ extension ForecastCD {
     @NSManaged public var minTemperature: Double
     @NSManaged public var pressure: Int64
     @NSManaged public var temperature: Double
-    @NSManaged public var currentWeather: CurrentWeatherCD?
+    @NSManaged public var currentWeather: CurrentWeatherCD
 
 }

@@ -18,6 +18,6 @@ extension CoordinatesCD {
 
     @NSManaged public var latitude: Double
     @NSManaged public var longitude: Double
-    @NSManaged public var currentWeather: CurrentWeatherCD?
+    @NSManaged public var currentWeather: CurrentWeatherCD
 
 }

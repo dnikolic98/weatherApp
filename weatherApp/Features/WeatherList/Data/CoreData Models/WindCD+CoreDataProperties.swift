@@ -16,8 +16,8 @@ extension WindCD {
         return NSFetchRequest<WindCD>(entityName: "WindCD")
     }
 
-    @NSManaged public var directionDegree: Double
-    @NSManaged public var speed: Int64
-    @NSManaged public var currentWeather: CurrentWeatherCD?
+    @NSManaged public var directionDegree: Int64
+    @NSManaged public var speed: Double
+    @NSManaged public var currentWeather: CurrentWeatherCD
 
 }

@@ -12,7 +12,7 @@ import Reachability
 class WeatherRepository {
     
     let weatherService: WeatherServiceProtocol
-    let reachability: Reachability
+    var reachability: Reachability
     
     init(weatherService: WeatherServiceProtocol, reachability: Reachability) {
         self.weatherService = weatherService
@@ -21,28 +21,43 @@ class WeatherRepository {
     }
     
     
-    func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeather]?) -> Void)) {
-        reachability.whenReachable = { _ in
+    func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeatherCD]?) -> Void)) {
+        switch reachability.connection {
+        case .unavailable:
+            let currentWeatherListCD = CoreData.shared.fetchCurrentWeather()
+            completion(currentWeatherListCD)
+        default:
             self.weatherService.fetchSeveralCurrentWeather(id: id) { (currentWeatherList) in
-                completion(currentWeatherList)
+                guard let currentWeatherList = currentWeatherList else {
+                    completion(nil)
+                    return
+                }
+                DispatchQueue.main.async {
+                    let _ = currentWeatherList.map { CurrentWeatherCD.createFrom(currentWeather: $0) }
+                    let currentWeatherListCD = CoreData.shared.fetchCurrentWeather()
+                    completion(currentWeatherListCD)
+                }
             }
-        }
-        
-        reachability.whenUnreachable = { _ in
-            print("Not reachable")
         }
     }
     
-    func fetchForcastWeather(coord: Coordinates, completion: @escaping ((ForecastedWeather?) -> Void)) {
-        
-        reachability.whenReachable = { _ in
+    func fetchForcastWeather(coord: Coordinates, completion: @escaping ((ForecastedWeatherCD?) -> Void)) {
+        switch reachability.connection {
+        case .unavailable:
+            let currentWeatherListCD = CoreData.shared.fetchForecastWeather(coord: coord)
+            completion(currentWeatherListCD)
+        default:
             self.weatherService.fetchForcastWeather(coord: coord) { (forecastedWeather) in
-                completion(forecastedWeather)
+                guard let forecastedWeather = forecastedWeather else {
+                    completion(nil)
+                    return
+                }
+                DispatchQueue.main.async {
+                    let _ = ForecastedWeatherCD.createFrom(forecastedWeather: forecastedWeather)
+                    let currentWeatherListCD = CoreData.shared.fetchForecastWeather(coord: coord)
+                    completion(currentWeatherListCD)
+                }
             }
-        }
-        
-        reachability.whenUnreachable = { _ in
-            print("Not reachable")
         }
     }
     

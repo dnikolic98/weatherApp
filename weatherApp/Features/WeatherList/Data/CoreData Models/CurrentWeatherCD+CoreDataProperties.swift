@@ -17,10 +17,10 @@ extension CurrentWeatherCD {
     }
 
     @NSManaged public var id: Int64
-    @NSManaged public var name: String?
-    @NSManaged public var coord: CoordinatesCD?
-    @NSManaged public var forecast: ForecastCD?
-    @NSManaged public var weather: WeatherCD?
-    @NSManaged public var wind: WindCD?
+    @NSManaged public var name: String
+    @NSManaged public var coord: CoordinatesCD
+    @NSManaged public var forecast: ForecastCD
+    @NSManaged public var weather: WeatherCD
+    @NSManaged public var wind: WindCD
 
 }

@@ -15,8 +15,10 @@ extension ForecastedWeatherCD {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<ForecastedWeatherCD> {
         return NSFetchRequest<ForecastedWeatherCD>(entityName: "ForecastedWeatherCD")
     }
-
-    @NSManaged public var forecastedWeather: NSSet?
+    
+    @NSManaged public var forecastedWeather: NSSet
+    @NSManaged public var latitude: Double
+    @NSManaged public var longitude: Double
 
 }
 

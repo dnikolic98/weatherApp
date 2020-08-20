@@ -44,6 +44,7 @@ class DetailWeatherViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+print(FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask))
         
         view.setGradientBackground(startColor: .grayBlueTint, endColor: .darkNavyBlue)
     }

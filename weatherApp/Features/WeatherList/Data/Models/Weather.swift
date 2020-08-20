@@ -8,14 +8,14 @@
 
 struct Weather: Codable {
     
-    let description: String
+    let overview: String
     let icon: String
     var iconUrlString: String {
         "https://openweathermap.org/img/wn/\(icon)@2x.png"
     }
     
     private enum CodingKeys : String, CodingKey {
-        case description = "description"
+        case overview = "description"
         case icon = "icon"
     }
     
