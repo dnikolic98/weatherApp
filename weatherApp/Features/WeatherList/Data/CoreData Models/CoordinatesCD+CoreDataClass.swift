@@ -13,7 +13,7 @@ import CoreData
 public class CoordinatesCD: NSManagedObject {
     
     class func firstOrCreate(withCurrentWeather currentWeather: CurrentWeatherCD) -> CoordinatesCD? {
-        let context = CoreData.shared.persistentContainer.viewContext
+        let context = CoreDataStack.shared.persistentContainer.viewContext
         
         let request: NSFetchRequest<CoordinatesCD> = CoordinatesCD.fetchRequest()
         request.predicate = NSPredicate(format: "currentWeather = %@", currentWeather)

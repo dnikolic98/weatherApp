@@ -13,43 +13,44 @@ import CoreData
 public class WeatherCD: NSManagedObject {
     
     class func firstOrCreate(withCurrentWeather currentWeather: CurrentWeatherCD) -> WeatherCD? {
-        let context = CoreData.shared.persistentContainer.viewContext
-        
-        let request: NSFetchRequest<WeatherCD> = WeatherCD.fetchRequest()
-        request.predicate = NSPredicate(format: "currentWeather = %@", currentWeather)
-        request.returnsObjectsAsFaults = false
-        
-        do {
-            let weatherFetched = try context.fetch(request)
-            
-            guard let weather = weatherFetched.first else {
-                let newWeather = WeatherCD(context: context)
-                return newWeather
-            }
-            
-            return weather
-        } catch {
-            return nil
-        }
+        let predicate = NSPredicate(format: "currentWeather = %@", currentWeather)
+        return firstOrCreate(withPredicate: predicate)
     }
     
     class func createFrom(weather: Weather, currentWeather: CurrentWeatherCD) -> WeatherCD? {
         guard let weatherCD = firstOrCreate(withCurrentWeather: currentWeather) else { return nil }
         
         weatherCD.currentWeather = currentWeather
-        weatherCD.icon = weather.icon
-        weatherCD.iconsUrlString = weather.iconUrlString
-        weatherCD.overview = weather.overview
+        populate(weatherCoreData: weatherCD, weather: weather)
         
-        
-            return weatherCD
+        return weatherCD
     }
     
     class func firstOrCreate(withDailyWeather dailyWeather: DailyWeatherCD) -> WeatherCD? {
-        let context = CoreData.shared.persistentContainer.viewContext
+        let predicate = NSPredicate(format: "dailyWeather = %@", dailyWeather)
+        return firstOrCreate(withPredicate: predicate)
+    }
+    
+    class func createFrom(weather: Weather, dailyWeather: DailyWeatherCD) -> WeatherCD? {
+        guard let weatherCD = firstOrCreate(withDailyWeather: dailyWeather) else { return nil }
+        
+        weatherCD.dailyWeather = dailyWeather
+        populate(weatherCoreData: weatherCD, weather: weather)
+        
+        return weatherCD
+    }
+    
+    private class func populate(weatherCoreData: WeatherCD, weather: Weather) {
+        weatherCoreData.icon = weather.icon
+        weatherCoreData.iconsUrlString = weather.iconUrlString
+        weatherCoreData.overview = weather.overview
+    }
+    
+    private class func firstOrCreate(withPredicate predicate: NSPredicate) -> WeatherCD? {
+        let context = CoreDataStack.shared.persistentContainer.viewContext
         
         let request: NSFetchRequest<WeatherCD> = WeatherCD.fetchRequest()
-        request.predicate = NSPredicate(format: "dailyWeather = %@", dailyWeather)
+        request.predicate = predicate
         request.returnsObjectsAsFaults = false
         
         do {
@@ -64,17 +65,6 @@ public class WeatherCD: NSManagedObject {
         } catch {
             return nil
         }
-    }
-    
-    class func createFrom(weather: Weather, dailyWeather: DailyWeatherCD) -> WeatherCD? {
-        guard let weatherCD = firstOrCreate(withDailyWeather: dailyWeather) else { return nil }
-        
-        weatherCD.dailyWeather = dailyWeather
-        weatherCD.icon = weather.icon
-        weatherCD.iconsUrlString = weather.iconUrlString
-        weatherCD.overview = weather.overview
-        
-        return weatherCD
     }
     
 }

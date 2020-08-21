@@ -13,7 +13,7 @@ import CoreData
 public class WindCD: NSManagedObject {
     
     class func firstOrCreate(withCurrentWeather currentWeather: CurrentWeatherCD) -> WindCD? {
-        let context = CoreData.shared.persistentContainer.viewContext
+        let context = CoreDataStack.shared.persistentContainer.viewContext
         
         let request: NSFetchRequest<WindCD> = WindCD.fetchRequest()
         request.predicate = NSPredicate(format: "currentWeather = %@", currentWeather)
