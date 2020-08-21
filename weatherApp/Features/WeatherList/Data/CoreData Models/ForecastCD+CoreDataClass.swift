@@ -44,7 +44,6 @@ public class ForecastCD: NSManagedObject {
         forecastCD.minTemperature = forecast.minTemperature
         forecastCD.temperature = forecast.temperature
         
-        
         return forecastCD
     }
     

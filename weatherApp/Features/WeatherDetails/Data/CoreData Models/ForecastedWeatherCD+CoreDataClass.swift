@@ -17,7 +17,8 @@ public class ForecastedWeatherCD: NSManagedObject {
         
         let request: NSFetchRequest<ForecastedWeatherCD> = ForecastedWeatherCD.fetchRequest()
         let epsilon = 0.00001
-        request.predicate = NSPredicate(format: "longitude > %f AND longitude < %f AND latitude > %f AND latitude < %f", lon-epsilon, lon+epsilon, lat-epsilon, lat+epsilon)
+        let format = "longitude > %f AND longitude < %f AND latitude > %f AND latitude < %f"
+        request.predicate = NSPredicate(format: format, lon-epsilon, lon+epsilon, lat-epsilon, lat+epsilon)
         request.returnsObjectsAsFaults = false
         
         do {
