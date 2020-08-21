@@ -8,9 +8,9 @@
 
 import CoreData
 
-class CoreData {
+class CoreDataStack {
     
-    static let shared = CoreData()
+    static let shared = CoreDataStack()
     private init() {}
 
     lazy var persistentContainer: NSPersistentContainer = {
@@ -26,7 +26,7 @@ class CoreData {
     func fetchCurrentWeather() -> [CurrentWeatherCD]? {
         let request: NSFetchRequest<CurrentWeatherCD> = CurrentWeatherCD.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        let context = CoreData.shared.persistentContainer.viewContext
+        let context = CoreDataStack.shared.persistentContainer.viewContext
         let currentWeatherList = try? context.fetch(request)
         return currentWeatherList
     }
@@ -38,7 +38,7 @@ class CoreData {
         let request: NSFetchRequest<ForecastedWeatherCD> = ForecastedWeatherCD.fetchRequest()
         let epsilon = 0.00001
         request.predicate = NSPredicate(format: "longitude > %f AND longitude < %f AND latitude > %f AND latitude < %f", lon-epsilon, lon+epsilon, lat-epsilon, lat+epsilon)
-        let context = CoreData.shared.persistentContainer.viewContext
+        let context = CoreDataStack.shared.persistentContainer.viewContext
         let forecastedWeatherCD = try? context.fetch(request)
         return forecastedWeatherCD?.first
     }

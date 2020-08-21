@@ -13,7 +13,7 @@ import CoreData
 public class CurrentWeatherCD: NSManagedObject {
     
     class func firstOrCreate(withId id: Int) -> CurrentWeatherCD? {
-        let context = CoreData.shared.persistentContainer.viewContext
+        let context = CoreDataStack.shared.persistentContainer.viewContext
         
         let request: NSFetchRequest<CurrentWeatherCD> = CurrentWeatherCD.fetchRequest()
         request.predicate = NSPredicate(format: "id = %d", id)
@@ -53,7 +53,7 @@ public class CurrentWeatherCD: NSManagedObject {
         currentWeatherCD.id = Int64(currentWeather.id)
         
         do {
-            let context = CoreData.shared.persistentContainer.viewContext
+            let context = CoreDataStack.shared.persistentContainer.viewContext
             try context.save()
             return currentWeatherCD
         } catch {

@@ -24,7 +24,7 @@ class WeatherRepository {
     func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeatherCD]?) -> Void)) {
         switch reachability.connection {
         case .unavailable:
-            let currentWeatherListCD = CoreData.shared.fetchCurrentWeather()
+            let currentWeatherListCD = CoreDataStack.shared.fetchCurrentWeather()
             completion(currentWeatherListCD)
         default:
             self.weatherService.fetchSeveralCurrentWeather(id: id) { (currentWeatherList) in
@@ -34,7 +34,7 @@ class WeatherRepository {
                 }
                 DispatchQueue.main.async {
                     let _ = currentWeatherList.map { CurrentWeatherCD.createFrom(currentWeather: $0) }
-                    let currentWeatherListCD = CoreData.shared.fetchCurrentWeather()
+                    let currentWeatherListCD = CoreDataStack.shared.fetchCurrentWeather()
                     completion(currentWeatherListCD)
                 }
             }
@@ -44,7 +44,7 @@ class WeatherRepository {
     func fetchForcastWeather(coord: Coordinates, completion: @escaping ((ForecastedWeatherCD?) -> Void)) {
         switch reachability.connection {
         case .unavailable:
-            let currentWeatherListCD = CoreData.shared.fetchForecastWeather(coord: coord)
+            let currentWeatherListCD = CoreDataStack.shared.fetchForecastWeather(coord: coord)
             completion(currentWeatherListCD)
         default:
             self.weatherService.fetchForcastWeather(coord: coord) { (forecastedWeather) in
@@ -54,7 +54,7 @@ class WeatherRepository {
                 }
                 DispatchQueue.main.async {
                     let _ = ForecastedWeatherCD.createFrom(forecastedWeather: forecastedWeather)
-                    let currentWeatherListCD = CoreData.shared.fetchForecastWeather(coord: coord)
+                    let currentWeatherListCD = CoreDataStack.shared.fetchForecastWeather(coord: coord)
                     completion(currentWeatherListCD)
                 }
             }

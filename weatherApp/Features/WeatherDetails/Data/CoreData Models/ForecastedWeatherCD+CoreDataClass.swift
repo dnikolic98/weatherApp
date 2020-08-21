@@ -13,7 +13,7 @@ import CoreData
 public class ForecastedWeatherCD: NSManagedObject {
     
     class func firstOrCreate(withLongitude lon: Double, withLatitude lat: Double) -> ForecastedWeatherCD? {
-        let context = CoreData.shared.persistentContainer.viewContext
+        let context = CoreDataStack.shared.persistentContainer.viewContext
         
         let request: NSFetchRequest<ForecastedWeatherCD> = ForecastedWeatherCD.fetchRequest()
         let epsilon = 0.00001
@@ -45,13 +45,12 @@ public class ForecastedWeatherCD: NSManagedObject {
         forecastedWeatherCD.latitude = forecastedWeather.latitude
         for (index, dailyWeather) in forecastedWeather.forecastedWeather.enumerated() {
             if let dailyWeatherCD = DailyWeatherCD.createFrom(dailyWeather: dailyWeather, indexId: index, forecastedWeather: forecastedWeatherCD) {
-//                forecastedWeatherCD.removeFromForecastedWeather(dailyWeatherCD)
                 forecastedWeatherCD.addToForecastedWeather(dailyWeatherCD)
             }
         }
         
         do {
-            let context = CoreData.shared.persistentContainer.viewContext
+            let context = CoreDataStack.shared.persistentContainer.viewContext
             try context.save()
             return forecastedWeatherCD
         } catch {

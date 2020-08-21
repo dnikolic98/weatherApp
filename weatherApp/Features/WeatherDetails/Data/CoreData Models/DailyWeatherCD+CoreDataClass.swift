@@ -13,7 +13,7 @@ import CoreData
 public class DailyWeatherCD: NSManagedObject {
     
     class func firstOrCreate(withForecastedWeather forecastedWeather: ForecastedWeatherCD, withId id: Int) -> DailyWeatherCD? {
-        let context = CoreData.shared.persistentContainer.viewContext
+        let context = CoreDataStack.shared.persistentContainer.viewContext
         
         let request: NSFetchRequest<DailyWeatherCD> = DailyWeatherCD.fetchRequest()
         request.predicate = NSPredicate(format: "id = %d AND forecastedWeather = %@", id, forecastedWeather)
