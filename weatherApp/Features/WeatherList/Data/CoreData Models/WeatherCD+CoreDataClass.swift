@@ -12,6 +12,8 @@ import CoreData
 @objc(WeatherCD)
 public class WeatherCD: NSManagedObject {
     
+    //MARK: - CurrentWeather
+    
     class func firstOrCreate(withCurrentWeather currentWeather: CurrentWeatherCD) -> WeatherCD? {
         let predicate = NSPredicate(format: "currentWeather = %@", currentWeather)
         return firstOrCreate(withPredicate: predicate)
@@ -26,6 +28,8 @@ public class WeatherCD: NSManagedObject {
         return weatherCD
     }
     
+    //MARK: - DailyWeather
+    
     class func firstOrCreate(withDailyWeather dailyWeather: DailyWeatherCD) -> WeatherCD? {
         let predicate = NSPredicate(format: "dailyWeather = %@", dailyWeather)
         return firstOrCreate(withPredicate: predicate)
@@ -39,6 +43,8 @@ public class WeatherCD: NSManagedObject {
         
         return weatherCD
     }
+    
+    //MARK: - Privates
     
     private class func populate(weatherCoreData: WeatherCD, weather: Weather) {
         weatherCoreData.icon = weather.icon
