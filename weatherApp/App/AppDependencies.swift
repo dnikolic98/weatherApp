@@ -18,8 +18,16 @@ class AppDependencies {
         try! Reachability()
     }()
     
+    lazy var coreDataStack: CoreDataStack = {
+        CoreDataStack(modelName: "weatherApp", completion: {})
+    }()
+    
+    lazy var coreDataService: CoreDataService = {
+        CoreDataService(coreDataStack: coreDataStack)
+    }()
+    
     lazy var weatherRepository: WeatherRepository = {
-        WeatherRepository(weatherService: weatherService, reachability: reachability)
+        WeatherRepository(weatherService: weatherService, coreDataService: coreDataService, coreDataStack: coreDataStack, reachability: reachability)
     }()
 
 }

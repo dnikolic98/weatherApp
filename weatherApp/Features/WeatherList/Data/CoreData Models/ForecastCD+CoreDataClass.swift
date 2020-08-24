@@ -12,29 +12,13 @@ import CoreData
 @objc(ForecastCD)
 public class ForecastCD: NSManagedObject {
     
-    class func firstOrCreate(withCurrentWeather currentWeather: CurrentWeatherCD) -> ForecastCD? {
-        let context = CoreDataStack.shared.persistentContainer.viewContext
-        
-        let request: NSFetchRequest<ForecastCD> = ForecastCD.fetchRequest()
-        request.predicate = NSPredicate(format: "currentWeather = %@", currentWeather)
-        request.returnsObjectsAsFaults = false
-        
-        do {
-            let forecastFetched = try context.fetch(request)
-            
-            guard let forecast = forecastFetched.first else {
-                let newForecast = ForecastCD(context: context)
-                return newForecast
-            }
-            
-            return forecast
-        } catch {
-            return nil
-        }
+    class func firstOrCreate(withCurrentWeather currentWeather: CurrentWeatherCD, context: NSManagedObjectContext) -> ForecastCD? {
+        let predicate = NSPredicate(format: "currentWeather = %@", currentWeather)
+        return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    class func createFrom(forecast: Forecast, currentWeather: CurrentWeatherCD) -> ForecastCD? {
-        guard let forecastCD = firstOrCreate(withCurrentWeather: currentWeather) else { return nil }
+    class func createFrom(forecast: Forecast, currentWeather: CurrentWeatherCD, context: NSManagedObjectContext) -> ForecastCD? {
+        guard let forecastCD = firstOrCreate(withCurrentWeather: currentWeather, context: context) else { return nil }
         
         forecastCD.currentWeather = currentWeather
         forecastCD.feelsLikeTemperature = forecast.feelsLikeTemperature

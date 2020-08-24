@@ -12,32 +12,16 @@ import CoreData
 @objc(ForecastedWeatherCD)
 public class ForecastedWeatherCD: NSManagedObject {
     
-    class func firstOrCreate(withLongitude lon: Double, withLatitude lat: Double) -> ForecastedWeatherCD? {
-        let context = CoreDataStack.shared.persistentContainer.viewContext
-        
-        let request: NSFetchRequest<ForecastedWeatherCD> = ForecastedWeatherCD.fetchRequest()
+    class func firstOrCreate(withLongitude lon: Double, withLatitude lat: Double, context: NSManagedObjectContext) -> ForecastedWeatherCD? {
         let epsilon = 0.00001
         let format = "longitude > %f AND longitude < %f AND latitude > %f AND latitude < %f"
-        request.predicate = NSPredicate(format: format, lon-epsilon, lon+epsilon, lat-epsilon, lat+epsilon)
-        request.returnsObjectsAsFaults = false
-        
-        do {
-            let forecastedWeatherFetched = try context.fetch(request)
-            
-            guard let forecastedWeather = forecastedWeatherFetched.first else {
-                let newForecastedWeather = ForecastedWeatherCD(context: context)
-                return newForecastedWeather
-            }
-            
-            return forecastedWeather
-        } catch {
-            return nil
-        }
+        let predicate = NSPredicate(format: format, lon-epsilon, lon+epsilon, lat-epsilon, lat+epsilon)
+        return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    class func createFrom(forecastedWeather: ForecastedWeather) -> ForecastedWeatherCD? {
+    class func createFrom(forecastedWeather: ForecastedWeather, context: NSManagedObjectContext) -> ForecastedWeatherCD? {
         guard
-            let forecastedWeatherCD = firstOrCreate(withLongitude: forecastedWeather.longitude, withLatitude: forecastedWeather.latitude)
+            let forecastedWeatherCD = firstOrCreate(withLongitude: forecastedWeather.longitude, withLatitude: forecastedWeather.latitude, context: context)
         else {
             return nil
         }
@@ -45,19 +29,11 @@ public class ForecastedWeatherCD: NSManagedObject {
         forecastedWeatherCD.longitude = forecastedWeather.longitude
         forecastedWeatherCD.latitude = forecastedWeather.latitude
         for (index, dailyWeather) in forecastedWeather.forecastedWeather.enumerated() {
-            if let dailyWeatherCD = DailyWeatherCD.createFrom(dailyWeather: dailyWeather, indexId: index, forecastedWeather: forecastedWeatherCD) {
+            if let dailyWeatherCD = DailyWeatherCD.createFrom(dailyWeather: dailyWeather, indexId: index, forecastedWeather: forecastedWeatherCD, context: context) {
                 forecastedWeatherCD.addToForecastedWeather(dailyWeatherCD)
             }
         }
-        
-        do {
-            let context = CoreDataStack.shared.persistentContainer.viewContext
-            try context.save()
-            return forecastedWeatherCD
-        } catch {
-            print("Failed saving")
-            return nil
-        }
+        return forecastedWeatherCD
     }
     
 }

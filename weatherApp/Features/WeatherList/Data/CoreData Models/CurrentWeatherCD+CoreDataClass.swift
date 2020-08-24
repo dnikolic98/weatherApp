@@ -12,35 +12,19 @@ import CoreData
 @objc(CurrentWeatherCD)
 public class CurrentWeatherCD: NSManagedObject {
     
-    class func firstOrCreate(withId id: Int) -> CurrentWeatherCD? {
-        let context = CoreDataStack.shared.persistentContainer.viewContext
-        
-        let request: NSFetchRequest<CurrentWeatherCD> = CurrentWeatherCD.fetchRequest()
-        request.predicate = NSPredicate(format: "id = %d", id)
-        request.returnsObjectsAsFaults = false
-        
-        do {
-            let currentWeatherFetch = try context.fetch(request)
-            
-            guard let currentWeather = currentWeatherFetch.first else {
-                let newCurrentWeather = CurrentWeatherCD(context: context)
-                return newCurrentWeather
-            }
-            
-            return currentWeather
-        } catch {
-            return nil
-        }
+    class func firstOrCreate(withId id: Int, context: NSManagedObjectContext) -> CurrentWeatherCD? {
+        let predicate = NSPredicate(format: "id = %d", id)
+        return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    class func createFrom(currentWeather: CurrentWeather) -> CurrentWeatherCD? {
+    class func createFrom(currentWeather: CurrentWeather, context: NSManagedObjectContext) -> CurrentWeatherCD? {
         guard
-            let currentWeatherCD = firstOrCreate(withId: currentWeather.id),
+            let currentWeatherCD = firstOrCreate(withId: currentWeather.id, context: context),
             let weather = currentWeather.weather.at(0),
-            let weatherCD = WeatherCD.createFrom(weather: weather, currentWeather: currentWeatherCD),
-            let coordCD = CoordinatesCD.createFrom(coordinates: currentWeather.coord, currentWeather: currentWeatherCD),
-            let windCD = WindCD.createFrom(wind: currentWeather.wind, currentWeather: currentWeatherCD),
-            let forecastCD = ForecastCD.createFrom(forecast: currentWeather.forecast, currentWeather: currentWeatherCD)
+            let weatherCD = WeatherCD.createFrom(weather: weather, currentWeather: currentWeatherCD, context: context),
+            let coordCD = CoordinatesCD.createFrom(coordinates: currentWeather.coord, currentWeather: currentWeatherCD, context: context),
+            let windCD = WindCD.createFrom(wind: currentWeather.wind, currentWeather: currentWeatherCD, context: context),
+            let forecastCD = ForecastCD.createFrom(forecast: currentWeather.forecast, currentWeather: currentWeatherCD, context: context)
         else {
             return nil
         }
@@ -52,14 +36,7 @@ public class CurrentWeatherCD: NSManagedObject {
         currentWeatherCD.name = currentWeather.name
         currentWeatherCD.id = Int64(currentWeather.id)
         
-        do {
-            let context = CoreDataStack.shared.persistentContainer.viewContext
-            try context.save()
-            return currentWeatherCD
-        } catch {
-            print(error)
-            return nil
-        }
+        return currentWeatherCD
     }
     
 }

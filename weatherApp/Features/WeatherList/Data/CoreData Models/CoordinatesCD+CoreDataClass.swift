@@ -12,28 +12,13 @@ import CoreData
 @objc(CoordinatesCD)
 public class CoordinatesCD: NSManagedObject {
     
-    class func firstOrCreate(withCurrentWeather currentWeather: CurrentWeatherCD) -> CoordinatesCD? {
-        let context = CoreDataStack.shared.persistentContainer.viewContext
-        
-        let request: NSFetchRequest<CoordinatesCD> = CoordinatesCD.fetchRequest()
-        request.predicate = NSPredicate(format: "currentWeather = %@", currentWeather)
-        request.returnsObjectsAsFaults = false
-        
-        do {
-            let coordinatesFetched = try context.fetch(request)
-            
-            guard let coordinates = coordinatesFetched.first else {
-                let newCoordinates = CoordinatesCD(context: context)
-                return newCoordinates
-            }
-            return coordinates
-        } catch {
-            return nil
-        }
+    class func firstOrCreate(withCurrentWeather currentWeather: CurrentWeatherCD, context: NSManagedObjectContext) -> CoordinatesCD? {
+        let predicate = NSPredicate(format: "currentWeather = %@", currentWeather)
+        return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    class func createFrom(coordinates: Coordinates, currentWeather: CurrentWeatherCD) -> CoordinatesCD? {
-        guard let coordinatesCD = firstOrCreate(withCurrentWeather: currentWeather) else { return nil }
+    class func createFrom(coordinates: Coordinates, currentWeather: CurrentWeatherCD, context: NSManagedObjectContext) -> CoordinatesCD? {
+        guard let coordinatesCD = firstOrCreate(withCurrentWeather: currentWeather, context: context) else { return nil }
         
         coordinatesCD.currentWeather = currentWeather
         coordinatesCD.latitude = coordinates.latitude

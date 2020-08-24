@@ -12,29 +12,13 @@ import CoreData
 @objc(DailyTemperatureCD)
 public class DailyTemperatureCD: NSManagedObject {
 
-    class func firstOrCreate(withDailyWeather dailyWeather: DailyWeatherCD) -> DailyTemperatureCD? {
-        let context = CoreDataStack.shared.persistentContainer.viewContext
-        
-        let request: NSFetchRequest<DailyTemperatureCD> = DailyTemperatureCD.fetchRequest()
-        request.predicate = NSPredicate(format: "dailyWeather = %@", dailyWeather)
-        request.returnsObjectsAsFaults = false
-        
-        do {
-            let temperatureFetched = try context.fetch(request)
-            
-            guard let temperature = temperatureFetched.first else {
-                let newTemperature = DailyTemperatureCD(context: context)
-                return newTemperature
-            }
-            
-            return temperature
-        } catch {
-            return nil
-        }
+    class func firstOrCreate(withDailyWeather dailyWeather: DailyWeatherCD, context: NSManagedObjectContext) -> DailyTemperatureCD? {
+        let predicate = NSPredicate(format: "dailyWeather = %@", dailyWeather)
+        return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    class func createFrom(dailyTemperature: DailyTemperature, dailyWeather: DailyWeatherCD) -> DailyTemperatureCD? {
-        guard let dailyTemperatureCD = firstOrCreate(withDailyWeather: dailyWeather) else { return nil }
+    class func createFrom(dailyTemperature: DailyTemperature, dailyWeather: DailyWeatherCD, context: NSManagedObjectContext) -> DailyTemperatureCD? {
+        guard let dailyTemperatureCD = firstOrCreate(withDailyWeather: dailyWeather, context: context) else { return nil }
         
         dailyTemperatureCD.dailyWeather = dailyWeather
         dailyTemperatureCD.day = dailyTemperature.day
