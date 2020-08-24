@@ -17,14 +17,10 @@ public class WindCD: NSManagedObject {
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    class func createFrom(wind: Wind, currentWeather: CurrentWeatherCD, context: NSManagedObjectContext) -> WindCD? {
-        guard let windCD = firstOrCreate(withCurrentWeather: currentWeather, context: context) else { return nil }
-        
-        windCD.currentWeather = currentWeather
-        windCD.directionDegree = Int64(wind.directionDegree)
-        windCD.speed = wind.speed
-        
-        return windCD
+    func populate(wind: Wind, currentWeather: CurrentWeatherCD) {
+        self.currentWeather = currentWeather
+        self.directionDegree = Int64(wind.directionDegree)
+        self.speed = wind.speed
     }
     
 }

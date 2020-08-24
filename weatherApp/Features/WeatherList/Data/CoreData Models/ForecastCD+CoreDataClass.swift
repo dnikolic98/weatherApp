@@ -17,18 +17,14 @@ public class ForecastCD: NSManagedObject {
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    class func createFrom(forecast: Forecast, currentWeather: CurrentWeatherCD, context: NSManagedObjectContext) -> ForecastCD? {
-        guard let forecastCD = firstOrCreate(withCurrentWeather: currentWeather, context: context) else { return nil }
-        
-        forecastCD.currentWeather = currentWeather
-        forecastCD.feelsLikeTemperature = forecast.feelsLikeTemperature
-        forecastCD.humidity = Int64(forecast.humidity)
-        forecastCD.pressure = Int64(forecast.pressure)
-        forecastCD.maxTemperature = forecast.maxTemperature
-        forecastCD.minTemperature = forecast.minTemperature
-        forecastCD.temperature = forecast.temperature
-        
-        return forecastCD
+    func populate(forecast: Forecast, currentWeather: CurrentWeatherCD) {
+        self.currentWeather = currentWeather
+        self.feelsLikeTemperature = forecast.feelsLikeTemperature
+        self.humidity = Int64(forecast.humidity)
+        self.pressure = Int64(forecast.pressure)
+        self.maxTemperature = forecast.maxTemperature
+        self.minTemperature = forecast.minTemperature
+        self.temperature = forecast.temperature
     }
     
 }

@@ -19,21 +19,12 @@ public class ForecastedWeatherCD: NSManagedObject {
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    class func createFrom(forecastedWeather: ForecastedWeather, context: NSManagedObjectContext) -> ForecastedWeatherCD? {
-        guard
-            let forecastedWeatherCD = firstOrCreate(withLongitude: forecastedWeather.longitude, withLatitude: forecastedWeather.latitude, context: context)
-        else {
-            return nil
+    func populate(forecastedWeather: ForecastedWeather, dailyWeathers: [DailyWeatherCD]) {
+        self.longitude = forecastedWeather.longitude
+        self.latitude = forecastedWeather.latitude
+        for dailyWeather in dailyWeathers {
+            self.addToForecastedWeather(dailyWeather)
         }
-        
-        forecastedWeatherCD.longitude = forecastedWeather.longitude
-        forecastedWeatherCD.latitude = forecastedWeather.latitude
-        for (index, dailyWeather) in forecastedWeather.forecastedWeather.enumerated() {
-            if let dailyWeatherCD = DailyWeatherCD.createFrom(dailyWeather: dailyWeather, indexId: index, forecastedWeather: forecastedWeatherCD, context: context) {
-                forecastedWeatherCD.addToForecastedWeather(dailyWeatherCD)
-            }
-        }
-        return forecastedWeatherCD
     }
     
 }

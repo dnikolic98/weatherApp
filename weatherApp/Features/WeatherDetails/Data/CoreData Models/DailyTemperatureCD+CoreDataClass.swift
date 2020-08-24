@@ -17,18 +17,14 @@ public class DailyTemperatureCD: NSManagedObject {
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    class func createFrom(dailyTemperature: DailyTemperature, dailyWeather: DailyWeatherCD, context: NSManagedObjectContext) -> DailyTemperatureCD? {
-        guard let dailyTemperatureCD = firstOrCreate(withDailyWeather: dailyWeather, context: context) else { return nil }
-        
-        dailyTemperatureCD.dailyWeather = dailyWeather
-        dailyTemperatureCD.day = dailyTemperature.day
-        dailyTemperatureCD.evening = dailyTemperature.evening
-        dailyTemperatureCD.morning = dailyTemperature.morning
-        dailyTemperatureCD.max = dailyTemperature.max
-        dailyTemperatureCD.min = dailyTemperature.min
-        dailyTemperatureCD.night = dailyTemperature.night
-        
-        return dailyTemperatureCD
+    func populate(dailyTemperature: DailyTemperature, dailyWeather: DailyWeatherCD) {
+        self.dailyWeather = dailyWeather
+        self.day = dailyTemperature.day
+        self.evening = dailyTemperature.evening
+        self.morning = dailyTemperature.morning
+        self.max = dailyTemperature.max
+        self.min = dailyTemperature.min
+        self.night = dailyTemperature.night
     }
     
 }

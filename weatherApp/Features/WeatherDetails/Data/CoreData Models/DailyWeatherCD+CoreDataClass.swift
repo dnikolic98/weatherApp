@@ -17,27 +17,16 @@ public class DailyWeatherCD: NSManagedObject {
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    class func createFrom(dailyWeather: DailyWeather, indexId: Int, forecastedWeather: ForecastedWeatherCD, context: NSManagedObjectContext) -> DailyWeatherCD? {
-        guard
-            let dailyWeatherCD = firstOrCreate(withForecastedWeather: forecastedWeather, withId: indexId, context: context),
-            let weather = dailyWeather.weather.at(0),
-            let temperatureCD = DailyTemperatureCD.createFrom(dailyTemperature: dailyWeather.temperature, dailyWeather: dailyWeatherCD, context: context),
-            let weatherCD = WeatherCD.createFrom(weather: weather, dailyWeather: dailyWeatherCD, context: context)
-        else {
-            return nil
-        }
-        
-        dailyWeatherCD.forecastedWeather = forecastedWeather
-        dailyWeatherCD.id = Int64(indexId)
-        dailyWeatherCD.weather = weatherCD
-        dailyWeatherCD.forecastTime = Int64(dailyWeather.forecastTime)
-        dailyWeatherCD.humidity = Int64(dailyWeather.humidity)
-        dailyWeatherCD.pressure = dailyWeather.pressure
-        dailyWeatherCD.sunrise = Int64(dailyWeather.sunrise)
-        dailyWeatherCD.sunset = Int64(dailyWeather.sunset)
-        dailyWeatherCD.temperature = temperatureCD
-        
-        return dailyWeatherCD
+    func populate(dailyWeather: DailyWeather, indexId: Int, forecastedWeather: ForecastedWeatherCD, temperature: DailyTemperatureCD, weather: WeatherCD) {
+        self.forecastedWeather = forecastedWeather
+        self.id = Int64(indexId)
+        self.weather = weather
+        self.forecastTime = Int64(dailyWeather.forecastTime)
+        self.humidity = Int64(dailyWeather.humidity)
+        self.pressure = dailyWeather.pressure
+        self.sunrise = Int64(dailyWeather.sunrise)
+        self.sunset = Int64(dailyWeather.sunset)
+        self.temperature = temperature
     }
     
 }

@@ -13,14 +13,12 @@ class WeatherRepository {
     
     let weatherService: WeatherServiceProtocol
     let coreDataService: CoreDataService
-    let coreDataStack: CoreDataStack
     var reachability: Reachability
     
-    init(weatherService: WeatherServiceProtocol, coreDataService: CoreDataService, coreDataStack: CoreDataStack, reachability: Reachability) {
+    init(weatherService: WeatherServiceProtocol, coreDataService: CoreDataService, reachability: Reachability) {
         self.weatherService = weatherService
         self.reachability = reachability
         self.coreDataService = coreDataService
-        self.coreDataStack = coreDataStack
         startReachability()
     }
     
@@ -36,10 +34,8 @@ class WeatherRepository {
                     completion(nil)
                     return
                 }
-                let privateContext = self.coreDataStack.privateChildManagedObjectContext()
-                let _ = currentWeatherList.map { CurrentWeatherCD.createFrom(currentWeather: $0, context: privateContext) }
-                self.saveChanges(managedObjectContext: privateContext)
-                self.coreDataStack.saveChanges()
+                let _ = currentWeatherList.map { self.coreDataService.createCurrentWeatherFrom(currentWeather: $0) }
+                self.coreDataService.saveChanges()
                 
                 DispatchQueue.main.async {
                     let currentWeatherListCD = self.coreDataService.fetchCurrentWeather()
@@ -60,10 +56,9 @@ class WeatherRepository {
                     completion(nil)
                     return
                 }
-                let privateContext = self.coreDataStack.privateChildManagedObjectContext()
-                let _ = ForecastedWeatherCD.createFrom(forecastedWeather: forecastedWeather, context: privateContext)
-                self.saveChanges(managedObjectContext: privateContext)
-                self.coreDataStack.saveChanges()
+                
+                let _ = self.coreDataService.createFrom(forecastedWeather: forecastedWeather)
+                self.coreDataService.saveChanges()
                 
                 DispatchQueue.main.async {
                     let currentWeatherListCD = self.coreDataService.fetchForecastWeather(coord: coord)
@@ -81,16 +76,4 @@ class WeatherRepository {
         }
     }
     
-    private func saveChanges(managedObjectContext: NSManagedObjectContext) {
-        managedObjectContext.performAndWait {
-            do {
-                if managedObjectContext.hasChanges {
-                    try managedObjectContext.save()
-                }
-            } catch {
-                print("Unable to Save Changes of Managed Object Context")
-                print("\(error), \(error.localizedDescription)")
-            }
-        }
-    }
 }

@@ -19,13 +19,9 @@ public class WeatherCD: NSManagedObject {
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    class func createFrom(weather: Weather, currentWeather: CurrentWeatherCD, context: NSManagedObjectContext) -> WeatherCD? {
-        guard let weatherCD = firstOrCreate(withCurrentWeather: currentWeather, context: context) else { return nil }
-        
-        weatherCD.currentWeather = currentWeather
-        weatherCD.populate(weather: weather)
-        
-        return weatherCD
+    func populate(weather: Weather, currentWeather: CurrentWeatherCD) {
+        self.currentWeather = currentWeather
+        self.populate(weather: weather)
     }
     
     //MARK: - DailyWeather
@@ -35,17 +31,14 @@ public class WeatherCD: NSManagedObject {
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    class func createFrom(weather: Weather, dailyWeather: DailyWeatherCD, context: NSManagedObjectContext) -> WeatherCD? {
-        guard let weatherCD = firstOrCreate(withDailyWeather: dailyWeather, context: context) else { return nil }
-        
-        weatherCD.dailyWeather = dailyWeather
-        weatherCD.populate(weather: weather)
-        
-        return weatherCD
+    func populate(weather: Weather, dailyWeather: DailyWeatherCD) {
+        self.dailyWeather = dailyWeather
+        self.populate(weather: weather)
     }
     
+    //MARK: - Common
     
-    func populate( weather: Weather) {
+    private func populate(weather: Weather) {
         self.icon = weather.icon
         self.iconsUrlString = weather.iconUrlString
         self.overview = weather.overview

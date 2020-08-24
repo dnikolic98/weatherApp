@@ -10,9 +10,8 @@ import CoreData
 
 class CoreDataStack {
     
-    // MARK: - Type Aliases
-    
     public typealias CoreDataManagerCompletion = () -> ()
+    public static let weatherApp = "weatherApp"
 
     // MARK: - Properties
     
@@ -22,11 +21,9 @@ class CoreDataStack {
     // MARK: - Initialization
     
     public init(modelName: String, completion: @escaping CoreDataManagerCompletion) {
-        // Set Properties
         self.modelName = modelName
         self.completion = completion
         
-        // Setup Core Data Stack
         setupCoreDataStack()
     }
     
@@ -122,7 +119,6 @@ class CoreDataStack {
                 NSInferMappingModelAutomaticallyOption : true
             ]
             
-            // Add Persistent Store
             try persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType,
                                                               configurationName: nil,
                                                               at: persistentStoreURL,

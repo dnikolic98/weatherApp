@@ -17,14 +17,10 @@ public class CoordinatesCD: NSManagedObject {
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    class func createFrom(coordinates: Coordinates, currentWeather: CurrentWeatherCD, context: NSManagedObjectContext) -> CoordinatesCD? {
-        guard let coordinatesCD = firstOrCreate(withCurrentWeather: currentWeather, context: context) else { return nil }
-        
-        coordinatesCD.currentWeather = currentWeather
-        coordinatesCD.latitude = coordinates.latitude
-        coordinatesCD.longitude = coordinates.longitude
-        
-        return coordinatesCD
+    func populate(coordinates: Coordinates, currentWeather: CurrentWeatherCD) {
+        self.currentWeather = currentWeather
+        self.latitude = coordinates.latitude
+        self.longitude = coordinates.longitude
     }
     
 }
