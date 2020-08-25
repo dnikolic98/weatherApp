@@ -57,7 +57,7 @@ class WeatherRepository {
                     return
                 }
                 
-                let _ = self.coreDataService.createFrom(forecastedWeather: forecastedWeather)
+                let _ = self.coreDataService.createForecastedWeatherFrom(forecastedWeather: forecastedWeather)
                 self.coreDataService.saveChanges()
                 
                 DispatchQueue.main.async {

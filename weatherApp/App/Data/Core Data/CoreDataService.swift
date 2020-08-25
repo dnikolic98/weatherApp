@@ -116,7 +116,7 @@ class CoreDataService {
         return dailyWeatherCD
     }
     
-    func createFrom(forecastedWeather: ForecastedWeather) -> ForecastedWeatherCD? {
+    func createForecastedWeatherFrom(forecastedWeather: ForecastedWeather) -> ForecastedWeatherCD? {
         guard let forecastedWeatherCD = ForecastedWeatherCD.firstOrCreate(withLongitude: forecastedWeather.longitude, withLatitude: forecastedWeather.latitude, context: privateContext) else { return nil }
         var dailyWeathers: [DailyWeatherCD] = []
         for (index, dailyWeather) in forecastedWeather.forecastedWeather.enumerated() {
