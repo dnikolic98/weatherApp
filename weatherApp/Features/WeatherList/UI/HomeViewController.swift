@@ -16,6 +16,7 @@ class HomeViewController: UIViewController {
     
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var currentLocationView: MainInformationView!
     
     convenience init(currentWeatherListPresenter: CurrentWeatherListPresenter) {
         self.init()
@@ -62,6 +63,7 @@ class HomeViewController: UIViewController {
                 return
             }
             
+            self.setupCurrentLocationInfo()
             self.refreshTableView()
         }
     }
@@ -83,6 +85,11 @@ class HomeViewController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.view.backgroundColor = .clear
+    }
+    
+    private func setupCurrentLocationInfo() {
+        let cw = currentWeatherListPresenter.currentWeather(atIndex: 0)
+        currentLocationView.set(currentWeather: cw!)
     }
     
     private func setupTableView() {
