@@ -8,17 +8,17 @@
 
 import CoreData
 
-class CoreDataService {
+class CoreDataService: CoreDataServiceProtocol {
     
     //MARK: - Properties
     
-    private let coreDataStack: CoreDataStack
+    private let coreDataStack: CoreDataStackProtocol
     private let mainContext: NSManagedObjectContext
     private let privateContext: NSManagedObjectContext
     
     //MARK: - Initialization
     
-    init(coreDataStack: CoreDataStack) {
+    init(coreDataStack: CoreDataStackProtocol) {
         self.coreDataStack = coreDataStack
         self.mainContext = coreDataStack.mainManagedObjectContext
         self.privateContext = coreDataStack.privateChildManagedObjectContext()
@@ -131,7 +131,7 @@ class CoreDataService {
     //MARK: - Save Changes
     
     func saveChanges() {
-        coreDataStack.saveChangesAsync(context: privateContext)
+        coreDataStack.saveChangesSync(context: privateContext)
         coreDataStack.saveChangesToDisk()
     }
 }

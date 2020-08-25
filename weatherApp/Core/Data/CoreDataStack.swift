@@ -8,7 +8,7 @@
 
 import CoreData
 
-class CoreDataStack {
+class CoreDataStack: CoreDataStackProtocol {
     
     public typealias CoreDataManagerCompletion = () -> ()
     
@@ -28,16 +28,16 @@ class CoreDataStack {
     
     // MARK: - Core Data Stack
     
-    private lazy var privateManagedObjectContext: NSManagedObjectContext = {
-        let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator
+    public private(set) lazy var mainManagedObjectContext: NSManagedObjectContext = {
+        let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        managedObjectContext.parent = self.privateManagedObjectContext
         
         return managedObjectContext
     }()
     
-    public private(set) lazy var mainManagedObjectContext: NSManagedObjectContext = {
-        let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        managedObjectContext.parent = self.privateManagedObjectContext
+    private lazy var privateManagedObjectContext: NSManagedObjectContext = {
+        let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator
         
         return managedObjectContext
     }()

@@ -12,10 +12,10 @@ import Reachability
 class WeatherRepository {
     
     let weatherService: WeatherServiceProtocol
-    let coreDataService: CoreDataService
+    let coreDataService: CoreDataServiceProtocol
     var reachability: Reachability
     
-    init(weatherService: WeatherServiceProtocol, coreDataService: CoreDataService, reachability: Reachability) {
+    init(weatherService: WeatherServiceProtocol, coreDataService: CoreDataServiceProtocol, reachability: Reachability) {
         self.weatherService = weatherService
         self.reachability = reachability
         self.coreDataService = coreDataService
