@@ -29,8 +29,11 @@ class WeatherRepository {
             let currentWeatherListCD = coreDataService.fetchCurrentWeather()
             completion(currentWeatherListCD)
         default:
-            self.weatherService.fetchSeveralCurrentWeather(id: id) { (currentWeatherList) in
-                guard let currentWeatherList = currentWeatherList else {
+            weatherService.fetchSeveralCurrentWeather(id: id) { [weak self] (currentWeatherList) in
+                guard
+                    let self = self,
+                    let currentWeatherList = currentWeatherList
+                else {
                     completion(nil)
                     return
                 }
@@ -51,8 +54,11 @@ class WeatherRepository {
             let currentWeatherListCD = coreDataService.fetchForecastWeather(coord: coord)
             completion(currentWeatherListCD)
         default:
-            self.weatherService.fetchForcastWeather(coord: coord) { (forecastedWeather) in
-                guard let forecastedWeather = forecastedWeather else {
+            weatherService.fetchForcastWeather(coord: coord) { [weak self] (forecastedWeather) in
+                guard
+                    let self = self,
+                    let forecastedWeather = forecastedWeather
+                else {
                     completion(nil)
                     return
                 }

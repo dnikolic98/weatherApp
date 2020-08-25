@@ -233,7 +233,6 @@
 			isa = PBXGroup;
 			children = (
 				A3BE16F924ED13F8001D9F82 /* weatherApp.xcdatamodeld */,
-				A3BE16F724ED13CE001D9F82 /* CoreDataStack.swift */,
 				A3A81ECD24F3F2A8009B7674 /* CoreDataService.swift */,
 			);
 			path = "Core Data";
@@ -255,6 +254,7 @@
 		A3BD78DC24E294B8003723DE /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				A3C9307324F5049400B07ED0 /* Data */,
 				A31C944F24F40145003BFA47 /* CoreDataExtensions */,
 				A3BD78DE24E294E7003723DE /* UIExtensions */,
 				A3BD78DD24E294C4003723DE /* FoundationExtensions */,
@@ -414,6 +414,14 @@
 				A3BE171E24ED2E39001D9F82 /* ForecastedWeatherCD+CoreDataProperties.swift */,
 			);
 			path = "CoreData Models";
+			sourceTree = "<group>";
+		};
+		A3C9307324F5049400B07ED0 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				A3BE16F724ED13CE001D9F82 /* CoreDataStack.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 		A3EC097E24D85AC6007CDC4D /* Models */ = {
