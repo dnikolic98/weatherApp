@@ -19,7 +19,7 @@ class AppDependencies {
     }()
     
     lazy var coreDataStack: CoreDataStack = {
-        CoreDataStack(modelName: CoreDataStack.weatherApp, completion: {})
+        CoreDataStack(modelName: "weatherApp", completion: {})
     }()
     
     lazy var coreDataService: CoreDataService = {

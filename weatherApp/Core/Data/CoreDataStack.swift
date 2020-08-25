@@ -11,13 +11,12 @@ import CoreData
 class CoreDataStack {
     
     public typealias CoreDataManagerCompletion = () -> ()
-    public static let weatherApp = "weatherApp"
-
+    
     // MARK: - Properties
     
     private let modelName: String
     private let completion: CoreDataManagerCompletion
-
+    
     // MARK: - Initialization
     
     public init(modelName: String, completion: @escaping CoreDataManagerCompletion) {
@@ -28,14 +27,14 @@ class CoreDataStack {
     }
     
     // MARK: - Core Data Stack
-
+    
     private lazy var privateManagedObjectContext: NSManagedObjectContext = {
         let managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator
         
         return managedObjectContext
     }()
-
+    
     public private(set) lazy var mainManagedObjectContext: NSManagedObjectContext = {
         let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         managedObjectContext.parent = self.privateManagedObjectContext
@@ -54,35 +53,16 @@ class CoreDataStack {
         
         return managedObjectModel
     }()
-
+    
     private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         return NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
     }()
     
     // MARK: - Public API
     
-    public func saveChanges() {
-        mainManagedObjectContext.performAndWait {
-            do {
-                if self.mainManagedObjectContext.hasChanges {
-                    try self.mainManagedObjectContext.save()
-                }
-            } catch {
-                print("Unable to Save Changes of Main Managed Object Context")
-                print("\(error), \(error.localizedDescription)")
-            }
-        }
-        
-        privateManagedObjectContext.perform {
-            do {
-                if self.privateManagedObjectContext.hasChanges {
-                    try self.privateManagedObjectContext.save()
-                }
-            } catch {
-                print("Unable to Save Changes of Private Managed Object Context")
-                print("\(error), \(error.localizedDescription)")
-            }
-        }
+    public func saveChangesToDisk() {
+        saveChangesSync(context: mainManagedObjectContext)
+        saveChangesAsync(context: privateManagedObjectContext)
     }
     
     public func privateChildManagedObjectContext() -> NSManagedObjectContext {
@@ -91,9 +71,35 @@ class CoreDataStack {
         managedObjectContext.parent = mainManagedObjectContext
         return managedObjectContext
     }
-
+    
+    public func saveChangesSync(context: NSManagedObjectContext) {
+        context.performAndWait {
+            do {
+                if context.hasChanges {
+                    try context.save()
+                }
+            } catch {
+                print("Unable to Save Changes of Main Managed Object Context")
+                print("\(error), \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    public func saveChangesAsync(context: NSManagedObjectContext) {
+        context.perform {
+            do {
+                if context.hasChanges {
+                    try context.save()
+                }
+            } catch {
+                print("Unable to Save Changes of Main Managed Object Context")
+                print("\(error), \(error.localizedDescription)")
+            }
+        }
+    }
+    
     // MARK: - Helper Methods
-
+    
     private func setupCoreDataStack() {
         guard let persistentStoreCoordinator = mainManagedObjectContext.persistentStoreCoordinator else {
             fatalError("Unable to Set Up Core Data Stack")
@@ -105,7 +111,7 @@ class CoreDataStack {
             DispatchQueue.main.async { self.completion() }
         }
     }
-
+    
     private func addPersistentStore(to persistentStoreCoordinator: NSPersistentStoreCoordinator) {
         let fileManager = FileManager.default
         let storeName = "\(self.modelName).sqlite"
@@ -128,5 +134,5 @@ class CoreDataStack {
             fatalError("Unable to Add Persistent Store")
         }
     }
-
+    
 }

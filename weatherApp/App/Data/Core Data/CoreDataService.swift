@@ -131,16 +131,7 @@ class CoreDataService {
     //MARK: - Save Changes
     
     func saveChanges() {
-        privateContext.performAndWait {
-            do {
-                if privateContext.hasChanges {
-                    try privateContext.save()
-                }
-            } catch {
-                print("Unable to Save Changes of Managed Object Context")
-                print("\(error), \(error.localizedDescription)")
-            }
-        }
-        coreDataStack.saveChanges()
+        coreDataStack.saveChangesAsync(context: privateContext)
+        coreDataStack.saveChangesToDisk()
     }
 }
