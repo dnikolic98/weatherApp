@@ -59,12 +59,16 @@ class HomeViewController: UIViewController {
     
     @objc private func bindViewModel() {
         currentWeatherListPresenter.fetchCurrentWeatherList() { (currentWeatherList) in
-            guard let _ = currentWeatherList else {
-                return
-            }
+            guard let _ = currentWeatherList else { return }
             
-            self.setupCurrentLocationInfo()
             self.refreshTableView()
+        }
+        
+        self.currentWeatherListPresenter.fetchCurrentWeather() { (currentLocation) in
+            guard let currentLocation = currentLocation else { return }
+            DispatchQueue.main.async {
+                self.currentLocationView.set(currentWeather: currentLocation)
+            }
         }
     }
     
@@ -85,11 +89,6 @@ class HomeViewController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.view.backgroundColor = .clear
-    }
-    
-    private func setupCurrentLocationInfo() {
-        let cw = currentWeatherListPresenter.currentWeather(atIndex: 0)
-        currentLocationView.set(currentWeather: cw!)
     }
     
     private func setupTableView() {

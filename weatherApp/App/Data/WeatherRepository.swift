@@ -74,6 +74,32 @@ class WeatherRepository {
         }
     }
     
+    func fetchCurrentWeather(coord: Coordinates, completion: @escaping ((CurrentWeatherCD?) -> Void)) {
+        switch reachability.connection {
+        case .unavailable:
+            completion(nil)
+            let currentWeatherCD = coreDataService.fetchCurrentWeather(coord: coord)
+            completion(currentWeatherCD)
+        default:
+            weatherService.fetchCurrentWeather(coord: coord) { [weak self] (currentWeather) in
+                guard
+                    let self = self,
+                    let currentWeather = currentWeather
+                else {
+                    completion(nil)
+                    return
+                }
+                let currentWeatherCD = self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
+                self.coreDataService.saveChanges()
+                
+                DispatchQueue.main.async {
+                    let currentWeatherCD = self.coreDataService.fetchCurrentWeather(coord: coord)
+                    completion(currentWeatherCD)
+                }
+            }
+        }
+    }
+    
     private func startReachability() {
         do {
             try reachability.startNotifier()

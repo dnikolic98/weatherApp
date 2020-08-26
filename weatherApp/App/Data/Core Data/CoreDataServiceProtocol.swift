@@ -14,6 +14,8 @@ protocol CoreDataServiceProtocol {
     
     func fetchForecastWeather(coord: Coordinates) -> ForecastedWeatherCD?
     
+    func fetchCurrentWeather(coord: Coordinates) -> CurrentWeatherCD?
+    
     //MARK: - Create CoreData Models
     
     func createWeatherFrom(weather: Weather, currentWeather: CurrentWeatherCD) -> WeatherCD?

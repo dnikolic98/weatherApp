@@ -14,6 +14,10 @@ class AppDependencies {
         WeatherService()
     }()
     
+    lazy var locationService: LocationService = {
+        LocationService()
+    }()
+    
     lazy var reachability: Reachability = {
         try! Reachability()
     }()
