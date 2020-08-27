@@ -44,7 +44,7 @@ class CoreDataService: CoreDataServiceProtocol {
         let request: NSFetchRequest<ForecastedWeatherCoreData> = ForecastedWeatherCoreData.fetchRequest()
         let epsilon = 0.00001
         let format = "longitude > %f AND longitude < %f AND latitude > %f AND latitude < %f"
-        request.predicate = NSPredicate(format: format, lon-epsilon, lon+epsilon, lat-epsilon, lat+epsilon)
+        request.predicate = NSPredicate(format: format, lon - epsilon, lon + epsilon, lat - epsilon, lat + epsilon)
         
         let forecastedWeatherCoreData = try? mainContext.fetch(request)
         return forecastedWeatherCoreData?.first
@@ -136,4 +136,5 @@ class CoreDataService: CoreDataServiceProtocol {
         coreDataStack.saveChangesSync(context: privateContext)
         coreDataStack.saveChangesToDisk()
     }
+    
 }
