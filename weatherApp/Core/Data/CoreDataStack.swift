@@ -108,7 +108,7 @@ class CoreDataStack: CoreDataStackProtocol {
         DispatchQueue.global().async {
             self.addPersistentStore(to: persistentStoreCoordinator)
             
-            DispatchQueue.main.async { self.completion() }
+            self.completion()
         }
     }
     

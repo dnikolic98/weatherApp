@@ -40,10 +40,8 @@ class WeatherRepository {
                 let _ = currentWeatherList.map { self.coreDataService.createCurrentWeatherFrom(currentWeather: $0) }
                 self.coreDataService.saveChanges()
                 
-                DispatchQueue.main.async {
-                    let currentWeatherListCoreData = self.coreDataService.fetchCurrentWeather()
-                    completion(currentWeatherListCoreData)
-                }
+                let currentWeatherListCoreData = self.coreDataService.fetchCurrentWeather()
+                completion(currentWeatherListCoreData)
             }
         }
     }
@@ -66,10 +64,8 @@ class WeatherRepository {
                 let _ = self.coreDataService.createForecastedWeatherFrom(forecastedWeather: forecastedWeather)
                 self.coreDataService.saveChanges()
                 
-                DispatchQueue.main.async {
-                    let currentWeatherListCoreData = self.coreDataService.fetchForecastWeather(coord: coord)
-                    completion(currentWeatherListCoreData)
-                }
+                let currentWeatherListCoreData = self.coreDataService.fetchForecastWeather(coord: coord)
+                completion(currentWeatherListCoreData)
             }
         }
     }
