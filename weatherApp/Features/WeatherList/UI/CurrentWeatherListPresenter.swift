@@ -30,7 +30,7 @@ class CurrentWeatherListPresenter {
         weatherRepository.fetchSeveralCurrentWeather(id: locationIds) { [weak self] (currentWeatherList) in
             guard
                 let self = self,
-                currentWeatherList.count != 0
+                !currentWeatherList.isEmpty
             else {
                 completion([])
                 return
