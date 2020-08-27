@@ -26,8 +26,8 @@ class CoreDataService: CoreDataServiceProtocol {
     
     //MARK: - Fetches
     
-    func fetchCurrentWeather() -> [CurrentWeatherCD] {
-        let request: NSFetchRequest<CurrentWeatherCD> = CurrentWeatherCD.fetchRequest()
+    func fetchCurrentWeather() -> [CurrentWeatherCoreData] {
+        let request: NSFetchRequest<CurrentWeatherCoreData> = CurrentWeatherCoreData.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         
         guard let currentWeatherList = try? mainContext.fetch(request) else {
@@ -37,97 +37,97 @@ class CoreDataService: CoreDataServiceProtocol {
         return currentWeatherList
     }
     
-    func fetchForecastWeather(coord: Coordinates) -> ForecastedWeatherCD? {
+    func fetchForecastWeather(coord: Coordinates) -> ForecastedWeatherCoreData? {
         let lon = coord.longitude
         let lat = coord.latitude
         
-        let request: NSFetchRequest<ForecastedWeatherCD> = ForecastedWeatherCD.fetchRequest()
+        let request: NSFetchRequest<ForecastedWeatherCoreData> = ForecastedWeatherCoreData.fetchRequest()
         let epsilon = 0.00001
         let format = "longitude > %f AND longitude < %f AND latitude > %f AND latitude < %f"
         request.predicate = NSPredicate(format: format, lon-epsilon, lon+epsilon, lat-epsilon, lat+epsilon)
         
-        let forecastedWeatherCD = try? mainContext.fetch(request)
-        return forecastedWeatherCD?.first
+        let forecastedWeatherCoreData = try? mainContext.fetch(request)
+        return forecastedWeatherCoreData?.first
     }
     
     
     //MARK: - Create CoreData Models
     
-    func createWeatherFrom(weather: Weather, currentWeather: CurrentWeatherCD) -> WeatherCD? {
-        guard let weatherCD = WeatherCD.firstOrCreate(withCurrentWeather: currentWeather, context: privateContext) else { return nil }
-        weatherCD.populate(weather: weather, currentWeather: currentWeather)
-        return weatherCD
+    func createWeatherFrom(weather: Weather, currentWeather: CurrentWeatherCoreData) -> WeatherCoreData? {
+        guard let weatherCoreData = WeatherCoreData.firstOrCreate(withCurrentWeather: currentWeather, context: privateContext) else { return nil }
+        weatherCoreData.populate(weather: weather, currentWeather: currentWeather)
+        return weatherCoreData
     }
     
-    func createWeatherFrom(weather: Weather, dailyWeather: DailyWeatherCD) -> WeatherCD? {
-        guard let weatherCD = WeatherCD.firstOrCreate(withDailyWeather: dailyWeather, context: privateContext) else { return nil }
-        weatherCD.populate(weather: weather, dailyWeather: dailyWeather)
-        return weatherCD
+    func createWeatherFrom(weather: Weather, dailyWeather: DailyWeatherCoreData) -> WeatherCoreData? {
+        guard let weatherCoreData = WeatherCoreData.firstOrCreate(withDailyWeather: dailyWeather, context: privateContext) else { return nil }
+        weatherCoreData.populate(weather: weather, dailyWeather: dailyWeather)
+        return weatherCoreData
     }
     
-    func createWindFrom(wind: Wind, currentWeather: CurrentWeatherCD) -> WindCD? {
-        guard let windCD = WindCD.firstOrCreate(withCurrentWeather: currentWeather, context: privateContext) else { return nil }
-        windCD.populate(wind: wind, currentWeather: currentWeather)
-        return windCD
+    func createWindFrom(wind: Wind, currentWeather: CurrentWeatherCoreData) -> WindCoreData? {
+        guard let windCoreData = WindCoreData.firstOrCreate(withCurrentWeather: currentWeather, context: privateContext) else { return nil }
+        windCoreData.populate(wind: wind, currentWeather: currentWeather)
+        return windCoreData
     }
     
-    func createForecastFrom(forecast: Forecast, currentWeather: CurrentWeatherCD) -> ForecastCD? {
-        guard let forecastCD = ForecastCD.firstOrCreate(withCurrentWeather: currentWeather, context: privateContext) else { return nil }
-        forecastCD.populate(forecast: forecast, currentWeather: currentWeather)
-        return forecastCD
+    func createForecastFrom(forecast: Forecast, currentWeather: CurrentWeatherCoreData) -> ForecastCoreData? {
+        guard let forecastCoreData = ForecastCoreData.firstOrCreate(withCurrentWeather: currentWeather, context: privateContext) else { return nil }
+        forecastCoreData.populate(forecast: forecast, currentWeather: currentWeather)
+        return forecastCoreData
     }
     
-    func createCoordinatesFrom(coordinates: Coordinates, currentWeather: CurrentWeatherCD) -> CoordinatesCD? {
-        guard let coordinatesCD = CoordinatesCD.firstOrCreate(withCurrentWeather: currentWeather, context: privateContext) else { return nil }
-        coordinatesCD.populate(coordinates: coordinates, currentWeather: currentWeather)
-        return coordinatesCD
+    func createCoordinatesFrom(coordinates: Coordinates, currentWeather: CurrentWeatherCoreData) -> CoordinatesCoreData? {
+        guard let coordinatesCoreData = CoordinatesCoreData.firstOrCreate(withCurrentWeather: currentWeather, context: privateContext) else { return nil }
+        coordinatesCoreData.populate(coordinates: coordinates, currentWeather: currentWeather)
+        return coordinatesCoreData
     }
     
-    func createCurrentWeatherFrom(currentWeather: CurrentWeather) -> CurrentWeatherCD? {
+    func createCurrentWeatherFrom(currentWeather: CurrentWeather) -> CurrentWeatherCoreData? {
         guard
-            let currentWeatherCD = CurrentWeatherCD.firstOrCreate(withId: currentWeather.id, context: privateContext),
+            let currentWeatherCoreData = CurrentWeatherCoreData.firstOrCreate(withId: currentWeather.id, context: privateContext),
             let weather = currentWeather.weather.at(0),
-            let weatherCD = createWeatherFrom(weather: weather, currentWeather: currentWeatherCD),
-            let coordCD = createCoordinatesFrom(coordinates: currentWeather.coord, currentWeather: currentWeatherCD),
-            let windCD = createWindFrom(wind: currentWeather.wind, currentWeather: currentWeatherCD),
-            let forecastCD = createForecastFrom(forecast: currentWeather.forecast, currentWeather: currentWeatherCD)
+            let weatherCoreData = createWeatherFrom(weather: weather, currentWeather: currentWeatherCoreData),
+            let coordCoreData = createCoordinatesFrom(coordinates: currentWeather.coord, currentWeather: currentWeatherCoreData),
+            let windCoreData = createWindFrom(wind: currentWeather.wind, currentWeather: currentWeatherCoreData),
+            let forecastCoreData = createForecastFrom(forecast: currentWeather.forecast, currentWeather: currentWeatherCoreData)
         else {
             return nil
         }
-        currentWeatherCD.populate(currentWeather: currentWeather, forecast: forecastCD, weather: weatherCD, coord: coordCD, wind: windCD)
-        return currentWeatherCD
+        currentWeatherCoreData.populate(currentWeather: currentWeather, forecast: forecastCoreData, weather: weatherCoreData, coord: coordCoreData, wind: windCoreData)
+        return currentWeatherCoreData
     }
     
-    func createDailyTemperatureFrom(dailyTemperature: DailyTemperature, dailyWeather: DailyWeatherCD) -> DailyTemperatureCD? {
-        guard let dailyTemperatureCD = DailyTemperatureCD.firstOrCreate(withDailyWeather: dailyWeather, context: privateContext) else { return nil }
-        dailyTemperatureCD.populate(dailyTemperature: dailyTemperature, dailyWeather: dailyWeather)
-        return dailyTemperatureCD
+    func createDailyTemperatureFrom(dailyTemperature: DailyTemperature, dailyWeather: DailyWeatherCoreData) -> DailyTemperatureCoreData? {
+        guard let dailyTemperatureCoreData = DailyTemperatureCoreData.firstOrCreate(withDailyWeather: dailyWeather, context: privateContext) else { return nil }
+        dailyTemperatureCoreData.populate(dailyTemperature: dailyTemperature, dailyWeather: dailyWeather)
+        return dailyTemperatureCoreData
     }
     
     
-    func createDailyWeatherFrom(dailyWeather: DailyWeather, indexId: Int, forecastedWeather: ForecastedWeatherCD) -> DailyWeatherCD? {
+    func createDailyWeatherFrom(dailyWeather: DailyWeather, indexId: Int, forecastedWeather: ForecastedWeatherCoreData) -> DailyWeatherCoreData? {
         guard
-            let dailyWeatherCD = DailyWeatherCD.firstOrCreate(withForecastedWeather: forecastedWeather, withId: indexId, context: privateContext),
+            let dailyWeatherCoreData = DailyWeatherCoreData.firstOrCreate(withForecastedWeather: forecastedWeather, withId: indexId, context: privateContext),
             let weather = dailyWeather.weather.at(0),
-            let temperatureCD = createDailyTemperatureFrom(dailyTemperature: dailyWeather.temperature, dailyWeather: dailyWeatherCD),
-            let weatherCD = createWeatherFrom(weather: weather, dailyWeather: dailyWeatherCD)
+            let temperatureCoreData = createDailyTemperatureFrom(dailyTemperature: dailyWeather.temperature, dailyWeather: dailyWeatherCoreData),
+            let weatherCoreData = createWeatherFrom(weather: weather, dailyWeather: dailyWeatherCoreData)
         else {
             return nil
         }
-        dailyWeatherCD.populate(dailyWeather: dailyWeather, indexId: indexId, forecastedWeather: forecastedWeather, temperature: temperatureCD, weather: weatherCD)
-        return dailyWeatherCD
+        dailyWeatherCoreData.populate(dailyWeather: dailyWeather, indexId: indexId, forecastedWeather: forecastedWeather, temperature: temperatureCoreData, weather: weatherCoreData)
+        return dailyWeatherCoreData
     }
     
-    func createForecastedWeatherFrom(forecastedWeather: ForecastedWeather) -> ForecastedWeatherCD? {
-        guard let forecastedWeatherCD = ForecastedWeatherCD.firstOrCreate(withLongitude: forecastedWeather.longitude, withLatitude: forecastedWeather.latitude, context: privateContext) else { return nil }
-        var dailyWeathers: [DailyWeatherCD] = []
+    func createForecastedWeatherFrom(forecastedWeather: ForecastedWeather) -> ForecastedWeatherCoreData? {
+        guard let forecastedWeatherCoreData = ForecastedWeatherCoreData.firstOrCreate(withLongitude: forecastedWeather.longitude, withLatitude: forecastedWeather.latitude, context: privateContext) else { return nil }
+        var dailyWeathers: [DailyWeatherCoreData] = []
         for (index, dailyWeather) in forecastedWeather.forecastedWeather.enumerated() {
-            if let dailyWeatherCD = createDailyWeatherFrom(dailyWeather: dailyWeather, indexId: index, forecastedWeather: forecastedWeatherCD) {
-                dailyWeathers.append(dailyWeatherCD)
+            if let dailyWeatherCoreData = createDailyWeatherFrom(dailyWeather: dailyWeather, indexId: index, forecastedWeather: forecastedWeatherCoreData) {
+                dailyWeathers.append(dailyWeatherCoreData)
             }
         }
-        forecastedWeatherCD.populate(forecastedWeather: forecastedWeather, dailyWeathers: dailyWeathers)
-        return forecastedWeatherCD
+        forecastedWeatherCoreData.populate(forecastedWeather: forecastedWeather, dailyWeathers: dailyWeathers)
+        return forecastedWeatherCoreData
     }
     
     //MARK: - Save Changes

@@ -26,7 +26,7 @@ struct DailyForecastViewModel {
     let weatherDescription: String
     let weatherIconUrlString: String
     
-    init(currentWeather: CurrentWeatherViewModel, dailyWeather: DailyWeatherCD) {
+    init(currentWeather: CurrentWeatherViewModel, dailyWeather: DailyWeatherCoreData) {
         id = currentWeather.id
         name = currentWeather.name
         humidity = Int(dailyWeather.humidity)

@@ -21,7 +21,7 @@ struct CurrentWeatherViewModel {
     let weatherIconUrlString: String
     let coord: Coordinates
     
-    init(currentWeather: CurrentWeatherCD) {
+    init(currentWeather: CurrentWeatherCoreData) {
         id = Int(currentWeather.id)
         name = currentWeather.name
         humidity = Int(currentWeather.forecast.humidity)

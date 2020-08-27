@@ -1,5 +1,5 @@
 //
-//  DailyTemperatureCD+CoreDataClass.swift
+//  DailyTemperatureCoreData+CoreDataClass.swift
 //  
 //
 //  Created by Dario Nikolic on 19/08/2020.
@@ -9,15 +9,15 @@
 import Foundation
 import CoreData
 
-@objc(DailyTemperatureCD)
-public class DailyTemperatureCD: NSManagedObject {
+@objc(DailyTemperatureCoreData)
+public class DailyTemperatureCoreData: NSManagedObject {
 
-    class func firstOrCreate(withDailyWeather dailyWeather: DailyWeatherCD, context: NSManagedObjectContext) -> DailyTemperatureCD? {
+    class func firstOrCreate(withDailyWeather dailyWeather: DailyWeatherCoreData, context: NSManagedObjectContext) -> DailyTemperatureCoreData? {
         let predicate = NSPredicate(format: "dailyWeather = %@", dailyWeather)
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    func populate(dailyTemperature: DailyTemperature, dailyWeather: DailyWeatherCD) {
+    func populate(dailyTemperature: DailyTemperature, dailyWeather: DailyWeatherCoreData) {
         self.dailyWeather = dailyWeather
         self.day = dailyTemperature.day
         self.evening = dailyTemperature.evening

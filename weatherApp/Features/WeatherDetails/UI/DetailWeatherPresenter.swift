@@ -39,7 +39,7 @@ class DetailWeatherPresenter {
         return fiveDaysList.at(index)
     }
     
-    func fetchFiveDaysList(completion: @escaping ((ForecastedWeatherCD?) -> Void)) {
+    func fetchFiveDaysList(completion: @escaping ((ForecastedWeatherCoreData?) -> Void)) {
         weatherRepository.fetchForcastWeather(coord: currentWeather.coord) { [weak self] (fiveDaysForecast) in
             guard
                 let self = self,
@@ -50,7 +50,7 @@ class DetailWeatherPresenter {
             }
             
             self.sevenDayForecast = fiveDaysForecast.forecastedWeather
-                .map { DailyForecastViewModel(currentWeather: self.currentWeather, dailyWeather: $0 as! DailyWeatherCD) }
+                .map { DailyForecastViewModel(currentWeather: self.currentWeather, dailyWeather: $0 as! DailyWeatherCoreData) }
                 .sorted { $0.forecastTime < $1.forecastTime }
             
             self.setFiveDayList()

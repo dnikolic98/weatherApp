@@ -1,5 +1,5 @@
 //
-//  ForecastedWeatherCD+CoreDataProperties.swift
+//  ForecastedWeatherCoreData+CoreDataProperties.swift
 //  
 //
 //  Created by Dario Nikolic on 19/08/2020.
@@ -10,10 +10,10 @@ import Foundation
 import CoreData
 
 
-extension ForecastedWeatherCD {
+extension ForecastedWeatherCoreData {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<ForecastedWeatherCD> {
-        return NSFetchRequest<ForecastedWeatherCD>(entityName: "ForecastedWeatherCD")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<ForecastedWeatherCoreData> {
+        return NSFetchRequest<ForecastedWeatherCoreData>(entityName: "ForecastedWeatherCoreData")
     }
     
     @NSManaged public var forecastedWeather: NSSet
@@ -23,13 +23,13 @@ extension ForecastedWeatherCD {
 }
 
 // MARK: Generated accessors for forecastedWeather
-extension ForecastedWeatherCD {
+extension ForecastedWeatherCoreData {
 
     @objc(addForecastedWeatherObject:)
-    @NSManaged public func addToForecastedWeather(_ value: DailyWeatherCD)
+    @NSManaged public func addToForecastedWeather(_ value: DailyWeatherCoreData)
 
     @objc(removeForecastedWeatherObject:)
-    @NSManaged public func removeFromForecastedWeather(_ value: DailyWeatherCD)
+    @NSManaged public func removeFromForecastedWeather(_ value: DailyWeatherCoreData)
 
     @objc(addForecastedWeather:)
     @NSManaged public func addToForecastedWeather(_ values: NSSet)

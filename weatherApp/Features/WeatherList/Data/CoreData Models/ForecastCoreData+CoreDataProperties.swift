@@ -1,5 +1,5 @@
 //
-//  ForecastCD+CoreDataProperties.swift
+//  ForecastCoreData+CoreDataProperties.swift
 //  
 //
 //  Created by Dario Nikolic on 19/08/2020.
@@ -10,10 +10,10 @@ import Foundation
 import CoreData
 
 
-extension ForecastCD {
+extension ForecastCoreData {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<ForecastCD> {
-        return NSFetchRequest<ForecastCD>(entityName: "ForecastCD")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<ForecastCoreData> {
+        return NSFetchRequest<ForecastCoreData>(entityName: "ForecastCoreData")
     }
 
     @NSManaged public var feelsLikeTemperature: Double
@@ -22,6 +22,6 @@ extension ForecastCD {
     @NSManaged public var minTemperature: Double
     @NSManaged public var pressure: Int64
     @NSManaged public var temperature: Double
-    @NSManaged public var currentWeather: CurrentWeatherCD
+    @NSManaged public var currentWeather: CurrentWeatherCoreData
 
 }

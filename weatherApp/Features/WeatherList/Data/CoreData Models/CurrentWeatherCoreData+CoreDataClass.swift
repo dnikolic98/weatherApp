@@ -1,5 +1,5 @@
 //
-//  CurrentWeatherCD+CoreDataClass.swift
+//  CurrentWeatherCoreData+CoreDataClass.swift
 //  
 //
 //  Created by Dario Nikolic on 19/08/2020.
@@ -9,15 +9,15 @@
 import Foundation
 import CoreData
 
-@objc(CurrentWeatherCD)
-public class CurrentWeatherCD: NSManagedObject {
+@objc(CurrentWeatherCoreData)
+public class CurrentWeatherCoreData: NSManagedObject {
     
-    class func firstOrCreate(withId id: Int, context: NSManagedObjectContext) -> CurrentWeatherCD? {
+    class func firstOrCreate(withId id: Int, context: NSManagedObjectContext) -> CurrentWeatherCoreData? {
         let predicate = NSPredicate(format: "id = %d", id)
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    func populate(currentWeather: CurrentWeather, forecast: ForecastCD, weather: WeatherCD, coord: CoordinatesCD, wind: WindCD) {
+    func populate(currentWeather: CurrentWeather, forecast: ForecastCoreData, weather: WeatherCoreData, coord: CoordinatesCoreData, wind: WindCoreData) {
         self.coord = coord
         self.forecast = forecast
         self.weather = weather
