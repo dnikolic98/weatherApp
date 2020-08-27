@@ -40,19 +40,19 @@ class WeatherService: WeatherServiceProtocol {
         dataTask.resume()
     }
     
-    func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeather]?) -> Void)) {
+    func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeather]) -> Void)) {
         let severalIds = id.map { String($0) }.joined(separator:",")
         let resourceStringUrl = "\(baseUrlString)group?id=\(severalIds)&units=\(LocalizedStrings.units)&APPID=\(apiKey)"
         
         guard let url = URL(string: resourceStringUrl) else {
-            completion(nil)
+            completion([])
             return
         }
         let request = URLRequest(url: url)
         
         let dataTask = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data else {
-                completion(nil)
+                completion([])
                 return
             }
             
@@ -60,7 +60,7 @@ class WeatherService: WeatherServiceProtocol {
                 let multipleWeather = try JSONDecoder().decode(MultipleCurrentWeather.self, from: data)
                 completion(multipleWeather.list)
             } catch {
-                completion(nil)
+                completion([])
             }
              
         }

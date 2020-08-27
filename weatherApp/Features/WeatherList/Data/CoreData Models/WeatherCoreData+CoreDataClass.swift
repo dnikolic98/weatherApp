@@ -1,5 +1,5 @@
 //
-//  WeatherCD+CoreDataClass.swift
+//  WeatherCoreData+CoreDataClass.swift
 //  
 //
 //  Created by Dario Nikolic on 19/08/2020.
@@ -9,29 +9,29 @@
 import Foundation
 import CoreData
 
-@objc(WeatherCD)
-public class WeatherCD: NSManagedObject {
+@objc(WeatherCoreData)
+public class WeatherCoreData: NSManagedObject {
     
     //MARK: - CurrentWeather
     
-    class func firstOrCreate(withCurrentWeather currentWeather: CurrentWeatherCD, context: NSManagedObjectContext) -> WeatherCD? {
+    class func firstOrCreate(withCurrentWeather currentWeather: CurrentWeatherCoreData, context: NSManagedObjectContext) -> WeatherCoreData? {
         let predicate = NSPredicate(format: "currentWeather = %@", currentWeather)
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    func populate(weather: Weather, currentWeather: CurrentWeatherCD) {
+    func populate(weather: Weather, currentWeather: CurrentWeatherCoreData) {
         self.currentWeather = currentWeather
         self.populate(weather: weather)
     }
     
     //MARK: - DailyWeather
     
-    class func firstOrCreate(withDailyWeather dailyWeather: DailyWeatherCD, context: NSManagedObjectContext) -> WeatherCD? {
+    class func firstOrCreate(withDailyWeather dailyWeather: DailyWeatherCoreData, context: NSManagedObjectContext) -> WeatherCoreData? {
         let predicate = NSPredicate(format: "dailyWeather = %@", dailyWeather)
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    func populate(weather: Weather, dailyWeather: DailyWeatherCD) {
+    func populate(weather: Weather, dailyWeather: DailyWeatherCoreData) {
         self.dailyWeather = dailyWeather
         self.populate(weather: weather)
     }

@@ -10,7 +10,7 @@ protocol WeatherServiceProtocol {
     
     func fetchForcastWeather(coord: Coordinates, completion: @escaping ((ForecastedWeather?) -> Void))
     
-    func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeather]?) -> Void))
+    func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeather]) -> Void))
     
     func fetchCurrentWeather(coord: Coordinates, completion: @escaping ((CurrentWeather?) -> Void))
 

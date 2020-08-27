@@ -59,7 +59,7 @@ class HomeViewController: UIViewController {
     
     @objc private func bindViewModel() {
         currentWeatherListPresenter.fetchCurrentWeatherList() { (currentWeatherList) in
-            guard let _ = currentWeatherList else { return }
+            guard currentWeatherList.count != 0 else { return }
             
             self.refreshTableView()
         }

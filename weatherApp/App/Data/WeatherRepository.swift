@@ -23,36 +23,34 @@ class WeatherRepository {
     }
     
     
-    func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeatherCD]?) -> Void)) {
+    func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeatherCoreData]) -> Void)) {
         switch reachability.connection {
         case .unavailable:
-            let currentWeatherListCD = coreDataService.fetchCurrentWeather()
-            completion(currentWeatherListCD)
+            let currentWeatherListCoreData = coreDataService.fetchCurrentWeather()
+            completion(currentWeatherListCoreData)
         default:
             weatherService.fetchSeveralCurrentWeather(id: id) { [weak self] (currentWeatherList) in
                 guard
                     let self = self,
-                    let currentWeatherList = currentWeatherList
+                    currentWeatherList.count != 0
                 else {
-                    completion(nil)
+                    completion([])
                     return
                 }
                 let _ = currentWeatherList.map { self.coreDataService.createCurrentWeatherFrom(currentWeather: $0) }
                 self.coreDataService.saveChanges()
                 
-                DispatchQueue.main.async {
-                    let currentWeatherListCD = self.coreDataService.fetchCurrentWeather()
-                    completion(currentWeatherListCD)
-                }
+                let currentWeatherListCoreData = self.coreDataService.fetchCurrentWeather()
+                completion(currentWeatherListCoreData)
             }
         }
     }
     
-    func fetchForcastWeather(coord: Coordinates, completion: @escaping ((ForecastedWeatherCD?) -> Void)) {
+    func fetchForcastWeather(coord: Coordinates, completion: @escaping ((ForecastedWeatherCoreData?) -> Void)) {
         switch reachability.connection {
         case .unavailable:
-            let currentWeatherListCD = coreDataService.fetchForecastWeather(coord: coord)
-            completion(currentWeatherListCD)
+            let currentWeatherListCoreData = coreDataService.fetchForecastWeather(coord: coord)
+            completion(currentWeatherListCoreData)
         default:
             weatherService.fetchForcastWeather(coord: coord) { [weak self] (forecastedWeather) in
                 guard
@@ -66,20 +64,18 @@ class WeatherRepository {
                 let _ = self.coreDataService.createForecastedWeatherFrom(forecastedWeather: forecastedWeather)
                 self.coreDataService.saveChanges()
                 
-                DispatchQueue.main.async {
-                    let currentWeatherListCD = self.coreDataService.fetchForecastWeather(coord: coord)
-                    completion(currentWeatherListCD)
-                }
+                let currentWeatherListCoreData = self.coreDataService.fetchForecastWeather(coord: coord)
+                completion(currentWeatherListCoreData)
             }
         }
     }
     
-    func fetchCurrentWeather(coord: Coordinates, completion: @escaping ((CurrentWeatherCD?) -> Void)) {
+    func fetchCurrentWeather(coord: Coordinates, completion: @escaping ((CurrentWeatherCoreData?) -> Void)) {
         switch reachability.connection {
         case .unavailable:
             completion(nil)
-            let currentWeatherCD = coreDataService.fetchCurrentWeather(coord: coord)
-            completion(currentWeatherCD)
+            let currentWeatherCoreData = coreDataService.fetchCurrentWeather(coord: coord)
+            completion(currentWeatherCoreData)
         default:
             weatherService.fetchCurrentWeather(coord: coord) { [weak self] (currentWeather) in
                 guard
@@ -89,12 +85,12 @@ class WeatherRepository {
                     completion(nil)
                     return
                 }
-                let currentWeatherCD = self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
+                let _ = self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
                 self.coreDataService.saveChanges()
                 
                 DispatchQueue.main.async {
-                    let currentWeatherCD = self.coreDataService.fetchCurrentWeather(coord: coord)
-                    completion(currentWeatherCD)
+                    let currentWeatherCoreData = self.coreDataService.fetchCurrentWeather(coord: coord)
+                    completion(currentWeatherCoreData)
                 }
             }
         }
