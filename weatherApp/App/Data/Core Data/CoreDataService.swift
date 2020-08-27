@@ -51,13 +51,8 @@ class CoreDataService: CoreDataServiceProtocol {
     }
     
     func fetchForecastWeather(coord: Coordinates) -> ForecastedWeatherCoreData? {
-        let lon = coord.longitude
-        let lat = coord.latitude
-        
         let request: NSFetchRequest<ForecastedWeatherCoreData> = ForecastedWeatherCoreData.fetchRequest()
-        let epsilon = 0.00001
-        let format = "longitude > %f AND longitude < %f AND latitude > %f AND latitude < %f"
-        request.predicate = NSPredicate(format: format, lon - epsilon, lon + epsilon, lat - epsilon, lat + epsilon)
+        request.predicate = Predicates.coordinatesPredicate(coord)
         
         let forecastedWeatherCoreData = try? mainContext.fetch(request)
         return forecastedWeatherCoreData?.first

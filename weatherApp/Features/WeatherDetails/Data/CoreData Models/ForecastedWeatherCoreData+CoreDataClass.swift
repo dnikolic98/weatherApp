@@ -13,9 +13,7 @@ import CoreData
 public class ForecastedWeatherCoreData: NSManagedObject {
     
     class func firstOrCreate(withLongitude lon: Double, withLatitude lat: Double, context: NSManagedObjectContext) -> ForecastedWeatherCoreData? {
-        let epsilon = 0.00001
-        let format = "longitude > %f AND longitude < %f AND latitude > %f AND latitude < %f"
-        let predicate = NSPredicate(format: format, lon - epsilon, lon + epsilon, lat - epsilon, lat + epsilon)
+        let predicate = Predicates.coordinatesPredicate(latitude: lat, longitude: lon)
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
