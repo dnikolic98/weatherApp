@@ -15,7 +15,7 @@ public class WeatherCoreData: NSManagedObject {
     //MARK: - CurrentWeather
     
     class func firstOrCreate(withCurrentWeather currentWeather: CurrentWeatherCoreData, context: NSManagedObjectContext) -> WeatherCoreData? {
-        let predicate = NSPredicate(format: "currentWeather = %@", currentWeather)
+        let predicate = Predicates.currentWeatherPredicate(currentWeather)
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
@@ -27,7 +27,7 @@ public class WeatherCoreData: NSManagedObject {
     //MARK: - DailyWeather
     
     class func firstOrCreate(withDailyWeather dailyWeather: DailyWeatherCoreData, context: NSManagedObjectContext) -> WeatherCoreData? {
-        let predicate = NSPredicate(format: "dailyWeather = %@", dailyWeather)
+        let predicate = Predicates.dailyWeatherPredicate(dailyWeather)
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     

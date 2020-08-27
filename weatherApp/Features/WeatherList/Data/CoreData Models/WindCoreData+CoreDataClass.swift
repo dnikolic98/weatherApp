@@ -13,7 +13,7 @@ import CoreData
 public class WindCoreData: NSManagedObject {
     
     class func firstOrCreate(withCurrentWeather currentWeather: CurrentWeatherCoreData, context: NSManagedObjectContext) -> WindCoreData? {
-        let predicate = NSPredicate(format: "currentWeather = %@", currentWeather)
+        let predicate = Predicates.currentWeatherPredicate(currentWeather)
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
