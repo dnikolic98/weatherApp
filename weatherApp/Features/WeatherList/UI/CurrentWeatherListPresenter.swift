@@ -21,15 +21,15 @@ class CurrentWeatherListPresenter {
         currentWeatherList.count
     }
     
-    func fetchCurrentWeatherList(completion: @escaping (([CurrentWeatherViewModel]?) -> Void)) {
+    func fetchCurrentWeatherList(completion: @escaping (([CurrentWeatherViewModel]) -> Void)) {
         let locationIds = Cities.allCases.map { $0.rawValue }
         
         weatherRepository.fetchSeveralCurrentWeather(id: locationIds) { [weak self] (currentWeatherList) in
             guard
                 let self = self,
-                let currentWeatherList = currentWeatherList
+                currentWeatherList.count != 0
             else {
-                completion(nil)
+                completion([])
                 return
             }
             

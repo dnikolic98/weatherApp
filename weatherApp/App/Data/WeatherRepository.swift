@@ -23,7 +23,7 @@ class WeatherRepository {
     }
     
     
-    func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeatherCD]?) -> Void)) {
+    func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeatherCD]) -> Void)) {
         switch reachability.connection {
         case .unavailable:
             let currentWeatherListCD = coreDataService.fetchCurrentWeather()
@@ -32,9 +32,9 @@ class WeatherRepository {
             weatherService.fetchSeveralCurrentWeather(id: id) { [weak self] (currentWeatherList) in
                 guard
                     let self = self,
-                    let currentWeatherList = currentWeatherList
+                    currentWeatherList.count != 0
                 else {
-                    completion(nil)
+                    completion([])
                     return
                 }
                 let _ = currentWeatherList.map { self.coreDataService.createCurrentWeatherFrom(currentWeather: $0) }

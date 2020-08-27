@@ -26,12 +26,14 @@ class CoreDataService: CoreDataServiceProtocol {
     
     //MARK: - Fetches
     
-    func fetchCurrentWeather() -> [CurrentWeatherCD]? {
-        
+    func fetchCurrentWeather() -> [CurrentWeatherCD] {
         let request: NSFetchRequest<CurrentWeatherCD> = CurrentWeatherCD.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         
-        let currentWeatherList = try? mainContext.fetch(request)
+        guard let currentWeatherList = try? mainContext.fetch(request) else {
+            return []
+        }
+        
         return currentWeatherList
     }
     
