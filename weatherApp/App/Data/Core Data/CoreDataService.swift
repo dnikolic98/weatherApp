@@ -38,13 +38,8 @@ class CoreDataService: CoreDataServiceProtocol {
     }
     
     func fetchCurrentWeather(coord: Coordinates) -> CurrentWeatherCoreData? {
-        let lon = coord.longitude
-        let lat = coord.latitude
-        
         let request: NSFetchRequest<CurrentWeatherCoreData> = CurrentWeatherCoreData.fetchRequest()
-        let epsilon = 0.01
-        let format = "coord.longitude > %f AND coord.longitude < %f AND coord.latitude > %f AND coord.latitude < %f"
-        request.predicate = NSPredicate(format: format, lon-epsilon, lon+epsilon, lat-epsilon, lat+epsilon)
+        request.predicate = Predicates.coordinatesPredicate(coord, epsilon: 0.01, keyPath: "coord")
         
         let currentWeatherCoreData = try? mainContext.fetch(request)
         return currentWeatherCoreData?.first

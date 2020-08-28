@@ -88,10 +88,8 @@ class WeatherRepository {
                 let _ = self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
                 self.coreDataService.saveChanges()
                 
-                DispatchQueue.main.async {
-                    let currentWeatherCoreData = self.coreDataService.fetchCurrentWeather(coord: coord)
-                    completion(currentWeatherCoreData)
-                }
+                let currentWeatherCoreData = self.coreDataService.fetchCurrentWeather(coord: coord)
+                completion(currentWeatherCoreData)
             }
         }
     }
