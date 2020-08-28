@@ -18,11 +18,7 @@ class DetailWeatherViewController: UIViewController {
     private let numberOfDays = 5
     private let padding: CGFloat = 10
     
-    @IBOutlet private weak var tempLabel: UILabel!
-    @IBOutlet private weak var weatherIcon: UIImageView!
-    @IBOutlet private weak var weatherDescriptionLabel: UILabel!
-    @IBOutlet private weak var maxTempLabel: UILabel!
-    @IBOutlet private weak var minTempLabel: UILabel!
+    @IBOutlet weak var mainInformationView: MainInformationView!
     @IBOutlet private weak var detailsCollectionView: UICollectionView!
     @IBOutlet private weak var detailsCollectionViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var daysCollectionView: UICollectionView!
@@ -65,18 +61,7 @@ class DetailWeatherViewController: UIViewController {
     
     private func setWeatherInformation() {
         let currentWeather = detailWeatherPresenter.currentWeather
-        
-        title = currentWeather.name
-        
-        tempLabel.text = String(format: LocalizedStrings.degreeValueFormat, currentWeather.temperature)
-        weatherDescriptionLabel.text = currentWeather.weatherDescription.firstCapitalized
-        minTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.minTemperature)
-        maxTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.maxTemperature)
-        
-        let urlString = currentWeather.weatherIconUrlString
-        if let url = URL(string: urlString) {
-            weatherIcon.kf.setImage(with: url)
-        }
+        mainInformationView.set(currentWeather: currentWeather)
     }
     
     private func setupCollectionViews() {
