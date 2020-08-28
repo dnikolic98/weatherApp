@@ -26,11 +26,10 @@ struct DailyForecastViewModel {
     let weatherDescription: String
     let weatherIconUrlString: String
     
-    
-    init(currentWeather: CurrentWeatherViewModel, dailyWeather: DailyWeather) {
+    init(currentWeather: CurrentWeatherViewModel, dailyWeather: DailyWeatherCoreData) {
         id = currentWeather.id
         name = currentWeather.name
-        humidity = dailyWeather.humidity
+        humidity = Int(dailyWeather.humidity)
         pressure = Int(dailyWeather.pressure)
         maxTemperature = Int(dailyWeather.temperature.max)
         minTemperature = Int(dailyWeather.temperature.min)
@@ -38,10 +37,10 @@ struct DailyForecastViewModel {
         dayTemperature = Int(dailyWeather.temperature.day)
         morningTemperature = Int(dailyWeather.temperature.morning)
         nightTemperature = Int(dailyWeather.temperature.night)
-        weatherDescription = dailyWeather.weather.at(0)?.description ?? ""
-        weatherIconUrlString = dailyWeather.weather.at(0)?.iconUrlString ?? ""
-        sunrise = dailyWeather.sunrise
-        sunset = dailyWeather.sunset
+        weatherDescription = dailyWeather.weather.overview
+        weatherIconUrlString = dailyWeather.weather.iconsUrlString
+        sunrise = Int(dailyWeather.sunrise)
+        sunset = Int(dailyWeather.sunset)
         forecastTime = Date(timeIntervalSince1970: TimeInterval(dailyWeather.forecastTime))
     }
     

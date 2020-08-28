@@ -9,11 +9,11 @@
 class CurrentWeatherListPresenter {
     
     private var currentWeatherList: [CurrentWeatherViewModel] = []
-    private let weatherService: WeatherServiceProtocol
+    private let weatherRepository: WeatherRepository
     private let navigationService: NavigationService
     
-    init(weatherService: WeatherServiceProtocol, navigationService: NavigationService) {
-        self.weatherService = weatherService
+    init(weatherRepository: WeatherRepository, navigationService: NavigationService) {
+        self.weatherRepository = weatherRepository
         self.navigationService = navigationService
     }
     
@@ -21,15 +21,15 @@ class CurrentWeatherListPresenter {
         currentWeatherList.count
     }
     
-    func fetchCurrentWeatherList(completion: @escaping (([CurrentWeatherViewModel]?) -> Void)) {
+    func fetchCurrentWeatherList(completion: @escaping (([CurrentWeatherViewModel]) -> Void)) {
         let locationIds = Cities.allCases.map { $0.rawValue }
         
-        weatherService.fetchSeveralCurrentWeather(id: locationIds) { [weak self] (currentWeatherList) in
+        weatherRepository.fetchSeveralCurrentWeather(id: locationIds) { [weak self] (currentWeatherList) in
             guard
                 let self = self,
-                let currentWeatherList = currentWeatherList
+                !currentWeatherList.isEmpty
             else {
-                completion(nil)
+                completion([])
                 return
             }
             

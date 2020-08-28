@@ -8,7 +8,7 @@
 
 class DetailWeatherPresenter {
     
-    private let weatherService: WeatherServiceProtocol
+    private let weatherRepository: WeatherRepository
     private var sevenDayForecast: [DailyForecastViewModel] = []
     private var weatherConditionList: [ConditionInformationViewModel] = []
     private var fiveDaysList: [SingleWeatherInformationViewModel] = []
@@ -24,9 +24,9 @@ class DetailWeatherPresenter {
         fiveDaysList.count
     }
     
-    init(currentWeather: CurrentWeatherViewModel, weatherService: WeatherServiceProtocol) {
+    init(currentWeather: CurrentWeatherViewModel, weatherRepository: WeatherRepository) {
         self.currentWeather = currentWeather
-        self.weatherService = weatherService
+        self.weatherRepository = weatherRepository
 
         setWeatherConditionList()
     }
@@ -39,8 +39,8 @@ class DetailWeatherPresenter {
         return fiveDaysList.at(index)
     }
     
-    func fetchFiveDaysList(completion: @escaping ((ForecastedWeather?) -> Void)) {
-        weatherService.fetchForcastWeather(coord: currentWeather.coord) { [weak self] (fiveDaysForecast) in
+    func fetchFiveDaysList(completion: @escaping ((ForecastedWeatherCoreData?) -> Void)) {
+        weatherRepository.fetchForcastWeather(coord: currentWeather.coord) { [weak self] (fiveDaysForecast) in
             guard
                 let self = self,
                 let fiveDaysForecast = fiveDaysForecast
@@ -49,7 +49,9 @@ class DetailWeatherPresenter {
                 return
             }
             
-            self.sevenDayForecast = fiveDaysForecast.forecastedWeather.map { DailyForecastViewModel(currentWeather: self.currentWeather, dailyWeather: $0) }
+            self.sevenDayForecast = fiveDaysForecast.forecastedWeather
+                .map { DailyForecastViewModel(currentWeather: self.currentWeather, dailyWeather: $0 as! DailyWeatherCoreData) }
+                .sorted { $0.forecastTime < $1.forecastTime }
             
             self.setFiveDayList()
             completion(fiveDaysForecast)
