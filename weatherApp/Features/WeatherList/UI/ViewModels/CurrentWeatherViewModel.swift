@@ -35,7 +35,7 @@ struct CurrentWeatherViewModel {
         weatherDescription = currentWeather.weather.overview
         weatherIconUrlString = currentWeather.weather.iconsUrlString
         coord = Coordinates.init(latitude: currentWeather.coord.latitude, longitude: currentWeather.coord.longitude)
-        updatedTime = currentWeather.updatedTime
+        updatedTime = currentWeather.updatedTime.dateTime()
     }
     
 }

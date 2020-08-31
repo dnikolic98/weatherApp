@@ -43,7 +43,7 @@ struct DailyForecastViewModel {
         sunrise = Int(dailyWeather.sunrise)
         sunset = Int(dailyWeather.sunset)
         forecastTime = Date(timeIntervalSince1970: TimeInterval(dailyWeather.forecastTime))
-        updatedInfo = dailyWeather.updatedTime
+        updatedInfo = dailyWeather.updatedTime.dateTime()
     }
     
 }
