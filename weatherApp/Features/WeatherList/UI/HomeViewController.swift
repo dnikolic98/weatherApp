@@ -14,6 +14,7 @@ class HomeViewController: UIViewController {
     private var refreshControl: UIRefreshControl!
     private var currentWeatherListPresenter: CurrentWeatherListPresenter!
     
+    @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var currentLocationView: MainInformationView!
@@ -32,6 +33,7 @@ class HomeViewController: UIViewController {
         styleNavgiationBar()
         setupTableView()
         bindViewModel()
+        configurePullToRefresh()
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -98,10 +100,6 @@ class HomeViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.isScrollEnabled = false
         
-        refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(bindViewModel), for: UIControl.Event.valueChanged)
-        tableView.refreshControl = refreshControl
-        
         tableViewHeightConstraint.constant = CGFloat(0)
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.typeName)
     }
@@ -112,6 +110,12 @@ class HomeViewController: UIViewController {
             self.tableView.reloadData()
             self.refreshControl.endRefreshing()
         }
+    }
+    
+    func configurePullToRefresh() {
+       refreshControl = UIRefreshControl()
+       refreshControl.addTarget(self, action: #selector(bindViewModel), for: UIControl.Event.valueChanged)
+       scrollView.refreshControl = refreshControl
     }
     
     private func refreshTableViewHeight() {
