@@ -81,7 +81,7 @@ class HomeViewController: UIViewController {
     
     private func startTimer() {
         timerObservable = Observable<Int>
-            .timer(.seconds(0), period: .seconds(600), scheduler: MainScheduler.instance)
+            .timer(.seconds(0), period: .seconds(300), scheduler: MainScheduler.instance)
             .subscribe(onNext: { (data) in
                 self.bindViewModel()
             })

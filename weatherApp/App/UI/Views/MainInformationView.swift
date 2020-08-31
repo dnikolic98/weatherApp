@@ -14,6 +14,7 @@ class MainInformationView: UIView {
     
     private let locationNameLabel = UILabel()
     private let weatherDescriptionLabel = UILabel()
+    private let updatedInfoLabel = UILabel()
     private let currentTempLabel = UILabel()
     private let minTempLabel = UILabel()
     private let maxTempLabel = UILabel()
@@ -37,6 +38,7 @@ class MainInformationView: UIView {
         currentTempLabel.text = String(format: LocalizedStrings.degreeValueFormat, currentWeather.temperature)
         minTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.minTemperature)
         maxTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.maxTemperature)
+//        updatedInfoLabel.text = "31/8/2020, 12:40"
         
         let urlString = currentWeather.weatherIconUrlString
         if let url = URL(string: urlString) {
@@ -62,10 +64,18 @@ class MainInformationView: UIView {
         styleMinTempLabel()
         styleMaxTempLabel()
         styleLine()
+        styleUpdatedInfoLabel()
     }
     
     private func styleLine() {
         lineView.backgroundColor = .white30
+    }
+    
+    private func styleUpdatedInfoLabel() {
+        updatedInfoLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+        updatedInfoLabel.adjustsFontSizeToFitWidth = true
+        updatedInfoLabel.minimumScaleFactor = 0.5
+        updatedInfoLabel.textColor = .white
     }
     
     private func styleLocationNameLabel() {
@@ -122,6 +132,7 @@ class MainInformationView: UIView {
         addSubview(weatherIcon)
         addSubview(temperatureStackView)
         addSubview(lineView)
+        addSubview(updatedInfoLabel)
         
         temperatureStackView.addArrangedSubview(maxTempLabel)
         temperatureStackView.addArrangedSubview(lineView)
@@ -134,6 +145,7 @@ class MainInformationView: UIView {
         
         lineView.autoSetDimension(.height, toSize: 1)
         
+        
         locationNameLabel.autoPinEdge(.top, to: .top, of: self, withOffset: 25)
         locationNameLabel.autoPinEdge(.leading, to: .leading, of: self, withOffset: 25)
         
@@ -142,6 +154,7 @@ class MainInformationView: UIView {
         
         weatherDescriptionLabel.autoAlignAxis(.horizontal, toSameAxisOf: weatherIcon)
         weatherDescriptionLabel.autoPinEdge(.leading, to: .trailing, of: weatherIcon, withOffset: 15)
+        weatherDescriptionLabel.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -30)
         
         currentTempLabel.autoPinEdge(.top, to: .bottom, of: weatherDescriptionLabel)
         currentTempLabel.autoPinEdge(.leading, to: .leading, of: self, withOffset: 30, relation: .greaterThanOrEqual)
@@ -150,9 +163,10 @@ class MainInformationView: UIView {
         temperatureStackView.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -30)
         temperatureStackView.autoPinEdge(.leading, to: .trailing, of: currentTempLabel, withOffset: 25)
         
-//        minTempLabel.widthAnchor.constraint(equalTo: maxTempLabel.widthAnchor).isActive = true
         lineView.widthAnchor.constraint(equalTo: maxTempLabel.widthAnchor).isActive = true
         
+        updatedInfoLabel.autoPinEdge(.bottom, to: .bottom, of: self, withOffset: 5)
+        updatedInfoLabel.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -20)
     }
     
 }
