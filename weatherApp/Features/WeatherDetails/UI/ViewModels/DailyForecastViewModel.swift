@@ -25,6 +25,7 @@ struct DailyForecastViewModel {
     let nightTemperature: Int
     let weatherDescription: String
     let weatherIconUrlString: String
+    let updatedInfo: String
     
     init(currentWeather: CurrentWeatherViewModel, dailyWeather: DailyWeatherCoreData) {
         id = currentWeather.id
@@ -42,6 +43,7 @@ struct DailyForecastViewModel {
         sunrise = Int(dailyWeather.sunrise)
         sunset = Int(dailyWeather.sunset)
         forecastTime = Date(timeIntervalSince1970: TimeInterval(dailyWeather.forecastTime))
+        updatedInfo = dailyWeather.updatedTime
     }
     
 }

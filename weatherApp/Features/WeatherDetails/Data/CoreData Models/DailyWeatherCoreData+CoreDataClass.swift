@@ -18,6 +18,8 @@ public class DailyWeatherCoreData: NSManagedObject {
     }
     
     func populate(dailyWeather: DailyWeather, indexId: Int, forecastedWeather: ForecastedWeatherCoreData, temperature: DailyTemperatureCoreData, weather: WeatherCoreData) {
+        let currentDateTime = Date().dateTime()
+        
         self.forecastedWeather = forecastedWeather
         self.id = Int64(indexId)
         self.weather = weather
@@ -27,6 +29,7 @@ public class DailyWeatherCoreData: NSManagedObject {
         self.sunrise = Int64(dailyWeather.sunrise)
         self.sunset = Int64(dailyWeather.sunset)
         self.temperature = temperature
+        self.updatedTime = currentDateTime
     }
     
 }

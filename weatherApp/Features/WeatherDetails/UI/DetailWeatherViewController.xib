@@ -13,6 +13,7 @@
                 <outlet property="detailsCollectionView" destination="b3T-kv-4cc" id="MQJ-zz-NRP"/>
                 <outlet property="detailsCollectionViewHeightConstraint" destination="N8g-Fi-v6y" id="p4m-mL-tM6"/>
                 <outlet property="mainInformationView" destination="sQY-21-BWp" id="ZK1-GX-oHe"/>
+                <outlet property="scrollView" destination="61r-2t-F0h" id="v4u-Tq-nJb"/>
                 <outlet property="view" destination="wCt-B9-54W" id="XaT-Zc-av4"/>
             </connections>
         </placeholder>

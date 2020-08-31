@@ -73,6 +73,7 @@ class HomeViewController: UIViewController {
         
         self.currentWeatherListPresenter.fetchCurrentWeather() { (currentLocation) in
             guard let currentLocation = currentLocation else { return }
+            
             DispatchQueue.main.async {
                 self.currentLocationView.set(currentWeather: currentLocation)
             }

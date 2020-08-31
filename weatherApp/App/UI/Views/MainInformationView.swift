@@ -38,7 +38,7 @@ class MainInformationView: UIView {
         currentTempLabel.text = String(format: LocalizedStrings.degreeValueFormat, currentWeather.temperature)
         minTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.minTemperature)
         maxTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.maxTemperature)
-//        updatedInfoLabel.text = "31/8/2020, 12:40"
+        updatedInfoLabel.text = currentWeather.updatedTime
         
         let urlString = currentWeather.weatherIconUrlString
         if let url = URL(string: urlString) {
@@ -72,7 +72,7 @@ class MainInformationView: UIView {
     }
     
     private func styleUpdatedInfoLabel() {
-        updatedInfoLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+        updatedInfoLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         updatedInfoLabel.adjustsFontSizeToFitWidth = true
         updatedInfoLabel.minimumScaleFactor = 0.5
         updatedInfoLabel.textColor = .white
@@ -145,15 +145,15 @@ class MainInformationView: UIView {
         
         lineView.autoSetDimension(.height, toSize: 1)
         
-        
         locationNameLabel.autoPinEdge(.top, to: .top, of: self, withOffset: 25)
         locationNameLabel.autoPinEdge(.leading, to: .leading, of: self, withOffset: 25)
+        locationNameLabel.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -30)
         
         weatherIcon.autoPinEdge(.top, to: .bottom, of: locationNameLabel, withOffset: 10)
         weatherIcon.autoPinEdge(.leading, to: .leading, of: self, withOffset: 20)
         
         weatherDescriptionLabel.autoAlignAxis(.horizontal, toSameAxisOf: weatherIcon)
-        weatherDescriptionLabel.autoPinEdge(.leading, to: .trailing, of: weatherIcon, withOffset: 15)
+        weatherDescriptionLabel.autoPinEdge(.leading, to: .trailing, of: weatherIcon, withOffset: 10)
         weatherDescriptionLabel.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -30)
         
         currentTempLabel.autoPinEdge(.top, to: .bottom, of: weatherDescriptionLabel)

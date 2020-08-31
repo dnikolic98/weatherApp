@@ -18,12 +18,15 @@ public class CurrentWeatherCoreData: NSManagedObject {
     }
     
     func populate(currentWeather: CurrentWeather, forecast: ForecastCoreData, weather: WeatherCoreData, coord: CoordinatesCoreData, wind: WindCoreData) {
+        let currentDateTime = Date().dateTime()
+        
         self.coord = coord
         self.forecast = forecast
         self.weather = weather
         self.wind = wind
         self.name = currentWeather.name
         self.id = Int64(currentWeather.id)
+        self.updatedTime = currentDateTime
     }
     
 }

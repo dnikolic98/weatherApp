@@ -61,7 +61,6 @@ class CurrentWeatherListPresenter {
                 completion(self.currentLocationWeather)
             }
         }
-        
     }
     
     func currentWeather(atIndex index: Int) -> CurrentWeatherViewModel? {

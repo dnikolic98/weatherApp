@@ -13,7 +13,7 @@ class DetailWeatherPresenter {
     private var weatherConditionList: [ConditionInformationViewModel] = []
     private var fiveDaysList: [SingleWeatherInformationViewModel] = []
     
-    let currentWeather: CurrentWeatherViewModel
+    var currentWeather: CurrentWeatherViewModel
     var numberOfConditions: Int {
         weatherConditionList.count
     }
@@ -55,6 +55,22 @@ class DetailWeatherPresenter {
             
             self.setFiveDayList()
             completion(fiveDaysForecast)
+        }
+    }
+    
+    func fetchCurrentWeather(completion: @escaping ((CurrentWeatherViewModel?) -> Void)) {
+        let coord = currentWeather.coord
+        self.weatherRepository.fetchCurrentWeather(coord: coord) { [weak self] (currentWeather) in
+            guard
+                let self = self,
+                let currentWeather = currentWeather
+                else {
+                    completion(nil)
+                    return
+            }
+            
+            self.currentWeather = CurrentWeatherViewModel(currentWeather: currentWeather)
+            completion(self.currentWeather)
         }
     }
     
