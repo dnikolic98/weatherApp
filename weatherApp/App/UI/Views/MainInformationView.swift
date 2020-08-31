@@ -33,7 +33,7 @@ class MainInformationView: UIView {
     
     func set(currentWeather: CurrentWeatherViewModel) {
         locationNameLabel.text = currentWeather.name
-        weatherDescriptionLabel.text = currentWeather.weatherDescription
+        weatherDescriptionLabel.text = currentWeather.weatherDescription.firstCapitalized
         currentTempLabel.text = String(format: LocalizedStrings.degreeValueFormat, currentWeather.temperature)
         minTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.minTemperature)
         maxTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.maxTemperature)

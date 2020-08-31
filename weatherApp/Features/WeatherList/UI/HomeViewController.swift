@@ -7,17 +7,21 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class HomeViewController: UIViewController {
     
     private let rowHeight = WeatherTableViewCell.height
     private var refreshControl: UIRefreshControl!
     private var currentWeatherListPresenter: CurrentWeatherListPresenter!
+    private var timerObservable: Disposable?
+//    private let disposeBag: DisposeBag = DisposeBag()
     
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var currentLocationView: MainInformationView!
+    @IBOutlet private weak var currentLocationView: MainInformationView!
     
     convenience init(currentWeatherListPresenter: CurrentWeatherListPresenter) {
         self.init()
@@ -34,6 +38,7 @@ class HomeViewController: UIViewController {
         setupTableView()
         bindViewModel()
         configurePullToRefresh()
+        startTimer()
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -74,6 +79,14 @@ class HomeViewController: UIViewController {
         }
     }
     
+    private func startTimer() {
+        timerObservable = Observable<Int>
+            .timer(.seconds(0), period: .seconds(600), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { (data) in
+                self.bindViewModel()
+            })
+    }
+    
     //MARK: - UI elements setup
     
     private func styleNavgiationBar() {
@@ -104,18 +117,18 @@ class HomeViewController: UIViewController {
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.typeName)
     }
     
+    private func configurePullToRefresh() {
+       refreshControl = UIRefreshControl()
+       refreshControl.addTarget(self, action: #selector(bindViewModel), for: UIControl.Event.valueChanged)
+       scrollView.refreshControl = refreshControl
+    }
+    
     private func refreshTableView() {
         DispatchQueue.main.async {
             self.refreshTableViewHeight()
             self.tableView.reloadData()
             self.refreshControl.endRefreshing()
         }
-    }
-    
-    func configurePullToRefresh() {
-       refreshControl = UIRefreshControl()
-       refreshControl.addTarget(self, action: #selector(bindViewModel), for: UIControl.Event.valueChanged)
-       scrollView.refreshControl = refreshControl
     }
     
     private func refreshTableViewHeight() {
