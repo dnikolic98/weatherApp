@@ -21,7 +21,7 @@ class DetailWeatherViewController: UIViewController {
     private var refreshControl: UIRefreshControl!
     private var currentWeatherListPresenter: CurrentWeatherListPresenter!
     private var timerObservable: Disposable?
-//    private let disposeBag: DisposeBag = DisposeBag()
+    private let disposeBag: DisposeBag = DisposeBag()
     
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var mainInformationView: MainInformationView!
@@ -75,6 +75,7 @@ class DetailWeatherViewController: UIViewController {
             .subscribe(onNext: { (data) in
                 self.bindViewModel()
             })
+        .disposed(by: disposeBag) as? Disposable
     }
     
     //MARK: - UI elements setup

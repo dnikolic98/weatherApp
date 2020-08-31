@@ -86,6 +86,7 @@ class HomeViewController: UIViewController {
             .subscribe(onNext: { (data) in
                 self.bindViewModel()
             })
+            .disposed(by: disposeBag) as? Disposable
     }
     
     //MARK: - UI elements setup
