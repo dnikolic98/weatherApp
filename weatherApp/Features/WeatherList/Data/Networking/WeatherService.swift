@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxSwift
 
 class WeatherService: WeatherServiceProtocol {
     
@@ -40,6 +41,12 @@ class WeatherService: WeatherServiceProtocol {
         dataTask.resume()
     }
     
+    func fetchForecastWeather(coord: Coordinates) -> Observable<ForecastedWeather> {
+        let resourceStringUrl = "\(baseUrlString)onecall?exclude=current,minutely&lat=\(coord.latitude)&lon=\(coord.longitude)&units=\(LocalizedStrings.units)&appid=\(apiKey)"
+        
+        return fetchData(resourceUrlString: resourceStringUrl)
+    }
+    
     func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeather]) -> Void)) {
         let severalIds = id.map { String($0) }.joined(separator:",")
         let resourceStringUrl = "\(baseUrlString)group?id=\(severalIds)&units=\(LocalizedStrings.units)&APPID=\(apiKey)"
@@ -65,6 +72,13 @@ class WeatherService: WeatherServiceProtocol {
              
         }
         dataTask.resume()
+    }
+    
+    func fetchSeveralCurrentWeather(id: [Int]) -> Observable<[CurrentWeather]> {
+        let severalIds = id.map { String($0) }.joined(separator:",")
+        let resourceStringUrl = "\(baseUrlString)group?id=\(severalIds)&units=\(LocalizedStrings.units)&APPID=\(apiKey)"
+        
+        return fetchData(resourceUrlString: resourceStringUrl)
     }
     
     func fetchCurrentWeather(coord: Coordinates, completion: @escaping ((CurrentWeather?) -> Void)) {
@@ -93,5 +107,41 @@ class WeatherService: WeatherServiceProtocol {
         dataTask.resume()
     }
     
+    func fetchCurrentWeather(coord: Coordinates) -> Observable<CurrentWeather>{
+        let resourceStringUrl = "\(baseUrlString)weather?lat=\(coord.latitude)&lon=\(coord.longitude)&units=\(LocalizedStrings.units)&appid=\(apiKey)"
+        
+        return fetchData(resourceUrlString: resourceStringUrl)
+    }
+    
+    private func fetchData<T: Decodable>(resourceUrlString: String) -> Observable<T> {
+        return Observable<T>.create { [weak self] observer in
+            guard let self = self else { return Disposables.create() }
+            do {
+                let request = try self.buildRequest(from: resourceUrlString)
+                let dataTask = URLSession.shared.dataTask(with: request) { result in
+                    switch result {
+                    case .success(let (_, data)):
+                        do {
+                            let values = try JSONDecoder().decode(T.self, from: data)
+                            observer.onNext(values)
+                            observer.onCompleted()
+                        } catch {
+                            observer.onError(error)
+                        }
+                    case .failure(let error):
+                        observer.onError(error)
+                    }
+                }
+            dataTask.resume()
+            } catch {
+                observer.onError(error)
+            }
+            return Disposables.create()
+        }
+    }
+    
+    private func buildRequest(from urlString: String) throws -> URLRequest {
+        guard let url = URL(string: urlString) else { throw NetworkError.badURL}
+        return URLRequest(url: url)
+    }
 }
-
