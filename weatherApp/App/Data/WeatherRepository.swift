@@ -37,7 +37,9 @@ class WeatherRepository {
                     completion([])
                     return
                 }
-                let _ = currentWeatherList.map { self.coreDataService.createCurrentWeatherFrom(currentWeather: $0) }
+                for currentWeather in currentWeatherList {
+                    self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
+                }
                 self.coreDataService.saveChanges()
                 
                 let currentWeatherListCoreData = self.coreDataService.fetchCurrentWeather()
@@ -61,7 +63,7 @@ class WeatherRepository {
                     return
                 }
                 
-                let _ = self.coreDataService.createForecastedWeatherFrom(forecastedWeather: forecastedWeather)
+                self.coreDataService.createForecastedWeatherFrom(forecastedWeather: forecastedWeather)
                 self.coreDataService.saveChanges()
                 
                 let currentWeatherListCoreData = self.coreDataService.fetchForecastWeather(coord: coord)
@@ -85,7 +87,8 @@ class WeatherRepository {
                     completion(nil)
                     return
                 }
-                let _ = self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
+                
+                self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
                 self.coreDataService.saveChanges()
                 
                 let currentWeatherCoreData = self.coreDataService.fetchCurrentWeather(coord: coord)
