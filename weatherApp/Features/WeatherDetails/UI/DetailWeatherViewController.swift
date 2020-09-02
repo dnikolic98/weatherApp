@@ -54,14 +54,24 @@ class DetailWeatherViewController: UIViewController {
     //MARK: - Data
     
     @objc private func bindViewModel() {
-        detailWeatherPresenter.fetchFiveDaysList() { currentWeatherList in
-            guard let _ = currentWeatherList else { return }
+        detailWeatherPresenter.fetchFiveDaysList() { [weak self] currentWeatherList in
+            guard
+                let self = self,
+                let _ = currentWeatherList
+            else {
+                return
+            }
             
             self.refreshCollectionViewData()
         }
         
-        detailWeatherPresenter.fetchCurrentWeather { currentWeather in
-            guard let _ = currentWeather else { return }
+        detailWeatherPresenter.fetchCurrentWeather { [weak self] currentWeather in
+            guard
+                let self = self,
+                let _ = currentWeather
+            else {
+                    return
+            }
             
             DispatchQueue.main.async {
                 self.setWeatherInformation()
