@@ -57,7 +57,7 @@ class DetailWeatherViewController: UIViewController {
         detailWeatherPresenter.fetchFiveDaysList() { [weak self] currentWeatherList in
             guard
                 let self = self,
-                let _ = currentWeatherList
+                currentWeatherList != nil
             else {
                 return
             }
@@ -68,9 +68,9 @@ class DetailWeatherViewController: UIViewController {
         detailWeatherPresenter.fetchCurrentWeather { [weak self] currentWeather in
             guard
                 let self = self,
-                let _ = currentWeather
+                currentWeather != nil
             else {
-                    return
+                return
             }
             
             DispatchQueue.main.async {
