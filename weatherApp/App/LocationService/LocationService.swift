@@ -8,9 +8,7 @@
 
 import CoreLocation
 
-class LocationService: NSObject {
-
-    public typealias LocationServiceCompletion = (Coordinates?, Error?) -> (Void)
+class LocationService: NSObject, LocationServiceProtocol {
 
     private var locationManager: CLLocationManager!
     private var completion: LocationServiceCompletion!
@@ -35,18 +33,4 @@ class LocationService: NSObject {
             return Coordinates(latitude: lat, longitude: lon)
         }
 
-}
-
-extension LocationService: CLLocationManagerDelegate {
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let location = locations[0] as CLLocation
-        let coord = locationToCoordinates(location: location)
-        
-        completion(coord, nil)
-    }
-
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        completion(nil, error)
-    }
 }

@@ -56,36 +56,42 @@ class CoreDataService: CoreDataServiceProtocol {
     
     //MARK: - Create CoreData Models
     
+    @discardableResult
     func createWeatherFrom(weather: Weather, currentWeather: CurrentWeatherCoreData) -> WeatherCoreData? {
         guard let weatherCoreData = WeatherCoreData.firstOrCreate(withCurrentWeather: currentWeather, context: privateContext) else { return nil }
         weatherCoreData.populate(weather: weather, currentWeather: currentWeather)
         return weatherCoreData
     }
     
+    @discardableResult
     func createWeatherFrom(weather: Weather, dailyWeather: DailyWeatherCoreData) -> WeatherCoreData? {
         guard let weatherCoreData = WeatherCoreData.firstOrCreate(withDailyWeather: dailyWeather, context: privateContext) else { return nil }
         weatherCoreData.populate(weather: weather, dailyWeather: dailyWeather)
         return weatherCoreData
     }
     
+    @discardableResult
     func createWindFrom(wind: Wind, currentWeather: CurrentWeatherCoreData) -> WindCoreData? {
         guard let windCoreData = WindCoreData.firstOrCreate(withCurrentWeather: currentWeather, context: privateContext) else { return nil }
         windCoreData.populate(wind: wind, currentWeather: currentWeather)
         return windCoreData
     }
     
+    @discardableResult
     func createForecastFrom(forecast: Forecast, currentWeather: CurrentWeatherCoreData) -> ForecastCoreData? {
         guard let forecastCoreData = ForecastCoreData.firstOrCreate(withCurrentWeather: currentWeather, context: privateContext) else { return nil }
         forecastCoreData.populate(forecast: forecast, currentWeather: currentWeather)
         return forecastCoreData
     }
     
+    @discardableResult
     func createCoordinatesFrom(coordinates: Coordinates, currentWeather: CurrentWeatherCoreData) -> CoordinatesCoreData? {
         guard let coordinatesCoreData = CoordinatesCoreData.firstOrCreate(withCurrentWeather: currentWeather, context: privateContext) else { return nil }
         coordinatesCoreData.populate(coordinates: coordinates, currentWeather: currentWeather)
         return coordinatesCoreData
     }
     
+    @discardableResult
     func createCurrentWeatherFrom(currentWeather: CurrentWeather) -> CurrentWeatherCoreData? {
         guard
             let currentWeatherCoreData = CurrentWeatherCoreData.firstOrCreate(withId: currentWeather.id, context: privateContext),
@@ -101,13 +107,14 @@ class CoreDataService: CoreDataServiceProtocol {
         return currentWeatherCoreData
     }
     
+    @discardableResult
     func createDailyTemperatureFrom(dailyTemperature: DailyTemperature, dailyWeather: DailyWeatherCoreData) -> DailyTemperatureCoreData? {
         guard let dailyTemperatureCoreData = DailyTemperatureCoreData.firstOrCreate(withDailyWeather: dailyWeather, context: privateContext) else { return nil }
         dailyTemperatureCoreData.populate(dailyTemperature: dailyTemperature, dailyWeather: dailyWeather)
         return dailyTemperatureCoreData
     }
     
-    
+    @discardableResult
     func createDailyWeatherFrom(dailyWeather: DailyWeather, indexId: Int, forecastedWeather: ForecastedWeatherCoreData) -> DailyWeatherCoreData? {
         guard
             let dailyWeatherCoreData = DailyWeatherCoreData.firstOrCreate(withForecastedWeather: forecastedWeather, withId: indexId, context: privateContext),
@@ -121,6 +128,7 @@ class CoreDataService: CoreDataServiceProtocol {
         return dailyWeatherCoreData
     }
     
+    @discardableResult
     func createForecastedWeatherFrom(forecastedWeather: ForecastedWeather) -> ForecastedWeatherCoreData? {
         guard let forecastedWeatherCoreData = ForecastedWeatherCoreData.firstOrCreate(withLongitude: forecastedWeather.longitude, withLatitude: forecastedWeather.latitude, context: privateContext) else { return nil }
         var dailyWeathers: [DailyWeatherCoreData] = []
