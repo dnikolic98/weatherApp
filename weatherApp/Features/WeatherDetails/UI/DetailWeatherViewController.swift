@@ -21,7 +21,8 @@ class DetailWeatherViewController: UIViewController {
     private var refreshControl: UIRefreshControl!
     private var currentWeatherListPresenter: CurrentWeatherListPresenter!
     private var timerObservable: Disposable?
-    private let disposeBag: DisposeBag = DisposeBag()
+    private var dataDisposeBag: DisposeBag = DisposeBag()
+    private var timerDisposeBag: DisposeBag = DisposeBag()
     
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var mainInformationView: MainInformationView!
@@ -54,19 +55,16 @@ class DetailWeatherViewController: UIViewController {
     //MARK: - Data
     
     @objc private func bindViewModel() {
-        detailWeatherPresenter.fetchFiveDaysList() { (currentWeatherList) in
-            guard let _ = currentWeatherList else { return }
-            
-            self.refreshCollectionViewData()
-        }
+        dataDisposeBag = DisposeBag()
         
-        detailWeatherPresenter.fetchCurrentWeather { (currentWeather) in
-            guard let _ = currentWeather else { return }
-            
-            DispatchQueue.main.async {
-                self.setWeatherInformation()
-            }
-        }
+        Observable.combineLatest(
+            detailWeatherPresenter.fetchFiveDaysList(),
+            detailWeatherPresenter.fetchCurrentWeather())
+            .subscribe(onNext: { [weak self] forecastedWeather, currentWeather in
+                guard let self = self else { return }
+                self.refreshUI()
+            })
+            .disposed(by: dataDisposeBag)
     }
     
     private func startTimer() {
@@ -75,7 +73,7 @@ class DetailWeatherViewController: UIViewController {
             .subscribe(onNext: { (data) in
                 self.bindViewModel()
             })
-        .disposed(by: disposeBag) as? Disposable
+        .disposed(by: timerDisposeBag) as? Disposable
     }
     
     //MARK: - UI elements setup
@@ -137,6 +135,13 @@ class DetailWeatherViewController: UIViewController {
             self.daysCollectionView.reloadData()
             self.refreshControl.endRefreshing()
         }
+    }
+    
+    private func refreshUI() {
+        DispatchQueue.main.async {
+            self.setWeatherInformation()
+        }
+        refreshCollectionViewData()
     }
     
 }

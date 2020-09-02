@@ -7,46 +7,29 @@
 //
 
 import CoreLocation
+import RxSwift
+import RxCoreLocation
 
-class LocationService: NSObject {
+class LocationService {
 
-    public typealias LocationServiceCompletion = (Coordinates?, Error?) -> (Void)
+    private (set) var location: Observable<Coordinates>
 
-    private var locationManager: CLLocationManager!
-    private var completion: LocationServiceCompletion!
-
-    func getLocation(completion: @escaping LocationServiceCompletion) {
-        self.completion = completion
+    private let locationManager = CLLocationManager()
+    
+    init() {
+        locationManager.distanceFilter = kCLDistanceFilterNone;
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
         
-        startLocationService()
-    }
-
-    private func startLocationService() {
-        locationManager = CLLocationManager()
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        location = locationManager.rx
+            .didUpdateLocations
+            .filter { $1.count > 0 }
+            .map {
+                let coord = $1.last!.coordinate
+                return Coordinates(latitude: coord.latitude, longitude: coord.longitude)
+            }
+        
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
     }
-    
-    private func locationToCoordinates(location: CLLocation) -> Coordinates {
-            let lon = location.coordinate.longitude
-            let lat = location.coordinate.latitude
-            return Coordinates(latitude: lat, longitude: lon)
-        }
 
-}
-
-extension LocationService: CLLocationManagerDelegate {
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let location = locations[0] as CLLocation
-        let coord = locationToCoordinates(location: location)
-        
-        completion(coord, nil)
-    }
-
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        completion(nil, error)
-    }
 }

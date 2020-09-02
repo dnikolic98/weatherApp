@@ -16,7 +16,8 @@ class HomeViewController: UIViewController {
     private var refreshControl: UIRefreshControl!
     private var currentWeatherListPresenter: CurrentWeatherListPresenter!
     private var timerObservable: Disposable?
-    private let disposeBag: DisposeBag = DisposeBag()
+    private var dataDisposeBag: DisposeBag = DisposeBag()
+    private var timerDisposeBag: DisposeBag = DisposeBag()
     
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var tableView: UITableView!
@@ -65,19 +66,17 @@ class HomeViewController: UIViewController {
     //MARK: - TableView Data
     
     @objc private func bindViewModel() {
-        currentWeatherListPresenter.fetchCurrentWeatherList() { (currentWeatherList) in
-            guard !currentWeatherList.isEmpty else { return }
-            
-            self.refreshTableView()
-        }
+        dataDisposeBag = DisposeBag()
         
-        self.currentWeatherListPresenter.fetchCurrentWeather() { (currentLocation) in
-            guard let currentLocation = currentLocation else { return }
-            
-            DispatchQueue.main.async {
-                self.currentLocationView.set(currentWeather: currentLocation)
-            }
-        }
+        Observable.combineLatest(
+            currentWeatherListPresenter.fetchCurrentWeatherList(),
+            currentWeatherListPresenter.fetchCurrenLocationtWeather())
+            .subscribe(onNext: { [weak self] currentWeatherList, currentLocation in
+                guard let self = self else { return }
+
+                self.refreshUI(currentLocation: currentLocation)
+            })
+            .disposed(by: dataDisposeBag)
     }
     
     private func startTimer() {
@@ -86,7 +85,7 @@ class HomeViewController: UIViewController {
             .subscribe(onNext: { (data) in
                 self.bindViewModel()
             })
-            .disposed(by: disposeBag) as? Disposable
+            .disposed(by: timerDisposeBag) as? Disposable
     }
     
     //MARK: - UI elements setup
@@ -123,6 +122,13 @@ class HomeViewController: UIViewController {
        refreshControl = UIRefreshControl()
        refreshControl.addTarget(self, action: #selector(bindViewModel), for: UIControl.Event.valueChanged)
        scrollView.refreshControl = refreshControl
+    }
+    
+    private func refreshUI(currentLocation: CurrentWeatherViewModel) {
+        DispatchQueue.main.async {
+            self.currentLocationView.set(currentWeather: currentLocation)
+        }
+        refreshTableView()
     }
     
     private func refreshTableView() {

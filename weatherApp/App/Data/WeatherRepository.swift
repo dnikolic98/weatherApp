@@ -8,6 +8,7 @@
 
 import CoreData
 import Reachability
+import RxSwift
 
 class WeatherRepository {
     
@@ -22,76 +23,59 @@ class WeatherRepository {
         startReachability()
     }
     
-    
-    func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeatherCoreData]) -> Void)) {
-        switch reachability.connection {
-        case .unavailable:
-            let currentWeatherListCoreData = coreDataService.fetchCurrentWeather()
-            completion(currentWeatherListCoreData)
-        default:
-            weatherService.fetchSeveralCurrentWeather(id: id) { [weak self] (currentWeatherList) in
-                guard
-                    let self = self,
-                    !currentWeatherList.isEmpty
-                else {
-                    completion([])
-                    return
-                }
+    func fetchSeveralCurrentWeather(id: [Int]) -> Observable<[CurrentWeatherCoreData]> {
+        return weatherService.fetchSeveralCurrentWeather(id: id)
+            .do(onNext: { [weak self] (multipleCurrentWeather) in
+                guard let self = self else { return }
+                
+                let currentWeatherList = multipleCurrentWeather.list
                 let _ = currentWeatherList.map { self.coreDataService.createCurrentWeatherFrom(currentWeather: $0) }
                 self.coreDataService.saveChanges()
-                
+            })
+            .flatMap({ multipleCurrentWeather -> Observable<[CurrentWeatherCoreData]> in
                 let currentWeatherListCoreData = self.coreDataService.fetchCurrentWeather()
-                completion(currentWeatherListCoreData)
-            }
-        }
+                return Observable.of(currentWeatherListCoreData)
+            })
     }
     
-    func fetchForcastWeather(coord: Coordinates, completion: @escaping ((ForecastedWeatherCoreData?) -> Void)) {
-        switch reachability.connection {
-        case .unavailable:
-            let currentWeatherListCoreData = coreDataService.fetchForecastWeather(coord: coord)
-            completion(currentWeatherListCoreData)
-        default:
-            weatherService.fetchForcastWeather(coord: coord) { [weak self] (forecastedWeather) in
-                guard
-                    let self = self,
-                    let forecastedWeather = forecastedWeather
-                else {
-                    completion(nil)
-                    return
-                }
+    func fetchForcastWeather(coord: Coordinates) -> Observable<ForecastedWeatherCoreData> {
+        return weatherService.fetchForecastWeather(coord: coord)
+            .do(onNext: { [weak self] (forecastedWeather) in
+                guard let self = self else { return }
                 
                 let _ = self.coreDataService.createForecastedWeatherFrom(forecastedWeather: forecastedWeather)
                 self.coreDataService.saveChanges()
-                
-                let currentWeatherListCoreData = self.coreDataService.fetchForecastWeather(coord: coord)
-                completion(currentWeatherListCoreData)
-            }
-        }
-    }
-    
-    func fetchCurrentWeather(coord: Coordinates, completion: @escaping ((CurrentWeatherCoreData?) -> Void)) {
-        switch reachability.connection {
-        case .unavailable:
-            completion(nil)
-            let currentWeatherCoreData = coreDataService.fetchCurrentWeather(coord: coord)
-            completion(currentWeatherCoreData)
-        default:
-            weatherService.fetchCurrentWeather(coord: coord) { [weak self] (currentWeather) in
+            })
+            .flatMap({ [weak self] forecastedWeather -> Observable<ForecastedWeatherCoreData> in
                 guard
                     let self = self,
-                    let currentWeather = currentWeather
+                    let forecastedWeather = self.coreDataService.fetchForecastWeather(coord: coord)
                 else {
-                    completion(nil)
-                    return
+                    return Observable.of()
                 }
+                
+                return Observable.of(forecastedWeather)
+            })
+    }
+    
+    func fetchCurrentWeather(coord: Coordinates) -> Observable<CurrentWeatherCoreData> {
+        return weatherService.fetchCurrentWeather(coord: coord)
+            .do(onNext: { [weak self] (currentWeather) in
+                guard let self = self else { return }
+                
                 let _ = self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
                 self.coreDataService.saveChanges()
+            })
+            .flatMap({ [weak self] currentWeather -> Observable<CurrentWeatherCoreData> in
+                guard
+                    let self = self,
+                    let currentWeather = self.coreDataService.fetchCurrentWeather(coord: coord)
+                else {
+                    return Observable.of()
+                }
                 
-                let currentWeatherCoreData = self.coreDataService.fetchCurrentWeather(coord: coord)
-                completion(currentWeatherCoreData)
-            }
-        }
+                return Observable.of(currentWeather)
+            })
     }
     
     private func startReachability() {

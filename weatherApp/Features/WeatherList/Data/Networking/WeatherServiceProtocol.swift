@@ -6,12 +6,13 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
+import RxSwift
+
 protocol WeatherServiceProtocol {
     
-    func fetchForcastWeather(coord: Coordinates, completion: @escaping ((ForecastedWeather?) -> Void))
+    func fetchForecastWeather(coord: Coordinates) -> Observable<ForecastedWeather>
     
-    func fetchSeveralCurrentWeather(id: [Int], completion: @escaping (([CurrentWeather]) -> Void))
+    func fetchSeveralCurrentWeather(id: [Int]) -> Observable<MultipleCurrentWeather>
     
-    func fetchCurrentWeather(coord: Coordinates, completion: @escaping ((CurrentWeather?) -> Void))
-
+    func fetchCurrentWeather(coord: Coordinates) -> Observable<CurrentWeather>
 }
