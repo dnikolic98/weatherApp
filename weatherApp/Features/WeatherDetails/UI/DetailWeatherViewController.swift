@@ -54,13 +54,13 @@ class DetailWeatherViewController: UIViewController {
     //MARK: - Data
     
     @objc private func bindViewModel() {
-        detailWeatherPresenter.fetchFiveDaysList() { (currentWeatherList) in
+        detailWeatherPresenter.fetchFiveDaysList() { currentWeatherList in
             guard let _ = currentWeatherList else { return }
             
             self.refreshCollectionViewData()
         }
         
-        detailWeatherPresenter.fetchCurrentWeather { (currentWeather) in
+        detailWeatherPresenter.fetchCurrentWeather { currentWeather in
             guard let _ = currentWeather else { return }
             
             DispatchQueue.main.async {
@@ -74,7 +74,7 @@ class DetailWeatherViewController: UIViewController {
         
         Observable<Int>
             .timer(.seconds(0), period: .seconds(dataRefreshPeriod), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { (data) in
+            .subscribe(onNext: { _ in
                 self.bindViewModel()
             })
             .disposed(by: timerDisposeBag)

@@ -27,7 +27,7 @@ class CurrentWeatherListPresenter {
     func fetchCurrentWeatherList(completion: @escaping (([CurrentWeatherViewModel]) -> Void)) {
         let locationIds = Cities.allCases.map { $0.rawValue }
         
-        weatherRepository.fetchSeveralCurrentWeather(id: locationIds) { [weak self] (currentWeatherList) in
+        weatherRepository.fetchSeveralCurrentWeather(id: locationIds) { [weak self] currentWeatherList in
             guard
                 let self = self,
                 !currentWeatherList.isEmpty
@@ -48,7 +48,7 @@ class CurrentWeatherListPresenter {
                 return
             }
             
-            self.weatherRepository.fetchCurrentWeather(coord: coord) { [weak self] (currentWeather) in
+            self.weatherRepository.fetchCurrentWeather(coord: coord) { [weak self] currentWeather in
                 guard
                     let self = self,
                     let currentWeather = currentWeather

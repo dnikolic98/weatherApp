@@ -65,13 +65,13 @@ class HomeViewController: UIViewController {
     //MARK: - TableView Data
     
     @objc private func bindViewModel() {
-        currentWeatherListPresenter.fetchCurrentWeatherList() { (currentWeatherList) in
+        currentWeatherListPresenter.fetchCurrentWeatherList() { currentWeatherList in
             guard !currentWeatherList.isEmpty else { return }
             
             self.refreshTableView()
         }
         
-        self.currentWeatherListPresenter.fetchCurrentWeather() { (currentLocation) in
+        self.currentWeatherListPresenter.fetchCurrentWeather() { currentLocation in
             guard let currentLocation = currentLocation else { return }
             
             DispatchQueue.main.async {
@@ -85,7 +85,7 @@ class HomeViewController: UIViewController {
         
         Observable<Int>
             .timer(.seconds(0), period: .seconds(dataRefreshPeriod), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { (data) in
+            .subscribe(onNext: { _ in
                 self.bindViewModel()
             })
             .disposed(by: timerDisposeBag)
