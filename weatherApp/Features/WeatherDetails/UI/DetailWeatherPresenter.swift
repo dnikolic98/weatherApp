@@ -60,13 +60,13 @@ class DetailWeatherPresenter {
     
     func fetchCurrentWeather(completion: @escaping ((CurrentWeatherViewModel?) -> Void)) {
         let coord = currentWeather.coord
-        self.weatherRepository.fetchCurrentWeather(coord: coord) { [weak self] currentWeather in
+        weatherRepository.fetchCurrentWeather(coord: coord) { [weak self] currentWeather in
             guard
                 let self = self,
                 let currentWeather = currentWeather
-                else {
-                    completion(nil)
-                    return
+            else {
+                completion(nil)
+                return
             }
             
             self.currentWeather = CurrentWeatherViewModel(currentWeather: currentWeather)
