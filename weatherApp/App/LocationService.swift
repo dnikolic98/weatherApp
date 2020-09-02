@@ -8,9 +8,7 @@
 
 import CoreLocation
 
-class LocationService: NSObject {
-
-    public typealias LocationServiceCompletion = (Coordinates?, Error?) -> (Void)
+class LocationService: NSObject, LocationServiceProtocol {
 
     private var locationManager: CLLocationManager!
     private var completion: LocationServiceCompletion!
