@@ -14,7 +14,6 @@ class Predicates {
         let keyPath = keyPath.isEmpty ? keyPath : keyPath + "."
         
         let format = "\(keyPath)longitude > %f AND \(keyPath)longitude < %f AND \(keyPath)latitude > %f AND \(keyPath)latitude < %f"
-        print(format)
         return NSPredicate(format: format, lon - epsilon, lon + epsilon, lat - epsilon, lat + epsilon)
     }
     
