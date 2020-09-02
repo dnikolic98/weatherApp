@@ -16,6 +16,7 @@ class HomeViewController: UIViewController {
     private var refreshControl: UIRefreshControl!
     private var currentWeatherListPresenter: CurrentWeatherListPresenter!
     private var timerDisposeBag: DisposeBag = DisposeBag()
+    private let dataRefreshPeriod: Int = 60 * 2
     
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var tableView: UITableView!
@@ -83,7 +84,7 @@ class HomeViewController: UIViewController {
         timerDisposeBag = DisposeBag()
         
         Observable<Int>
-            .timer(.seconds(0), period: .seconds(300), scheduler: MainScheduler.instance)
+            .timer(.seconds(0), period: .seconds(dataRefreshPeriod), scheduler: MainScheduler.instance)
             .subscribe(onNext: { (data) in
                 self.bindViewModel()
             })

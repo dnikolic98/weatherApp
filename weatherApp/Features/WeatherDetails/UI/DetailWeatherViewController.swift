@@ -15,12 +15,13 @@ class DetailWeatherViewController: UIViewController {
     private var detailWeatherPresenter: DetailWeatherPresenter!
     private let detailsCollectioViewRowHeight = WeatherConditionDetailCollectionViewCell.height
     private let daysCollectioViewRowHeight = SingleWeatherInformationCollectionViewCell.height
-    private let detailsNumOfColumns = 2
-    private let numberOfDays = 5
-    private let padding: CGFloat = 10
     private var refreshControl: UIRefreshControl!
     private var currentWeatherListPresenter: CurrentWeatherListPresenter!
     private var timerDisposeBag: DisposeBag = DisposeBag()
+    private let detailsNumOfColumns = 2
+    private let numberOfDays = 5
+    private let padding: CGFloat = 10
+    private let dataRefreshPeriod: Int = 60 * 2
     
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var mainInformationView: MainInformationView!
@@ -72,7 +73,7 @@ class DetailWeatherViewController: UIViewController {
         timerDisposeBag = DisposeBag()
         
         Observable<Int>
-            .timer(.seconds(0), period: .seconds(300), scheduler: MainScheduler.instance)
+            .timer(.seconds(0), period: .seconds(dataRefreshPeriod), scheduler: MainScheduler.instance)
             .subscribe(onNext: { (data) in
                 self.bindViewModel()
             })
