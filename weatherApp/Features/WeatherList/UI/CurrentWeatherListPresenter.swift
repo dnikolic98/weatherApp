@@ -42,8 +42,11 @@ class CurrentWeatherListPresenter {
     }
     
     func fetchCurrentWeather(completion: @escaping ((CurrentWeatherViewModel?) -> Void)) {
-        locationService.getLocation { (coordinates, error) -> (Void) in
-            guard let coord = coordinates else {
+        locationService.getLocation { [weak self] (coordinates, error) -> (Void) in
+            guard
+                let self = self,
+                let coord = coordinates
+            else {
                 completion(nil)
                 return
             }
@@ -61,7 +64,6 @@ class CurrentWeatherListPresenter {
                 completion(self.currentLocationWeather)
             }
         }
-        
     }
     
     func currentWeather(atIndex index: Int) -> CurrentWeatherViewModel? {
