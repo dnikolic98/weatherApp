@@ -67,6 +67,7 @@
 		A3BE178424ED2FAB001D9F82 /* WeatherCoreData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE177424ED2FA9001D9F82 /* WeatherCoreData+CoreDataProperties.swift */; };
 		A3BE178524ED2FAB001D9F82 /* ForecastCoreData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BE177C24ED2FAB001D9F82 /* ForecastCoreData+CoreDataProperties.swift */; };
 		A3C78D0F24FFE97200E42688 /* LocationServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C78D0E24FFE97200E42688 /* LocationServiceProtocol.swift */; };
+		A3C78D1124FFEA7000E42688 /* LocationService+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C78D1024FFEA7000E42688 /* LocationService+Extension.swift */; };
 		A3D3FB9924E4316D00E70AE8 /* SingleWeatherInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D3FB9824E4316D00E70AE8 /* SingleWeatherInformation.swift */; };
 		A3E516AC24DCAD600013F4CE /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E516AB24DCAD600013F4CE /* UIView+Extension.swift */; };
 		A3EC098424D8AB72007CDC4D /* CurrentWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EC098324D8AB72007CDC4D /* CurrentWeather.swift */; };
@@ -137,6 +138,7 @@
 		A3BE177B24ED2FAA001D9F82 /* WindCoreData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "WindCoreData+CoreDataProperties.swift"; path = "/Users/dario/Documents/projects/weatherApp/weatherApp/Features/WeatherList/Data/CoreData Models/WindCoreData+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		A3BE177C24ED2FAB001D9F82 /* ForecastCoreData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ForecastCoreData+CoreDataProperties.swift"; path = "/Users/dario/Documents/projects/weatherApp/weatherApp/Features/WeatherList/Data/CoreData Models/ForecastCoreData+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		A3C78D0E24FFE97200E42688 /* LocationServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServiceProtocol.swift; sourceTree = "<group>"; };
+		A3C78D1024FFEA7000E42688 /* LocationService+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocationService+Extension.swift"; sourceTree = "<group>"; };
 		A3D3FB9824E4316D00E70AE8 /* SingleWeatherInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleWeatherInformation.swift; sourceTree = "<group>"; };
 		A3E516AB24DCAD600013F4CE /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		A3EC098324D8AB72007CDC4D /* CurrentWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeather.swift; sourceTree = "<group>"; };
@@ -272,8 +274,7 @@
 		A3BD78DB24E293F5003723DE /* App */ = {
 			isa = PBXGroup;
 			children = (
-				A3F4A3C424F56CCE00A30ACB /* LocationService.swift */,
-				A3C78D0E24FFE97200E42688 /* LocationServiceProtocol.swift */,
+				A3C78D1224FFEA8100E42688 /* LocationService */,
 				A3396EB424F54B81009FDBEC /* UI */,
 				A3A81ECF24F3F3B9009B7674 /* Data */,
 				A3794AE924D84B4B008A8779 /* AppDelegate.swift */,
@@ -450,6 +451,16 @@
 				A3BE171E24ED2E39001D9F82 /* ForecastedWeatherCoreData+CoreDataProperties.swift */,
 			);
 			path = "CoreData Models";
+			sourceTree = "<group>";
+		};
+		A3C78D1224FFEA8100E42688 /* LocationService */ = {
+			isa = PBXGroup;
+			children = (
+				A3F4A3C424F56CCE00A30ACB /* LocationService.swift */,
+				A3C78D0E24FFE97200E42688 /* LocationServiceProtocol.swift */,
+				A3C78D1024FFEA7000E42688 /* LocationService+Extension.swift */,
+			);
+			path = LocationService;
 			sourceTree = "<group>";
 		};
 		A3C9307324F5049400B07ED0 /* Data */ = {
@@ -660,6 +671,7 @@
 				A3F4A3C524F56CCE00A30ACB /* LocationService.swift in Sources */,
 				A3BE172724ED2E39001D9F82 /* DailyTemperatureCoreData+CoreDataProperties.swift in Sources */,
 				A39D475324E5484E00C1C6A3 /* DailyForecastViewModel.swift in Sources */,
+				A3C78D1124FFEA7000E42688 /* LocationService+Extension.swift in Sources */,
 				A3BE172824ED2E39001D9F82 /* DailyTemperatureCoreData+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
