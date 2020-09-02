@@ -13,7 +13,7 @@ import CoreData
 public class DailyTemperatureCoreData: NSManagedObject {
 
     class func firstOrCreate(withDailyWeather dailyWeather: DailyWeatherCoreData, context: NSManagedObjectContext) -> DailyTemperatureCoreData? {
-        let predicate = NSPredicate(format: "dailyWeather = %@", dailyWeather)
+        let predicate = Predicates.dailyWeatherPredicate(dailyWeather)
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
