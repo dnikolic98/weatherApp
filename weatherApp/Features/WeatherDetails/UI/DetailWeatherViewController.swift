@@ -74,7 +74,8 @@ class DetailWeatherViewController: UIViewController {
         
         Observable<Int>
             .timer(.seconds(0), period: .seconds(dataRefreshPeriod), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { _ in
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
                 self.bindViewModel()
             })
             .disposed(by: timerDisposeBag)
