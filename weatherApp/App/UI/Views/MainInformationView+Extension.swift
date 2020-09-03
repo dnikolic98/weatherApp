@@ -9,7 +9,6 @@
 import UIKit
 import PureLayout
 
-
 extension MainInformationView {
     
     func buildViews() {

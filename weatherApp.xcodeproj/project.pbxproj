@@ -11,6 +11,10 @@
 		A31ADEDC24E07A4C0071762E /* Wind.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31ADEDB24E07A4C0071762E /* Wind.swift */; };
 		A31C945124F40176003BFA47 /* NSManagedObject+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31C945024F40176003BFA47 /* NSManagedObject+Extension.swift */; };
 		A328A87425010F7D00C67BDD /* TimeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A328A87325010F7D00C67BDD /* TimeInfo.swift */; };
+		A328A8772501323200C67BDD /* LocationSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A328A8762501323200C67BDD /* LocationSearchViewController.swift */; };
+		A328A87C2501366800C67BDD /* LocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A328A87B2501366800C67BDD /* LocationSearchView.swift */; };
+		A328A87E2501377900C67BDD /* LocationSearchView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A328A87D2501377900C67BDD /* LocationSearchView+Extension.swift */; };
+		A328A88025013BDA00C67BDD /* LocationSearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A328A87F25013BDA00C67BDD /* LocationSearchPresenter.swift */; };
 		A3396EB124F52575009FDBEC /* CoreDataStackProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3396EB024F52575009FDBEC /* CoreDataStackProtocol.swift */; };
 		A3396EB324F5271F009FDBEC /* CoreDataServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3396EB224F5271F009FDBEC /* CoreDataServiceProtocol.swift */; };
 		A3396EB724F54BD8009FDBEC /* MainInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3396EB624F54BD8009FDBEC /* MainInformationView.swift */; };
@@ -84,6 +88,10 @@
 		A31ADEDB24E07A4C0071762E /* Wind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wind.swift; sourceTree = "<group>"; };
 		A31C945024F40176003BFA47 /* NSManagedObject+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObject+Extension.swift"; sourceTree = "<group>"; };
 		A328A87325010F7D00C67BDD /* TimeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInfo.swift; sourceTree = "<group>"; };
+		A328A8762501323200C67BDD /* LocationSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewController.swift; sourceTree = "<group>"; };
+		A328A87B2501366800C67BDD /* LocationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchView.swift; sourceTree = "<group>"; };
+		A328A87D2501377900C67BDD /* LocationSearchView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocationSearchView+Extension.swift"; sourceTree = "<group>"; };
+		A328A87F25013BDA00C67BDD /* LocationSearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchPresenter.swift; sourceTree = "<group>"; };
 		A3396EB024F52575009FDBEC /* CoreDataStackProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStackProtocol.swift; sourceTree = "<group>"; };
 		A3396EB224F5271F009FDBEC /* CoreDataServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataServiceProtocol.swift; sourceTree = "<group>"; };
 		A3396EB624F54BD8009FDBEC /* MainInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainInformationView.swift; sourceTree = "<group>"; };
@@ -184,6 +192,25 @@
 				A31C945024F40176003BFA47 /* NSManagedObject+Extension.swift */,
 			);
 			path = CoreDataExtensions;
+			sourceTree = "<group>";
+		};
+		A328A875250130CF00C67BDD /* SearchLocation */ = {
+			isa = PBXGroup;
+			children = (
+				A328A87A2501364C00C67BDD /* UI */,
+			);
+			path = SearchLocation;
+			sourceTree = "<group>";
+		};
+		A328A87A2501364C00C67BDD /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				A328A8762501323200C67BDD /* LocationSearchViewController.swift */,
+				A328A87B2501366800C67BDD /* LocationSearchView.swift */,
+				A328A87D2501377900C67BDD /* LocationSearchView+Extension.swift */,
+				A328A87F25013BDA00C67BDD /* LocationSearchPresenter.swift */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 		A3396EB424F54B81009FDBEC /* UI */ = {
@@ -332,6 +359,7 @@
 		A3BD78E124E297A3003723DE /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				A328A875250130CF00C67BDD /* SearchLocation */,
 				A3BD78E324E297CA003723DE /* WeatherList */,
 				A3BD78E224E297BE003723DE /* WeatherDetails */,
 			);
@@ -640,6 +668,7 @@
 				A3DCBF1224FE56B500590016 /* NetworkError.swift in Sources */,
 				A37C882A24D9535E007764FA /* WeatherTableViewCell.swift in Sources */,
 				A3396EB324F5271F009FDBEC /* CoreDataServiceProtocol.swift in Sources */,
+				A328A87E2501377900C67BDD /* LocationSearchView+Extension.swift in Sources */,
 				A3BE16FB24ED13F8001D9F82 /* weatherApp.xcdatamodeld in Sources */,
 				A3BE16F824ED13CE001D9F82 /* CoreDataStack.swift in Sources */,
 				A3BE178224ED2FAB001D9F82 /* CoordinatesCoreData+CoreDataClass.swift in Sources */,
@@ -656,6 +685,7 @@
 				A3BE177D24ED2FAB001D9F82 /* ForecastCoreData+CoreDataClass.swift in Sources */,
 				A3BE178524ED2FAB001D9F82 /* ForecastCoreData+CoreDataProperties.swift in Sources */,
 				A391440B24F811BE00509A81 /* NSPredicate+Extensions.swift in Sources */,
+				A328A87C2501366800C67BDD /* LocationSearchView.swift in Sources */,
 				A3D867812500FB78003DE8A0 /* UIView+AppGradient.swift in Sources */,
 				A3BD78F024E2C81A003723DE /* CurrentWeatherListPresenter.swift in Sources */,
 				A3C78D0F24FFE97200E42688 /* LocationServiceProtocol.swift in Sources */,
@@ -695,8 +725,10 @@
 				A3BD78E024E29713003723DE /* UIColor+AppColors.swift in Sources */,
 				A3F4A3C524F56CCE00A30ACB /* LocationService.swift in Sources */,
 				A3BE172724ED2E39001D9F82 /* DailyTemperatureCoreData+CoreDataProperties.swift in Sources */,
+				A328A8772501323200C67BDD /* LocationSearchViewController.swift in Sources */,
 				A39D475324E5484E00C1C6A3 /* DailyForecastViewModel.swift in Sources */,
 				A3BE172824ED2E39001D9F82 /* DailyTemperatureCoreData+CoreDataClass.swift in Sources */,
+				A328A88025013BDA00C67BDD /* LocationSearchPresenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
