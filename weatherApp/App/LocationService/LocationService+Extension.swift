@@ -6,6 +6,8 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
+import CoreLocation
+
 extension LocationService: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
