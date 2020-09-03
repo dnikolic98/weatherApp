@@ -9,16 +9,23 @@
 import CoreLocation
 
 class LocationService: NSObject, LocationServiceProtocol {
-
+    
     private var locationManager: CLLocationManager!
-    private var completion: LocationServiceCompletion!
-
+    
+    var completion: LocationServiceCompletion!
+    
     func getLocation(completion: @escaping LocationServiceCompletion) {
         self.completion = completion
         
         startLocationService()
     }
-
+    
+    func locationToCoordinates(location: CLLocation) -> Coordinates {
+        let lon = location.coordinate.longitude
+        let lat = location.coordinate.latitude
+        return Coordinates(latitude: lat, longitude: lon)
+    }
+    
     private func startLocationService() {
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -27,10 +34,4 @@ class LocationService: NSObject, LocationServiceProtocol {
         locationManager.startUpdatingLocation()
     }
     
-    private func locationToCoordinates(location: CLLocation) -> Coordinates {
-            let lon = location.coordinate.longitude
-            let lat = location.coordinate.latitude
-            return Coordinates(latitude: lat, longitude: lon)
-        }
-
 }
