@@ -29,7 +29,7 @@ class WeatherRepository {
             let currentWeatherListCoreData = coreDataService.fetchCurrentWeather()
             completion(currentWeatherListCoreData)
         default:
-            weatherService.fetchSeveralCurrentWeather(id: id) { [weak self] (currentWeatherList) in
+            weatherService.fetchSeveralCurrentWeather(id: id) { [weak self] currentWeatherList in
                 guard
                     let self = self,
                     !currentWeatherList.isEmpty
@@ -54,7 +54,7 @@ class WeatherRepository {
             let currentWeatherListCoreData = coreDataService.fetchForecastWeather(coord: coord)
             completion(currentWeatherListCoreData)
         default:
-            weatherService.fetchForcastWeather(coord: coord) { [weak self] (forecastedWeather) in
+            weatherService.fetchForcastWeather(coord: coord) { [weak self] forecastedWeather in
                 guard
                     let self = self,
                     let forecastedWeather = forecastedWeather
@@ -79,7 +79,7 @@ class WeatherRepository {
             let currentWeatherCoreData = coreDataService.fetchCurrentWeather(coord: coord)
             completion(currentWeatherCoreData)
         default:
-            weatherService.fetchCurrentWeather(coord: coord) { [weak self] (currentWeather) in
+            weatherService.fetchCurrentWeather(coord: coord) { [weak self] currentWeather in
                 guard
                     let self = self,
                     let currentWeather = currentWeather

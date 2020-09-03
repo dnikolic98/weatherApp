@@ -24,6 +24,7 @@ public class CurrentWeatherCoreData: NSManagedObject {
         self.wind = wind
         self.name = currentWeather.name
         self.id = Int64(currentWeather.id)
+        self.updatedTime = Date()
     }
     
 }

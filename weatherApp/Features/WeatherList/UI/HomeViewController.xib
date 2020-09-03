@@ -10,6 +10,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeViewController" customModule="weatherApp" customModuleProvider="target">
             <connections>
                 <outlet property="currentLocationView" destination="nah-Fd-LNk" id="7Yt-j2-YFX"/>
+                <outlet property="scrollView" destination="zkp-HS-vh6" id="FIO-i5-9Dc"/>
                 <outlet property="tableView" destination="Er7-qZ-lC4" id="xbI-g3-dnU"/>
                 <outlet property="tableViewHeightConstraint" destination="mYY-JW-aNG" id="uXR-eJ-rup"/>
                 <outlet property="view" destination="FFa-MJ-bPf" id="4eV-pJ-Vih"/>

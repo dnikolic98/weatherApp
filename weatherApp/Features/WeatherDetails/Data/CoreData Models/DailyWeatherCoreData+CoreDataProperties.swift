@@ -22,6 +22,7 @@ extension DailyWeatherCoreData {
     @NSManaged public var pressure: Double
     @NSManaged public var sunrise: Int64
     @NSManaged public var sunset: Int64
+    @NSManaged public var updatedTime: Date
     @NSManaged public var temperature: DailyTemperatureCoreData
     @NSManaged public var weather: WeatherCoreData
     @NSManaged public var forecastedWeather: ForecastedWeatherCoreData

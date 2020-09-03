@@ -8,6 +8,7 @@
     <entity name="CurrentWeatherCoreData" representedClassName="CurrentWeatherCoreData" syncable="YES">
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
+        <attribute name="updatedTime" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="coord" maxCount="1" deletionRule="Nullify" destinationEntity="CoordinatesCoreData" inverseName="currentWeather" inverseEntity="CoordinatesCoreData"/>
         <relationship name="forecast" maxCount="1" deletionRule="Nullify" destinationEntity="ForecastCoreData" inverseName="currentWeather" inverseEntity="ForecastCoreData"/>
         <relationship name="weather" maxCount="1" deletionRule="Nullify" destinationEntity="WeatherCoreData" inverseName="currentWeather" inverseEntity="WeatherCoreData"/>
@@ -29,6 +30,7 @@
         <attribute name="pressure" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="sunrise" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="sunset" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="updatedTime" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="forecastedWeather" maxCount="1" deletionRule="Nullify" destinationEntity="ForecastedWeatherCoreData" inverseName="forecastedWeather" inverseEntity="ForecastedWeatherCoreData"/>
         <relationship name="temperature" maxCount="1" deletionRule="Nullify" destinationEntity="DailyTemperatureCoreData" inverseName="dailyWeather" inverseEntity="DailyTemperatureCoreData"/>
         <relationship name="weather" maxCount="1" deletionRule="Nullify" destinationEntity="WeatherCoreData" inverseName="dailyWeather" inverseEntity="WeatherCoreData"/>
@@ -61,9 +63,9 @@
     </entity>
     <elements>
         <element name="CoordinatesCoreData" positionX="160" positionY="192" width="128" height="88"/>
-        <element name="CurrentWeatherCoreData" positionX="-229.42578125" positionY="214.34765625" width="128" height="133"/>
+        <element name="CurrentWeatherCoreData" positionX="-229.42578125" positionY="214.34765625" width="128" height="148"/>
         <element name="DailyTemperatureCoreData" positionX="160" positionY="192" width="128" height="148"/>
-        <element name="DailyWeatherCoreData" positionX="160" positionY="192" width="128" height="178"/>
+        <element name="DailyWeatherCoreData" positionX="160" positionY="192" width="128" height="193"/>
         <element name="ForecastCoreData" positionX="160" positionY="192" width="128" height="148"/>
         <element name="ForecastedWeatherCoreData" positionX="160" positionY="192" width="128" height="88"/>
         <element name="WeatherCoreData" positionX="160" positionY="192" width="128" height="118"/>

@@ -45,6 +45,9 @@ extension MainInformationView {
         minTempLabel = UILabel()
         addSubview(minTempLabel)
         temperatureStackView.addArrangedSubview(minTempLabel)
+        
+        updatedInfoLabel = UILabel()
+        addSubview(updatedInfoLabel)
     }
     
     func styleViews() {
@@ -56,6 +59,7 @@ extension MainInformationView {
         styleMaxTempLabel()
         styleLine()
         styleMinTempLabel()
+        styleUpdatedInfoLabel()
     }
     
     func defineLayoutForViews() {
@@ -81,6 +85,9 @@ extension MainInformationView {
         temperatureStackView.autoPinEdge(.leading, to: .trailing, of: currentTempLabel, withOffset: 25)
         
         lineView.widthAnchor.constraint(equalTo: maxTempLabel.widthAnchor).isActive = true
+        
+        updatedInfoLabel.autoPinEdge(.bottom, to: .bottom, of: self, withOffset: 5)
+        updatedInfoLabel.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -20)
     }
     
     
@@ -137,5 +144,12 @@ extension MainInformationView {
         maxTempLabel.textColor = .white
     }
     
+    
+    private func styleUpdatedInfoLabel() {
+        updatedInfoLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+        updatedInfoLabel.adjustsFontSizeToFitWidth = true
+        updatedInfoLabel.minimumScaleFactor = 0.5
+        updatedInfoLabel.textColor = .white
+    }
     
 }

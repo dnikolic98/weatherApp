@@ -8,17 +8,23 @@
 
 import UIKit
 import Kingfisher
+import RxSwift
 
 class DetailWeatherViewController: UIViewController {
     
     private var detailWeatherPresenter: DetailWeatherPresenter!
     private let detailsCollectioViewRowHeight = WeatherConditionDetailCollectionViewCell.height
     private let daysCollectioViewRowHeight = SingleWeatherInformationCollectionViewCell.height
+    private var refreshControl: UIRefreshControl!
+    private var currentWeatherListPresenter: CurrentWeatherListPresenter!
+    private var timerDisposeBag: DisposeBag = DisposeBag()
     private let detailsNumOfColumns = 2
     private let numberOfDays = 5
     private let padding: CGFloat = 10
+    private let dataRefreshPeriod: Int = 60 * 2
     
-    @IBOutlet weak var mainInformationView: MainInformationView!
+    @IBOutlet private weak var scrollView: UIScrollView!
+    @IBOutlet private weak var mainInformationView: MainInformationView!
     @IBOutlet private weak var detailsCollectionView: UICollectionView!
     @IBOutlet private weak var detailsCollectionViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var daysCollectionView: UICollectionView!
@@ -36,6 +42,7 @@ class DetailWeatherViewController: UIViewController {
         setWeatherInformation()
         setupCollectionViews()
         bindViewModel()
+        configurePullToRefresh()
     }
     
     override func viewWillLayoutSubviews() {
@@ -44,17 +51,44 @@ class DetailWeatherViewController: UIViewController {
         view.setGradientBackground(startColor: .grayBlueTint, endColor: .darkNavyBlue)
     }
     
-    private func bindViewModel() {
-        guard let detailWeatherPresenter = detailWeatherPresenter else { return }
-        
-        detailWeatherPresenter.fetchFiveDaysList() { (currentWeatherList) in
-            guard let _ = currentWeatherList else {
+    //MARK: - Data
+    
+    @objc private func bindViewModel() {
+        detailWeatherPresenter.fetchFiveDaysList() { [weak self] currentWeatherList in
+            guard
+                let self = self,
+                currentWeatherList != nil
+            else {
                 return
             }
+            
+            self.refreshCollectionViewData()
+        }
+        
+        detailWeatherPresenter.fetchCurrentWeather { [weak self] currentWeather in
+            guard
+                let self = self,
+                currentWeather != nil
+            else {
+                return
+            }
+            
             DispatchQueue.main.async {
-                self.daysCollectionView.reloadData()
+                self.setWeatherInformation()
             }
         }
+    }
+    
+    private func startTimer() {
+        timerDisposeBag = DisposeBag()
+        
+        Observable<Int>
+            .timer(.seconds(0), period: .seconds(dataRefreshPeriod), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.bindViewModel()
+            })
+            .disposed(by: timerDisposeBag)
     }
     
     //MARK: - UI elements setup
@@ -103,6 +137,19 @@ class DetailWeatherViewController: UIViewController {
         section.interGroupSpacing = padding
         
         return UICollectionViewCompositionalLayout(section: section)
+    }
+    
+    private func configurePullToRefresh() {
+       refreshControl = UIRefreshControl()
+       refreshControl.addTarget(self, action: #selector(bindViewModel), for: UIControl.Event.valueChanged)
+       scrollView.refreshControl = refreshControl
+    }
+    
+    private func refreshCollectionViewData() {
+        DispatchQueue.main.async {
+            self.daysCollectionView.reloadData()
+            self.refreshControl.endRefreshing()
+        }
     }
     
 }

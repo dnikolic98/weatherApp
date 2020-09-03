@@ -19,6 +19,7 @@ struct CurrentWeatherViewModel {
     let windSpeed: Double
     let weatherDescription: String
     let weatherIconUrlString: String
+    let updatedTime: String
     let coord: Coordinates
     
     init(currentWeather: CurrentWeatherCoreData) {
@@ -34,6 +35,7 @@ struct CurrentWeatherViewModel {
         weatherDescription = currentWeather.weather.overview
         weatherIconUrlString = currentWeather.weather.iconsUrlString
         coord = Coordinates.init(latitude: currentWeather.coord.latitude, longitude: currentWeather.coord.longitude)
+        updatedTime = currentWeather.updatedTime.dateTime()
     }
     
 }

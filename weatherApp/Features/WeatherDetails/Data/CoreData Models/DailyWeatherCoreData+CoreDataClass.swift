@@ -27,6 +27,7 @@ public class DailyWeatherCoreData: NSManagedObject {
         self.sunrise = Int64(dailyWeather.sunrise)
         self.sunset = Int64(dailyWeather.sunset)
         self.temperature = temperature
+        self.updatedTime = Date()
     }
     
 }
