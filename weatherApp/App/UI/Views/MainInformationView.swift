@@ -150,7 +150,6 @@ class MainInformationView: UIView {
         temperatureStackView.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -30)
         temperatureStackView.autoPinEdge(.leading, to: .trailing, of: currentTempLabel, withOffset: 25)
         
-//        minTempLabel.widthAnchor.constraint(equalTo: maxTempLabel.widthAnchor).isActive = true
         lineView.widthAnchor.constraint(equalTo: maxTempLabel.widthAnchor).isActive = true
         
     }

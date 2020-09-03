@@ -58,14 +58,25 @@ class HomeViewController: UIViewController {
     //MARK: - TableView Data
     
     @objc private func bindViewModel() {
-        currentWeatherListPresenter.fetchCurrentWeatherList() { (currentWeatherList) in
-            guard !currentWeatherList.isEmpty else { return }
+        currentWeatherListPresenter.fetchCurrentWeatherList() { [weak self] currentWeatherList in
+            guard
+                let self = self,
+                !currentWeatherList.isEmpty
+            else {
+                return
+            }
             
             self.refreshTableView()
         }
         
-        self.currentWeatherListPresenter.fetchCurrentWeather() { (currentLocation) in
-            guard let currentLocation = currentLocation else { return }
+        self.currentWeatherListPresenter.fetchCurrentWeather() { [weak self] currentLocation in
+            guard
+                let self = self,
+                let currentLocation = currentLocation
+            else {
+                return
+            }
+            
             DispatchQueue.main.async {
                 self.currentLocationView.set(currentWeather: currentLocation)
             }
