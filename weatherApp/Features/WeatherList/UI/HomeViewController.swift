@@ -40,6 +40,8 @@ class HomeViewController: UIViewController {
         bindViewModel()
         configurePullToRefresh()
         startTimer()
+        
+        view.setDefaultGradient()
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -49,7 +51,7 @@ class HomeViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        view.setGradientBackground(startColor: .grayBlueTint, endColor: .darkNavyBlue)
+        setGradientBackground()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -130,6 +132,7 @@ class HomeViewController: UIViewController {
     private func refreshUI(currentLocation: CurrentWeatherViewModel) {
         DispatchQueue.main.async {
             self.currentLocationView.set(currentWeather: currentLocation)
+            self.setGradientBackground()
         }
         refreshTableView()
     }
@@ -148,6 +151,13 @@ class HomeViewController: UIViewController {
         tableViewHeightConstraint.constant = CGFloat(rows) * rowHeight
     }
     
+    private func setGradientBackground() {
+        guard let currentWeather = currentWeatherListPresenter.currentLocationWeather else {
+            return
+        }
+        
+        view.setAutomaticGradient(currentWeather: currentWeather)
+    }
 }
 
 //MARK: - TableView DataSource

@@ -6,6 +6,8 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
+import Foundation
+
 struct CurrentWeatherViewModel {
     
     let id: Int
@@ -21,6 +23,9 @@ struct CurrentWeatherViewModel {
     let weatherIconUrlString: String
     let updatedTime: String
     let coord: Coordinates
+    let dayTime: Date
+    let sunset: Date
+    let sunrise: Date
     
     init(currentWeather: CurrentWeatherCoreData) {
         id = Int(currentWeather.id)
@@ -36,6 +41,9 @@ struct CurrentWeatherViewModel {
         weatherIconUrlString = currentWeather.weather.iconsUrlString
         coord = Coordinates.init(latitude: currentWeather.coord.latitude, longitude: currentWeather.coord.longitude)
         updatedTime = currentWeather.updatedTime.dateTime()
+        dayTime = Date(timeIntervalSince1970: TimeInterval(currentWeather.dayTime))
+        sunrise = Date(timeIntervalSince1970: TimeInterval(currentWeather.sunrise))
+        sunset = Date(timeIntervalSince1970: TimeInterval(currentWeather.sunset))
     }
     
 }

@@ -15,6 +15,8 @@ struct CurrentWeather: Codable {
     let name: String
     let weather: [Weather]
     let wind: Wind
+    let dayTime: Int
+    let timeInfo: TimeInfo
 
     private enum CodingKeys : String, CodingKey {
         case id = "id"
@@ -23,6 +25,8 @@ struct CurrentWeather: Codable {
         case name = "name"
         case weather = "weather"
         case wind = "wind"
+        case dayTime = "dt"
+        case timeInfo = "sys"
     }
     
 }

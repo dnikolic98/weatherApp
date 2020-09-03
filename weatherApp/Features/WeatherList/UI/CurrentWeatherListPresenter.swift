@@ -12,12 +12,13 @@ import RxCocoa
 class CurrentWeatherListPresenter {
     
     private var currentWeatherList: [CurrentWeatherViewModel] = []
-    private var currentLocationWeather: CurrentWeatherViewModel?
     private let weatherRepository: WeatherRepository
     private let navigationService: NavigationService
     private let locationService: LocationServiceProtocol
     private var currentLocation: BehaviorRelay<Coordinates>
     private var locationDisposeBag: DisposeBag = DisposeBag()
+    
+    var currentLocationWeather: CurrentWeatherViewModel?
     
     init(weatherRepository: WeatherRepository, locationService: LocationServiceProtocol, navigationService: NavigationService) {
         self.weatherRepository = weatherRepository
@@ -56,6 +57,10 @@ class CurrentWeatherListPresenter {
             .flatMap({ currentWeather -> Observable<CurrentWeatherViewModel> in
                 let currentWeatherViewModel = CurrentWeatherViewModel(currentWeather: currentWeather)
                 return Observable.of(currentWeatherViewModel)
+            })
+            .do(onNext: { [weak self] currentWeather in
+                guard let self = self else { return }
+                self.currentLocationWeather = currentWeather
             })
     }
     

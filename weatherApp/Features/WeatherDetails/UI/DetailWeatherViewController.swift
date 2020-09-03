@@ -49,7 +49,7 @@ class DetailWeatherViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        view.setGradientBackground(startColor: .grayBlueTint, endColor: .darkNavyBlue)
+        setGradientBackground()
     }
     
     //MARK: - Data
@@ -143,8 +143,15 @@ class DetailWeatherViewController: UIViewController {
     private func refreshUI() {
         DispatchQueue.main.async {
             self.setWeatherInformation()
+            self.setGradientBackground()
         }
         refreshCollectionViewData()
+    }
+    
+    
+    private func setGradientBackground() {
+        let currentWeather = detailWeatherPresenter.currentWeather
+        view.setAutomaticGradient(currentWeather: currentWeather)
     }
     
 }
