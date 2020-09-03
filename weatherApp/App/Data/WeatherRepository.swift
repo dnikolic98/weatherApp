@@ -31,7 +31,7 @@ class WeatherRepository {
             
         default:
             return weatherService.fetchSeveralCurrentWeather(id: id)
-                .do(onNext: { [weak self] (multipleCurrentWeather) in
+                .do(onNext: { [weak self] multipleCurrentWeather in
                     guard let self = self else { return }
                     
                     let currentWeatherList = multipleCurrentWeather.list
@@ -55,7 +55,7 @@ class WeatherRepository {
             
         default:
             return weatherService.fetchForecastWeather(coord: coord)
-                .do(onNext: { [weak self] (forecastedWeather) in
+                .do(onNext: { [weak self] forecastedWeather in
                     guard let self = self else { return }
                     
                     let _ = self.coreDataService.createForecastedWeatherFrom(forecastedWeather: forecastedWeather)
@@ -84,7 +84,7 @@ class WeatherRepository {
             
         default:
             return weatherService.fetchCurrentWeather(coord: coord)
-                .do(onNext: { [weak self] (currentWeather) in
+                .do(onNext: { [weak self] currentWeather in
                     guard let self = self else { return }
                     
                     let _ = self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)

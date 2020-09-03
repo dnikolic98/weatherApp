@@ -15,14 +15,14 @@ class DetailWeatherViewController: UIViewController {
     private var detailWeatherPresenter: DetailWeatherPresenter!
     private let detailsCollectioViewRowHeight = WeatherConditionDetailCollectionViewCell.height
     private let daysCollectioViewRowHeight = SingleWeatherInformationCollectionViewCell.height
+    private var refreshControl: UIRefreshControl!
+    private var currentWeatherListPresenter: CurrentWeatherListPresenter!
+    private var dataDisposeBag: DisposeBag = DisposeBag()
+    private var timerDisposeBag: DisposeBag = DisposeBag()
     private let detailsNumOfColumns = 2
     private let numberOfDays = 5
     private let padding: CGFloat = 10
-    private var refreshControl: UIRefreshControl!
-    private var currentWeatherListPresenter: CurrentWeatherListPresenter!
-    private var timerObservable: Disposable?
-    private var dataDisposeBag: DisposeBag = DisposeBag()
-    private var timerDisposeBag: DisposeBag = DisposeBag()
+    private let dataRefreshPeriod: Int = 60 * 2
     
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var mainInformationView: MainInformationView!
@@ -68,12 +68,15 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func startTimer() {
-        timerObservable = Observable<Int>
-            .timer(.seconds(0), period: .seconds(300), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { (data) in
+        timerDisposeBag = DisposeBag()
+        
+        Observable<Int>
+            .timer(.seconds(0), period: .seconds(dataRefreshPeriod), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
                 self.bindViewModel()
             })
-        .disposed(by: timerDisposeBag) as? Disposable
+            .disposed(by: timerDisposeBag)
     }
     
     //MARK: - UI elements setup

@@ -15,11 +15,11 @@ class CurrentWeatherListPresenter {
     private var currentLocationWeather: CurrentWeatherViewModel?
     private let weatherRepository: WeatherRepository
     private let navigationService: NavigationService
-    private let locationService: LocationService
+    private let locationService: LocationServiceProtocol
     private var currentLocation: BehaviorRelay<Coordinates>
     private var locationDisposeBag: DisposeBag = DisposeBag()
     
-    init(weatherRepository: WeatherRepository, locationService: LocationService, navigationService: NavigationService) {
+    init(weatherRepository: WeatherRepository, locationService: LocationServiceProtocol, navigationService: NavigationService) {
         self.weatherRepository = weatherRepository
         self.navigationService = navigationService
         self.locationService = locationService

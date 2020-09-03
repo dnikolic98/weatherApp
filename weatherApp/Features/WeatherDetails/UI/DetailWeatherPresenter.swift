@@ -42,7 +42,7 @@ class DetailWeatherPresenter {
     }
     
     func fetchFiveDaysList() -> Observable<ForecastedWeatherCoreData> {
-        weatherRepository
+        return weatherRepository
             .fetchForcastWeather(coord: currentWeather.coord)
             .do(onNext: { [weak self] forecastedWeather in
                 guard let self = self else { return }
@@ -56,7 +56,8 @@ class DetailWeatherPresenter {
     
     func fetchCurrentWeather() -> Observable<CurrentWeatherCoreData> {
         let coord = currentWeather.coord
-        return self.weatherRepository
+        
+        return weatherRepository
             .fetchCurrentWeather(coord: coord)
             .do(onNext: { [weak self] currentWeather in
                 guard let self = self else { return }
