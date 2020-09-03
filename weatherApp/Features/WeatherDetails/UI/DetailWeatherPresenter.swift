@@ -40,7 +40,7 @@ class DetailWeatherPresenter {
     }
     
     func fetchFiveDaysList(completion: @escaping ((ForecastedWeatherCoreData?) -> Void)) {
-        weatherRepository.fetchForcastWeather(coord: currentWeather.coord) { [weak self] (fiveDaysForecast) in
+        weatherRepository.fetchForcastWeather(coord: currentWeather.coord) { [weak self] fiveDaysForecast in
             guard
                 let self = self,
                 let fiveDaysForecast = fiveDaysForecast

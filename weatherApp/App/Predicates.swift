@@ -10,16 +10,18 @@ import Foundation
 
 class Predicates {
     
-    class func coordinatesPredicate(latitude lat: Double, longitude lon: Double, epsilon: Double = 0.00001) -> NSPredicate {
-        let format = "longitude > %f AND longitude < %f AND latitude > %f AND latitude < %f"
+    class func coordinatesPredicate(latitude lat: Double, longitude lon: Double, epsilon: Double = 0.00001, keyPath: String = "") -> NSPredicate {
+        let keyPath = keyPath.isEmpty ? keyPath : keyPath + "."
+        
+        let format = "\(keyPath)longitude > %f AND \(keyPath)longitude < %f AND \(keyPath)latitude > %f AND \(keyPath)latitude < %f"
         return NSPredicate(format: format, lon - epsilon, lon + epsilon, lat - epsilon, lat + epsilon)
     }
     
-    class func coordinatesPredicate(_ coordinates: Coordinates) -> NSPredicate  {
+    class func coordinatesPredicate(_ coordinates: Coordinates, epsilon: Double = 0.00001, keyPath: String = "") -> NSPredicate  {
         let lon = coordinates.longitude
         let lat = coordinates.latitude
         
-        return coordinatesPredicate(latitude: lat, longitude: lon)
+        return coordinatesPredicate(latitude: lat, longitude: lon, epsilon: epsilon, keyPath: keyPath)
     }
     
     class func idPredicate(_ id: Int) -> NSPredicate {

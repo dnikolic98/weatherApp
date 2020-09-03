@@ -16,6 +16,7 @@ class HomeViewController: UIViewController {
     
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var currentLocationView: MainInformationView!
     
     convenience init(currentWeatherListPresenter: CurrentWeatherListPresenter) {
         self.init()
@@ -57,10 +58,28 @@ class HomeViewController: UIViewController {
     //MARK: - TableView Data
     
     @objc private func bindViewModel() {
-        currentWeatherListPresenter.fetchCurrentWeatherList() { (currentWeatherList) in
-            guard !currentWeatherList.isEmpty else { return }
+        currentWeatherListPresenter.fetchCurrentWeatherList() { [weak self] currentWeatherList in
+            guard
+                let self = self,
+                !currentWeatherList.isEmpty
+            else {
+                return
+            }
             
             self.refreshTableView()
+        }
+        
+        self.currentWeatherListPresenter.fetchCurrentWeather() { [weak self] currentLocation in
+            guard
+                let self = self,
+                let currentLocation = currentLocation
+            else {
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.currentLocationView.set(currentWeather: currentLocation)
+            }
         }
     }
     

@@ -67,5 +67,31 @@ class WeatherService: WeatherServiceProtocol {
         dataTask.resume()
     }
     
+    func fetchCurrentWeather(coord: Coordinates, completion: @escaping ((CurrentWeather?) -> Void)) {
+        let resourceStringUrl = "\(baseUrlString)weather?lat=\(coord.latitude)&lon=\(coord.longitude)&units=\(LocalizedStrings.units)&appid=\(apiKey)"
+        
+        guard let url = URL(string: resourceStringUrl) else {
+            completion(nil)
+            return
+        }
+        let request = URLRequest(url: url)
+        
+        let dataTask = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data else {
+                completion(nil)
+                return
+            }
+            
+            do {
+                let currentWeather = try JSONDecoder().decode(CurrentWeather.self, from: data)
+                completion(currentWeather)
+            } catch {
+                completion(nil)
+            }
+             
+        }
+        dataTask.resume()
+    }
+    
 }
 

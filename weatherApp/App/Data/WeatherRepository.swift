@@ -37,7 +37,9 @@ class WeatherRepository {
                     completion([])
                     return
                 }
-                let _ = currentWeatherList.map { self.coreDataService.createCurrentWeatherFrom(currentWeather: $0) }
+                for currentWeather in currentWeatherList {
+                    self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
+                }
                 self.coreDataService.saveChanges()
                 
                 let currentWeatherListCoreData = self.coreDataService.fetchCurrentWeather()
@@ -61,11 +63,36 @@ class WeatherRepository {
                     return
                 }
                 
-                let _ = self.coreDataService.createForecastedWeatherFrom(forecastedWeather: forecastedWeather)
+                self.coreDataService.createForecastedWeatherFrom(forecastedWeather: forecastedWeather)
                 self.coreDataService.saveChanges()
                 
                 let currentWeatherListCoreData = self.coreDataService.fetchForecastWeather(coord: coord)
                 completion(currentWeatherListCoreData)
+            }
+        }
+    }
+    
+    func fetchCurrentWeather(coord: Coordinates, completion: @escaping ((CurrentWeatherCoreData?) -> Void)) {
+        switch reachability.connection {
+        case .unavailable:
+            completion(nil)
+            let currentWeatherCoreData = coreDataService.fetchCurrentWeather(coord: coord)
+            completion(currentWeatherCoreData)
+        default:
+            weatherService.fetchCurrentWeather(coord: coord) { [weak self] (currentWeather) in
+                guard
+                    let self = self,
+                    let currentWeather = currentWeather
+                else {
+                    completion(nil)
+                    return
+                }
+                
+                self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
+                self.coreDataService.saveChanges()
+                
+                let currentWeatherCoreData = self.coreDataService.fetchCurrentWeather(coord: coord)
+                completion(currentWeatherCoreData)
             }
         }
     }
