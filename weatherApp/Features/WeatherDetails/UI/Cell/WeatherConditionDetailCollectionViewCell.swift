@@ -43,7 +43,7 @@ class WeatherConditionDetailCollectionViewCell: UICollectionViewCell {
         setupLayout()
         
         contentView.backgroundColor = .black20
-        contentView.layer.cornerRadius = 8
+        contentView.layer.cornerRadius = 15
     }
     
     private func styleConditionLabel() {

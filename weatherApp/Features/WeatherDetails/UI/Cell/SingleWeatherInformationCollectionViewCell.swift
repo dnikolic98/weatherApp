@@ -76,7 +76,7 @@ class SingleWeatherInformationCollectionViewCell: UICollectionViewCell {
     
     private func styleTranslucentView() {
         translucentView.backgroundColor = .black20
-        translucentView.layer.cornerRadius = 8
+        translucentView.layer.cornerRadius = 15
     }
     
     //MARK: - Setting Up Layout

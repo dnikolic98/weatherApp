@@ -68,7 +68,7 @@ extension MainInformationView {
         
         lineView.autoSetDimension(.height, toSize: 1)
         
-        locationNameLabel.autoPinEdge(.top, to: .top, of: self, withOffset: 25)
+        locationNameLabel.autoPinEdge(.top, to: .top, of: self, withOffset: 10)
         locationNameLabel.autoPinEdge(.leading, to: .leading, of: self, withOffset: 25)
         
         weatherIcon.autoPinEdge(.top, to: .bottom, of: locationNameLabel, withOffset: 10)
@@ -86,7 +86,7 @@ extension MainInformationView {
         
         lineView.widthAnchor.constraint(equalTo: maxTempLabel.widthAnchor).isActive = true
         
-        updatedInfoLabel.autoPinEdge(.bottom, to: .bottom, of: self, withOffset: 5)
+        updatedInfoLabel.autoPinEdge(.bottom, to: .bottom, of: self, withOffset: -10)
         updatedInfoLabel.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -20)
     }
     
@@ -94,11 +94,12 @@ extension MainInformationView {
     //MARK: - Styling Elements
     
     private func styleView() {
-        backgroundColor = .clear
+        backgroundColor = .white15
+        layer.cornerRadius = 15
     }
     
     private func styleLine() {
-        lineView.backgroundColor = .white30
+        lineView.backgroundColor = .white80
     }
     
     private func styleLocationNameLabel() {
@@ -109,7 +110,7 @@ extension MainInformationView {
     }
     
     private func styleWeatherDescriptionLabel() {
-        weatherDescriptionLabel.font = UIFont.systemFont(ofSize: 30, weight: .thin)
+        weatherDescriptionLabel.font = UIFont.systemFont(ofSize: 30, weight: .light)
         weatherDescriptionLabel.adjustsFontSizeToFitWidth = true
         weatherDescriptionLabel.minimumScaleFactor = 0.5
         weatherDescriptionLabel.textColor = .white
@@ -131,14 +132,14 @@ extension MainInformationView {
     }
     
     private func styleMinTempLabel() {
-        minTempLabel.font = UIFont.systemFont(ofSize: 25, weight: .thin)
+        minTempLabel.font = UIFont.systemFont(ofSize: 25, weight: .light)
         minTempLabel.adjustsFontSizeToFitWidth = true
         minTempLabel.minimumScaleFactor = 0.5
         minTempLabel.textColor = .white
     }
     
     private func styleMaxTempLabel() {
-        maxTempLabel.font = UIFont.systemFont(ofSize: 25, weight: .thin)
+        maxTempLabel.font = UIFont.systemFont(ofSize: 25, weight: .light)
         maxTempLabel.adjustsFontSizeToFitWidth = true
         maxTempLabel.minimumScaleFactor = 0.5
         maxTempLabel.textColor = .white
