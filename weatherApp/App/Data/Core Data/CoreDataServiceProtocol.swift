@@ -16,6 +16,8 @@ protocol CoreDataServiceProtocol {
     
     func fetchCurrentWeather(coord: Coordinates) -> CurrentWeatherCoreData?
     
+    func fetchCityList() -> [CityCoreData]
+    
     //MARK: - Create CoreData Models
     
     @discardableResult

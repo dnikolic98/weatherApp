@@ -53,6 +53,16 @@ class CoreDataService: CoreDataServiceProtocol {
         return forecastedWeatherCoreData?.first
     }
     
+    func fetchCityList() -> [CityCoreData] {
+        let request: NSFetchRequest<CityCoreData> = CityCoreData.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        
+        guard let cityList = try? mainContext.fetch(request) else {
+            return []
+        }
+        
+        return cityList
+    }
     
     //MARK: - Create CoreData Models
     

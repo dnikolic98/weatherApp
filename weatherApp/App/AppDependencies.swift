@@ -30,17 +30,7 @@ class AppDependencies {
         CoreDataService(coreDataStack: coreDataStack)
     }()
     
-    lazy var cityLocationService: CityLocationService = {
-        CityLocationService(completion: {
-            print("done")
-        })
+    lazy var weatherRepository: WeatherRepository = { WeatherRepository(weatherService: weatherService, coreDataService: coreDataService, reachability: reachability)
     }()
     
-    lazy var weatherRepository: WeatherRepository = {
-        WeatherRepository(weatherService: weatherService,
-                          coreDataService: coreDataService,
-                          reachability: reachability,
-                          cityLocationService: cityLocationService)
-    }()
-
 }
