@@ -14,10 +14,10 @@ class WeatherRepository {
     
     let weatherService: WeatherServiceProtocol
     let coreDataService: CoreDataServiceProtocol
-    let cityLocationService: CityLocationService
+    let cityLocationService: CityLocationServiceProtocol
     var reachability: Reachability
     
-    init(weatherService: WeatherServiceProtocol, coreDataService: CoreDataServiceProtocol, reachability: Reachability, cityLocationService: CityLocationService) {
+    init(weatherService: WeatherServiceProtocol, coreDataService: CoreDataServiceProtocol, reachability: Reachability, cityLocationService: CityLocationServiceProtocol) {
         self.weatherService = weatherService
         self.reachability = reachability
         self.coreDataService = coreDataService
@@ -108,8 +108,8 @@ class WeatherRepository {
         }
     }
     
-    func fetchCities(query: String) -> [City] {
-        return cityLocationService.fetchCity(query: query)
+    func fetchCities() -> Observable<[City]> {
+        return cityLocationService.cityList
     }
     
     private func startReachability() {

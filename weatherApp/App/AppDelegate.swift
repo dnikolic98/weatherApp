@@ -17,6 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        PresavedSQLiteManager().checkIfDatabaseExists()
+        
         window = UIWindow(frame: UIScreen.main.bounds)
         navigationController = UINavigationController()
         let navigationService = NavigationService(navigationController: navigationController, appDependencies: appDependencies)

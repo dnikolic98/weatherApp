@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19G73" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CityCoreData" representedClassName="CityCoreData" syncable="YES">
+        <attribute name="country" attributeType="String"/>
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+    </entity>
     <entity name="CoordinatesCoreData" representedClassName="CoordinatesCoreData" syncable="YES">
         <attribute name="latitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="longitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -73,5 +78,6 @@
         <element name="ForecastedWeatherCoreData" positionX="160" positionY="192" width="128" height="88"/>
         <element name="WeatherCoreData" positionX="160" positionY="192" width="128" height="118"/>
         <element name="WindCoreData" positionX="160" positionY="192" width="128" height="88"/>
+        <element name="CityCoreData" positionX="-9" positionY="306" width="128" height="88"/>
     </elements>
 </model>
