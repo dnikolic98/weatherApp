@@ -21,6 +21,9 @@ extension LocationSearchView {
         searchContainer = UIView()
         addSubview(searchContainer)
         
+        backButton = UIButton()
+        searchContainer.addSubview(backButton)
+        
         searchBar = UISearchBar()
         searchContainer.addSubview(searchBar)
         
@@ -31,45 +34,73 @@ extension LocationSearchView {
     func styleViews() {
         styleView()
         styleSearchContainer()
+        styleBackButton()
         styleSearchBar()
         styleResultsTableView()
     }
     
     func defineLayoutForViews() {
-        searchContainer.autoSetDimension(.height, toSize: 20)
-        searchContainer.autoPinEdge(.leading, to: .leading, of: self)
-        searchContainer.autoPinEdge(.trailing, to: .trailing, of: self)
-        searchContainer.autoPinEdge(.top, to: .top, of: self)
+        searchContainer.autoSetDimension(.height, toSize: 50)
+        searchContainer.autoPinEdge(toSuperviewSafeArea: .leading)
+        searchContainer.autoPinEdge(toSuperviewSafeArea: .trailing)
+        searchContainer.autoPinEdge(toSuperviewSafeArea: .top)
         
-        searchBar.autoPinEdge(.leading, to: .leading, of: searchContainer, withOffset: 5)
+        backButton.autoPinEdge(.leading, to: .leading, of: searchContainer, withOffset: 5)
+        backButton.autoPinEdge(.top, to: .top, of: searchContainer, withOffset: 5)
+        backButton.autoPinEdge(.bottom, to: .bottom, of: searchContainer, withOffset: -5)
+        
         searchBar.autoPinEdge(.trailing, to: .trailing, of: searchContainer, withOffset: -5)
+        searchBar.autoPinEdge(.leading, to: .trailing, of: backButton)
         searchBar.autoPinEdge(.top, to: .top, of: searchContainer, withOffset: 5)
         searchBar.autoPinEdge(.bottom, to: .bottom, of: searchContainer, withOffset: -5)
         
-        resultsTableView.autoPinEdge(.top, to: .top, of: searchContainer, withOffset: 5)
-        searchContainer.autoPinEdge(.leading, to: .leading, of: self)
-        searchContainer.autoPinEdge(.trailing, to: .trailing, of: self)
-        searchContainer.autoPinEdge(.bottom, to: .bottom, of: self)
+        resultsTableView.autoPinEdge(.top, to: .bottom, of: searchContainer, withOffset: 5)
+        resultsTableView.autoPinEdge(toSuperviewSafeArea: .leading)
+        resultsTableView.autoPinEdge(toSuperviewSafeArea: .trailing)
+        resultsTableView.autoPinEdge(toSuperviewSafeArea: .bottom)
     }
     
     
     //MARK: - Styling Elements
     
     private func styleView() {
-        backgroundColor = .white15
-        layer.cornerRadius = 15
+        setDefaultGradient()
     }
     
+    private func styleBackButton() {
+        backButton.setImage(UIImage(named: "back-button"), for: .normal)
+    }
+    
+    
     private func styleSearchContainer() {
-//        searchContainer.font = UIFont.systemFont(ofSize: 35, weight: .bold)
+//        searchContainer.backgroundColor = .white15
     }
     
     private func styleSearchBar() {
-//        searchBar.font = UIFont.systemFont(ofSize: 30, weight: .light)
+        searchBar.backgroundImage = UIImage()
+        searchBar.barStyle = .black
+        searchBar.barTintColor = .clear
+        searchBar.searchTextField.backgroundColor = .black20
+        searchBar.tintColor = .white
+        searchBar.searchTextField.textColor = .white
+        searchBar.searchTextField.tintColor = .white70
+        searchBar.placeholder = LocalizedStrings.searchLocations
+        
+        let glassIconView = searchBar.searchTextField.leftView as! UIImageView
+        glassIconView.image = glassIconView.image?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
+        glassIconView.tintColor = .white80
     }
     
     private func styleResultsTableView() {
-//        resultsTableView.font = UIFont.systemFont(ofSize: 150, weight: .thin)
+        resultsTableView.backgroundColor = .clear
+        resultsTableView.separatorStyle = .none
+    }
+    
+    private func update(button: UIButton, image: UIImage?, color: UIColor) {
+        let image = (image ?? button.currentImage)?.withRenderingMode(.alwaysTemplate)
+        button.setImage(image, for: .normal)
+        button.setImage(image, for: .highlighted)
+        button.tintColor = color
     }
     
 }

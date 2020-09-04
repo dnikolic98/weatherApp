@@ -10,4 +10,17 @@ import RxSwift
 
 class LocationSearchPresenter {
     
+    private let weatherRepository: WeatherRepository
+    private let navigationService: NavigationService
+    
+    init(weatherRepository: WeatherRepository,navigationService: NavigationService) {
+        self.weatherRepository = weatherRepository
+        self.navigationService = navigationService
+    }
+    
+    func fetch(query: String) {
+        let result = weatherRepository.fetchCities(query: query)
+        print(result)
+    }
+    
 }

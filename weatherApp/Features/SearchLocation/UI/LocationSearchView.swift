@@ -13,6 +13,7 @@ class LocationSearchView: UIView {
     var searchContainer: UIView!
     var searchBar: UISearchBar!
     var resultsTableView: UITableView!
+    var backButton: UIButton!
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -72,6 +72,10 @@ class CurrentWeatherListPresenter {
         navigationService.goToDetailWeather(currentWeather: currentWeather)
     }
     
+    func handleAddLocation() {
+        navigationService.goToSearchLocation()
+    }
+    
     private func bindCurrentLocation() {
         locationService
             .location

@@ -25,7 +25,7 @@ class HomeViewController: UIViewController {
     @IBOutlet private weak var currentLocationView: MainInformationView!
     
     @IBAction func addLocationButtonTapped(_ sender: Any) {
-        
+        currentWeatherListPresenter.handleAddLocation()
     }
     
     convenience init(currentWeatherListPresenter: CurrentWeatherListPresenter) {
