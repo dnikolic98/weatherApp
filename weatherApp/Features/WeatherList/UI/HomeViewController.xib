@@ -25,7 +25,7 @@
                     <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1fC-fv-cvp" userLabel="ContentView">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="1054.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="1114.5"/>
                             <subviews>
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Er7-qZ-lC4">
                                     <rect key="frame" x="0.0" y="357" width="414" height="697.5"/>
@@ -55,6 +55,26 @@
                                         <constraint firstAttribute="height" constant="300" id="i61-tF-ur6"/>
                                     </constraints>
                                 </view>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EjW-ci-D2c">
+                                    <rect key="frame" x="15" y="1059.5" width="384" height="40"/>
+                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.15250880280000001" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="40" id="EDX-zW-pTg"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                    <inset key="contentEdgeInsets" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <state key="normal" title="+ Add location">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                            <integer key="value" value="10"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="addLocationButtonTapped:" destination="-1" eventType="touchUpInside" id="6rJ-8g-VdE"/>
+                                    </connections>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
@@ -62,13 +82,16 @@
                                 <constraint firstItem="fWW-66-gML" firstAttribute="leading" secondItem="Dxp-kJ-IqC" secondAttribute="trailing" constant="10" id="28P-kK-EAl"/>
                                 <constraint firstAttribute="trailing" secondItem="fWW-66-gML" secondAttribute="trailing" constant="20" id="4bX-VI-n1L"/>
                                 <constraint firstAttribute="trailing" secondItem="nah-Fd-LNk" secondAttribute="trailing" constant="10" id="9be-nF-pVS"/>
-                                <constraint firstAttribute="bottom" secondItem="Er7-qZ-lC4" secondAttribute="bottom" id="BFh-ew-0IV"/>
                                 <constraint firstItem="Er7-qZ-lC4" firstAttribute="top" secondItem="Dxp-kJ-IqC" secondAttribute="bottom" constant="10" id="FbE-mm-CtM"/>
+                                <constraint firstAttribute="bottom" secondItem="EjW-ci-D2c" secondAttribute="bottom" constant="15" id="Fbr-OC-XlV"/>
                                 <constraint firstItem="nah-Fd-LNk" firstAttribute="leading" secondItem="1fC-fv-cvp" secondAttribute="leading" constant="10" id="JV0-tH-Kj9"/>
+                                <constraint firstItem="EjW-ci-D2c" firstAttribute="top" secondItem="Er7-qZ-lC4" secondAttribute="bottom" constant="5" id="Lu6-Ct-CYZ"/>
                                 <constraint firstAttribute="trailing" secondItem="Er7-qZ-lC4" secondAttribute="trailing" id="ZSw-Sl-ktx"/>
+                                <constraint firstAttribute="trailing" secondItem="EjW-ci-D2c" secondAttribute="trailing" constant="15" id="b6y-x9-VWM"/>
                                 <constraint firstItem="Dxp-kJ-IqC" firstAttribute="top" secondItem="nah-Fd-LNk" secondAttribute="bottom" constant="15" id="qhW-iq-dFc"/>
                                 <constraint firstItem="Er7-qZ-lC4" firstAttribute="leading" secondItem="1fC-fv-cvp" secondAttribute="leading" id="tor-u9-FQT"/>
                                 <constraint firstItem="fWW-66-gML" firstAttribute="centerY" secondItem="Dxp-kJ-IqC" secondAttribute="centerY" id="u5d-BJ-Chx"/>
+                                <constraint firstItem="EjW-ci-D2c" firstAttribute="leading" secondItem="1fC-fv-cvp" secondAttribute="leading" constant="15" id="wsd-7R-1TW"/>
                                 <constraint firstItem="Dxp-kJ-IqC" firstAttribute="leading" secondItem="1fC-fv-cvp" secondAttribute="leading" constant="20" id="zH0-2y-WW1"/>
                             </constraints>
                         </view>
@@ -93,7 +116,7 @@
                 <constraint firstItem="TvO-w0-Gwp" firstAttribute="trailing" secondItem="zkp-HS-vh6" secondAttribute="trailing" id="WKG-PS-SJb"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="TvO-w0-Gwp"/>
-            <point key="canvasLocation" x="-836.23188405797111" y="-212.27678571428569"/>
+            <point key="canvasLocation" x="-1084.0579710144928" y="-300"/>
         </view>
     </objects>
 </document>

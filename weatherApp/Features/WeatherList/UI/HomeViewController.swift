@@ -24,6 +24,10 @@ class HomeViewController: UIViewController {
     @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var currentLocationView: MainInformationView!
     
+    @IBAction func addLocationButtonTapped(_ sender: Any) {
+        
+    }
+    
     convenience init(currentWeatherListPresenter: CurrentWeatherListPresenter) {
         self.init()
 
@@ -158,6 +162,7 @@ class HomeViewController: UIViewController {
         
         view.setAutomaticGradient(currentWeather: currentWeather)
     }
+    
 }
 
 //MARK: - TableView DataSource
