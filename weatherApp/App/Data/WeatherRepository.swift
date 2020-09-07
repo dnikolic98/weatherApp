@@ -27,7 +27,7 @@ class WeatherRepository {
     func fetchSeveralCurrentWeather(id: [Int]) -> Observable<[CurrentWeatherCoreData]> {
         switch reachability.connection {
         case .unavailable:
-            let currentWeatherListCoreData = coreDataService.fetchCurrentWeather()
+            let currentWeatherListCoreData = coreDataService.fetchCurrentWeather(id: id)
             return Observable.of(currentWeatherListCoreData)
             
         default:
@@ -42,7 +42,7 @@ class WeatherRepository {
                     self.coreDataService.saveChanges()
                 })
                 .flatMap({ multipleCurrentWeather -> Observable<[CurrentWeatherCoreData]> in
-                    let currentWeatherListCoreData = self.coreDataService.fetchCurrentWeather()
+                    let currentWeatherListCoreData = self.coreDataService.fetchCurrentWeather(id: id)
                     return Observable.of(currentWeatherListCoreData)
                 })
         }

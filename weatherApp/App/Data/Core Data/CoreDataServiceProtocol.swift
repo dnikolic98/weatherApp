@@ -10,7 +10,7 @@ protocol CoreDataServiceProtocol {
     
     //MARK: - Fetches
     
-    func fetchCurrentWeather() -> [CurrentWeatherCoreData]
+    func fetchCurrentWeather(id: [Int]) -> [CurrentWeatherCoreData]
     
     func fetchForecastWeather(coord: Coordinates) -> ForecastedWeatherCoreData?
     

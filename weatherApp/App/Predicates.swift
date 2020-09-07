@@ -40,4 +40,8 @@ class Predicates {
         return NSPredicate(format: "forecastedWeather = %@", forecastedWeather)
     }
     
+    class func severalIdPredicate(_ ids: [Int]) -> NSPredicate {
+        return NSPredicate(format: "id IN %@", ids)
+    }
+    
 }
