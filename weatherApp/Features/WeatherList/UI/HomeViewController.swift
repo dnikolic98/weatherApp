@@ -201,4 +201,12 @@ extension HomeViewController: UITableViewDelegate {
         currentWeatherListPresenter.handleSelectedLocation(currentWeather: currentWeather)
     }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            guard let currentWeather = currentWeatherListPresenter.currentWeather(atIndex: indexPath.row) else { return }
+            currentWeatherListPresenter.handleRemoveLocation(id: currentWeather.id, index: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
 }

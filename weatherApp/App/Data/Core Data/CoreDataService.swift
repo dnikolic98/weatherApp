@@ -75,6 +75,15 @@ class CoreDataService: CoreDataServiceProtocol {
         return cityList
     }
     
+    
+    func fetchSelectedLocations(id: Int) -> SelectedLocationCoreData? {
+        let request: NSFetchRequest<SelectedLocationCoreData> = SelectedLocationCoreData.fetchRequest()
+        request.predicate = Predicates.idPredicate(id)
+        
+        let location = try? mainContext.fetch(request)
+        return location?.first
+    }
+    
     //MARK: - Create CoreData Models
     
     @discardableResult
@@ -172,7 +181,9 @@ class CoreDataService: CoreDataServiceProtocol {
     //MARK - Remove Core data models
     
     func removeSelectedLocation(id: Int) {
-        //TODO
+        guard let location = fetchSelectedLocations(id: id) else { return }
+        mainContext.delete(location)
+        saveChanges()
     }
     
     

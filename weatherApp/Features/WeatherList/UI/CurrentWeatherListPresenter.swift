@@ -80,6 +80,11 @@ class CurrentWeatherListPresenter {
         navigationService.goToSearchLocation()
     }
     
+    func handleRemoveLocation(id: Int, index: Int) {
+        currentWeatherList.remove(at: index)
+        weatherRepository.deselectLocation(id: id)
+    }
+    
     private func bindCurrentLocation() {
         locationService
             .location

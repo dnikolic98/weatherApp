@@ -118,6 +118,11 @@ class WeatherRepository {
     
     func selectLocation(id: Int) {
         coreDataService.createSelectedLocationFrom(id: id)
+        coreDataService.saveChanges()
+    }
+    
+    func deselectLocation(id: Int) {
+        coreDataService.removeSelectedLocation(id: id)
     }
     
     private func startReachability() {
