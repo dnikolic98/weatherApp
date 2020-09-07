@@ -111,6 +111,15 @@ class WeatherRepository {
         return Observable.of(cityList)
     }
     
+    func fetchSelectedLocations() -> Observable<[SelectedLocationCoreData]> {
+        let selectedLocations = coreDataService.fetchSelectedLocations()
+        return Observable.of(selectedLocations)
+    }
+    
+    func selectLocation(id: Int) {
+        coreDataService.createSelectedLocationFrom(id: id)
+    }
+    
     private func startReachability() {
         do {
             try reachability.startNotifier()

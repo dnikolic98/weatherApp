@@ -50,7 +50,6 @@ class LocationSearchViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
-//        refreshTableView()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -171,6 +170,9 @@ extension LocationSearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+        guard let city = citiesFiltered.value.at(indexPath.row) else { return }
+        
+        presenter.handleCellTap(city: city)
     }
     
 }

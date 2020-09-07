@@ -14,5 +14,4 @@ struct CellBackgrounds {
     
     static let standard: UIColor = .white15
     
-    
 }

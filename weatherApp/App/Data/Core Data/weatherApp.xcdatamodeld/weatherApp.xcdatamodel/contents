@@ -57,6 +57,9 @@
         <attribute name="longitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="forecastedWeather" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DailyWeatherCoreData" inverseName="forecastedWeather" inverseEntity="DailyWeatherCoreData"/>
     </entity>
+    <entity name="SelectedLocationCoreData" representedClassName="SelectedLocationCoreData" syncable="YES">
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
     <entity name="WeatherCoreData" representedClassName="WeatherCoreData" syncable="YES">
         <attribute name="icon" attributeType="String"/>
         <attribute name="iconsUrlString" attributeType="String"/>
@@ -79,5 +82,6 @@
         <element name="ForecastedWeatherCoreData" positionX="160" positionY="192" width="128" height="88"/>
         <element name="WeatherCoreData" positionX="160" positionY="192" width="128" height="118"/>
         <element name="WindCoreData" positionX="160" positionY="192" width="128" height="88"/>
+        <element name="SelectedLocationCoreData" positionX="-27" positionY="288" width="128" height="58"/>
     </elements>
 </model>

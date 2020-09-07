@@ -64,6 +64,16 @@ class CoreDataService: CoreDataServiceProtocol {
         return cityList
     }
     
+    func fetchSelectedLocations() -> [SelectedLocationCoreData] {
+        let request: NSFetchRequest<SelectedLocationCoreData> = SelectedLocationCoreData.fetchRequest()
+        
+        guard let cityList = try? mainContext.fetch(request) else {
+            return []
+        }
+        
+        return cityList
+    }
+    
     //MARK: - Create CoreData Models
     
     @discardableResult
@@ -150,6 +160,20 @@ class CoreDataService: CoreDataServiceProtocol {
         forecastedWeatherCoreData.populate(forecastedWeather: forecastedWeather, dailyWeathers: dailyWeathers)
         return forecastedWeatherCoreData
     }
+    
+    @discardableResult
+    func createSelectedLocationFrom(id: Int) -> SelectedLocationCoreData? {
+        guard let selectedLocation = SelectedLocationCoreData.firstOrCreate(withId: id, context: privateContext) else { return nil }
+        selectedLocation.populate(id: id)
+        return selectedLocation
+    }
+    
+    //MARK - Remove Core data models
+    
+    func removeSelectedLocation(id: Int) {
+        //TODO
+    }
+    
     
     //MARK: - Save Changes
     

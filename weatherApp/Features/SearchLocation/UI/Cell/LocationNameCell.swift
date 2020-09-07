@@ -32,6 +32,8 @@ class LocationNameTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         nameLabel.text = ""
+        contentView.backgroundColor = CellBackgrounds.standard
+        isUserInteractionEnabled = true
     }
     
     override func layoutSubviews() {
@@ -40,6 +42,10 @@ class LocationNameTableViewCell: UITableViewCell {
     
     func set(with city: CityViewModel) {
         nameLabel.text = city.name
+        if city.selected {
+            contentView.backgroundColor = CellBackgrounds.selected
+            isUserInteractionEnabled = false
+        }
     }
     
     //MARK: - Styling UI Elements

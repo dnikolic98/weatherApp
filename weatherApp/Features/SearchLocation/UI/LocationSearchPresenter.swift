@@ -14,6 +14,7 @@ class LocationSearchPresenter {
     private let cityListdisposeBag: DisposeBag = DisposeBag()
     private let weatherRepository: WeatherRepository
     private let navigationService: NavigationService
+    private var selectedLocationIds: [Int] = []
     
     init(weatherRepository: WeatherRepository,navigationService: NavigationService) {
         self.weatherRepository = weatherRepository
@@ -25,12 +26,29 @@ class LocationSearchPresenter {
     }
     
     func fetchCityList() -> Observable<[CityViewModel]> {
-        return weatherRepository
-            .fetchCityLists()
-            .flatMap({ cityCoreData -> Observable<[CityViewModel]> in
-                let cityViewModels = cityCoreData.map { CityViewModel(city: $0) }
+        weatherRepository
+        .fetchSelectedLocations()
+            .do(onNext: { [weak self] selectedLocations in
+                self?.selectedLocationIds = selectedLocations.map({ Int($0.id) })
+            })
+            .flatMap({ [weak self] _ -> Observable<[CityCoreData]> in
+                self?.weatherRepository.fetchCityLists() ?? Observable.of()
+            })
+            .flatMap({ [weak self] cityCoreData -> Observable<[CityViewModel]> in
+                guard let self = self else { return Observable.of() }
+                
+                let cityViewModels = cityCoreData.map { city -> CityViewModel in
+                    let selected = self.selectedLocationIds.contains(Int(city.id))
+                    return CityViewModel(city: city, isSelected: selected)
+                }
+                
                 return Observable.of(cityViewModels)
             })
+    }
+    
+    func handleCellTap(city: CityViewModel) {
+        weatherRepository.selectLocation(id: city.id)
+        navigationService.goBack()
     }
     
 }
