@@ -38,6 +38,10 @@ class NavigationService {
         let presenter = LocationSearchPresenter(weatherRepository: appDependencies.weatherRepository, navigationService: self)
         navigationController?.pushViewController(LocationSearchViewController(with: presenter), animated: true)
     }
+    
+    func goBack() {
+        navigationController?.popViewController(animated: true)
+    }
 
 }
 

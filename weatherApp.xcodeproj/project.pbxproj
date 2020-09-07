@@ -223,8 +223,8 @@
 			isa = PBXGroup;
 			children = (
 				A34F11D625026F31006E9F13 /* ViewModels */,
-				A34F11D525026C38006E9F13 /* View */,
 				A34F11D425026C31006E9F13 /* Cell */,
+				A34F11D525026C38006E9F13 /* View */,
 				A328A8762501323200C67BDD /* LocationSearchViewController.swift */,
 				A328A87F25013BDA00C67BDD /* LocationSearchPresenter.swift */,
 			);

@@ -96,11 +96,4 @@ extension LocationSearchView {
         resultsTableView.separatorStyle = .none
     }
     
-    private func update(button: UIButton, image: UIImage?, color: UIColor) {
-        let image = (image ?? button.currentImage)?.withRenderingMode(.alwaysTemplate)
-        button.setImage(image, for: .normal)
-        button.setImage(image, for: .highlighted)
-        button.tintColor = color
-    }
-    
 }

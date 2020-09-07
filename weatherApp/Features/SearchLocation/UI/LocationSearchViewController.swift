@@ -32,6 +32,7 @@ class LocationSearchViewController: UIViewController {
         
         setupSearchBar()
         setupKeyboardDismissGestureRecognizer()
+        setupBackButton()
         
 //        locationSearchView.searchBar.rx.text
 //            .subscribe(onNext: { query in
@@ -96,5 +97,9 @@ class LocationSearchViewController: UIViewController {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(endEditingSearchBar))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+    }
+    
+    private func setupBackButton() {
+        locationSearchView.backButton.addTarget(presenter, action: #selector(presenter.handleBackButtonTapped), for: .touchUpInside)
     }
 }

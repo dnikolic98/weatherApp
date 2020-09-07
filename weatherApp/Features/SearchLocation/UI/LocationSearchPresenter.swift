@@ -20,4 +20,8 @@ class LocationSearchPresenter {
         self.navigationService = navigationService
     }
     
+    @objc func handleBackButtonTapped() {
+        navigationService.goBack()
+    }
+    
 }
