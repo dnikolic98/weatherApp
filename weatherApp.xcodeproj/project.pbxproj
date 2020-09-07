@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		13E8F276292783AC56A01250 /* Pods_weatherApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2CBE0A15CAE8FD584CED745 /* Pods_weatherApp.framework */; };
+		A30DDDE225062CE400B1D833 /* LocationNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30DDDE125062CE300B1D833 /* LocationNameCell.swift */; };
 		A31ADEDC24E07A4C0071762E /* Wind.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31ADEDB24E07A4C0071762E /* Wind.swift */; };
 		A31C945124F40176003BFA47 /* NSManagedObject+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31C945024F40176003BFA47 /* NSManagedObject+Extension.swift */; };
 		A328A87425010F7D00C67BDD /* TimeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A328A87325010F7D00C67BDD /* TimeInfo.swift */; };
@@ -93,6 +94,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A30DDDE125062CE300B1D833 /* LocationNameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationNameCell.swift; sourceTree = "<group>"; };
 		A31ADEDB24E07A4C0071762E /* Wind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wind.swift; sourceTree = "<group>"; };
 		A31C945024F40176003BFA47 /* NSManagedObject+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObject+Extension.swift"; sourceTree = "<group>"; };
 		A328A87325010F7D00C67BDD /* TimeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInfo.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 		A34F11D425026C31006E9F13 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				A30DDDE125062CE300B1D833 /* LocationNameCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -761,6 +764,7 @@
 				A39D475524E5597100C1C6A3 /* Date+Extension.swift in Sources */,
 				A39D474924E52DE100C1C6A3 /* DailyWeather.swift in Sources */,
 				A3794AEA24D84B4B008A8779 /* AppDelegate.swift in Sources */,
+				A30DDDE225062CE400B1D833 /* LocationNameCell.swift in Sources */,
 				A3EC098424D8AB72007CDC4D /* CurrentWeather.swift in Sources */,
 				A3BE104824EAA43F006DFA5B /* WeatherServiceProtocol.swift in Sources */,
 				A39D474F24E5332B00C1C6A3 /* ForecastedWeather.swift in Sources */,

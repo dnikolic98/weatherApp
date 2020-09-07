@@ -24,4 +24,13 @@ class LocationSearchPresenter {
         navigationService.goBack()
     }
     
+    func fetchCityList() -> Observable<[CityViewModel]> {
+        return weatherRepository
+            .fetchCityLists()
+            .flatMap({ cityCoreData -> Observable<[CityViewModel]> in
+                let cityViewModels = cityCoreData.map { CityViewModel(city: $0) }
+                return Observable.of(cityViewModels)
+            })
+    }
+    
 }

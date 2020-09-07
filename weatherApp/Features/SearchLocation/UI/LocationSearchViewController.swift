@@ -12,8 +12,12 @@ import RxCocoa
 
 class LocationSearchViewController: UIViewController {
     
+    private let citiesDisposeBage: DisposeBag = DisposeBag()
     private let searchBarDisposeBag: DisposeBag = DisposeBag()
+    private var allCitiesDisposeBag: DisposeBag = DisposeBag()
     private let presenter: LocationSearchPresenter!
+    private let allCities: BehaviorRelay<[CityViewModel]> = BehaviorRelay<[CityViewModel]>(value: [])
+    private let citiesFiltered: BehaviorRelay<[CityViewModel]> = BehaviorRelay<[CityViewModel]>(value: [])
     private var locationSearchView: LocationSearchView {
         return self.view as! LocationSearchView
     }
@@ -33,11 +37,10 @@ class LocationSearchViewController: UIViewController {
         setupSearchBar()
         setupKeyboardDismissGestureRecognizer()
         setupBackButton()
-        
-//        locationSearchView.searchBar.rx.text
-//            .subscribe(onNext: { query in
-//                self.presenter.fetch(query: query ?? "")
-//            })
+        setupTableView()
+        bindAllCities()
+        setupDataFiltering()
+        setupTableViewDataReloading()
     }
     
     override func loadView() {
@@ -58,22 +61,21 @@ class LocationSearchViewController: UIViewController {
     private func setupSearchBar() {
         setupSearchBarAnimation()
         setupSearchButtonInteractions()
+        locationSearchView.searchBar.becomeFirstResponder()
     }
     
     private func setupSearchBarAnimation() {
         locationSearchView.searchBar.rx
             .textDidBeginEditing
             .subscribe({ [weak self] _ in
-                guard let self = self else { return }
-                self.locationSearchView.searchBar.setShowsCancelButton(true, animated: true)
+                self?.locationSearchView.searchBar.setShowsCancelButton(true, animated: true)
             })
             .disposed(by: searchBarDisposeBag)
         
         locationSearchView.searchBar.rx
             .textDidEndEditing
             .subscribe({ [weak self] _ in
-                guard let self = self else { return }
-                self.locationSearchView.searchBar.setShowsCancelButton(false, animated: true)
+                self?.locationSearchView.searchBar.setShowsCancelButton(false, animated: true)
             })
             .disposed(by: searchBarDisposeBag)
     }
@@ -83,8 +85,7 @@ class LocationSearchViewController: UIViewController {
             locationSearchView.searchBar.rx.cancelButtonClicked,
             locationSearchView.searchBar.rx.searchButtonClicked)
             .subscribe({ [weak self] _ in
-                guard let self = self else { return }
-                self.endEditingSearchBar()
+                self?.endEditingSearchBar()
             })
             .disposed(by: searchBarDisposeBag)
     }
@@ -99,7 +100,77 @@ class LocationSearchViewController: UIViewController {
         view.addGestureRecognizer(tap)
     }
     
+    private func setupTableView() {
+        locationSearchView.resultsTableView.dataSource = self
+        locationSearchView.resultsTableView.delegate = self
+        locationSearchView.resultsTableView.register(LocationNameTableViewCell.self, forCellReuseIdentifier: LocationNameTableViewCell.typeName)
+    }
+    
     private func setupBackButton() {
         locationSearchView.backButton.addTarget(presenter, action: #selector(presenter.handleBackButtonTapped), for: .touchUpInside)
     }
+    
+    private func bindAllCities() {
+        allCitiesDisposeBag = DisposeBag()
+        
+        presenter
+            .fetchCityList()
+            .bind(to: allCities)
+            .disposed(by: allCitiesDisposeBag)
+    }
+    
+    private func setupDataFiltering() {
+        Observable.combineLatest(
+            locationSearchView.searchBar.rx.text,
+            allCities.asObservable())
+            .map({ filter, cities in
+                if let filter = filter?.lowercased(), !filter.isEmpty {
+                    return cities.filter { $0.name.lowercased().hasPrefix(filter) }
+                }
+                return []
+            })
+            .bind(to: citiesFiltered)
+            .disposed(by: citiesDisposeBage)
+    }
+    
+    private func setupTableViewDataReloading() {
+        citiesFiltered
+            .asObservable()
+            .subscribe( { [weak self] _ in
+                self?.locationSearchView.resultsTableView.reloadData()
+            })
+            .disposed(by: citiesDisposeBage)
+    }
+    
+}
+
+extension LocationSearchViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return citiesFiltered.value.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: LocationNameTableViewCell.typeName, for: indexPath) as! LocationNameTableViewCell
+        
+        if let location = citiesFiltered.value.at(indexPath.row) {
+            cell.set(with: location)
+        }
+        
+        return cell
+    }
+    
+}
+
+extension LocationSearchViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return LocationNameTableViewCell.height
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+    }
+    
 }
