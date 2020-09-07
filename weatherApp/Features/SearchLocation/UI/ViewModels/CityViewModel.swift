@@ -11,12 +11,10 @@ import Foundation
 struct CityViewModel {
     
     let name: String
-    let country: String
     let id: Int
     
     init(city: CityCoreData) {
-        self.name = city.name
-        self.country = city.country.uppercased()
+        self.name = String(format: "%@ (%@)", city.name, city.country.uppercased())
         self.id = Int(city.id)
     }
     

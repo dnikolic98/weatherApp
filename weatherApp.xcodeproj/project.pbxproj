@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		13E8F276292783AC56A01250 /* Pods_weatherApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2CBE0A15CAE8FD584CED745 /* Pods_weatherApp.framework */; };
 		A30DDDE225062CE400B1D833 /* LocationNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30DDDE125062CE300B1D833 /* LocationNameCell.swift */; };
+		A30DDDE42506518300B1D833 /* CellBackgrounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30DDDE32506518300B1D833 /* CellBackgrounds.swift */; };
 		A31ADEDC24E07A4C0071762E /* Wind.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31ADEDB24E07A4C0071762E /* Wind.swift */; };
 		A31C945124F40176003BFA47 /* NSManagedObject+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31C945024F40176003BFA47 /* NSManagedObject+Extension.swift */; };
 		A328A87425010F7D00C67BDD /* TimeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A328A87325010F7D00C67BDD /* TimeInfo.swift */; };
@@ -95,6 +96,7 @@
 
 /* Begin PBXFileReference section */
 		A30DDDE125062CE300B1D833 /* LocationNameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationNameCell.swift; sourceTree = "<group>"; };
+		A30DDDE32506518300B1D833 /* CellBackgrounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellBackgrounds.swift; sourceTree = "<group>"; };
 		A31ADEDB24E07A4C0071762E /* Wind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wind.swift; sourceTree = "<group>"; };
 		A31C945024F40176003BFA47 /* NSManagedObject+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObject+Extension.swift"; sourceTree = "<group>"; };
 		A328A87325010F7D00C67BDD /* TimeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInfo.swift; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 			isa = PBXGroup;
 			children = (
 				A30DDDE125062CE300B1D833 /* LocationNameCell.swift */,
+				A30DDDE32506518300B1D833 /* CellBackgrounds.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -774,6 +777,7 @@
 				A3A58C662502998F00E1FC79 /* CityCoreData+CoreDataProperties copy.swift in Sources */,
 				A391440B24F811BE00509A81 /* NSPredicate+Extensions.swift in Sources */,
 				A328A87C2501366800C67BDD /* LocationSearchView.swift in Sources */,
+				A30DDDE42506518300B1D833 /* CellBackgrounds.swift in Sources */,
 				A3D867812500FB78003DE8A0 /* UIView+AppGradient.swift in Sources */,
 				A34F120D25028F81006E9F13 /* PresavedSQLiteManager.swift in Sources */,
 				A3BD78F024E2C81A003723DE /* CurrentWeatherListPresenter.swift in Sources */,
