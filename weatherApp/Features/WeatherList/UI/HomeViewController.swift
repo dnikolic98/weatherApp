@@ -125,11 +125,6 @@ class HomeViewController: UIViewController {
         
         tableViewHeightConstraint.constant = CGFloat(0)
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.typeName)
-        
-        let footerView = AddLocationFooter(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 40))
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleAddlocationTap(_:)))
-        footerView.addGestureRecognizer(tapGesture)
-        tableView.tableFooterView = footerView
     }
     
     private func configurePullToRefresh() {
@@ -157,7 +152,7 @@ class HomeViewController: UIViewController {
     private func refreshTableViewHeight() {
         let rows = currentWeatherListPresenter.numberOfCurrentWeather
         
-        tableViewHeightConstraint.constant = CGFloat(rows) * rowHeight + 50
+        tableViewHeightConstraint.constant = CGFloat(rows) * rowHeight
     }
     
     private func setGradientBackground() {
@@ -166,13 +161,6 @@ class HomeViewController: UIViewController {
         }
         
         view.setAutomaticGradient(currentWeather: currentWeather)
-    }
-    
-    @objc private func handleAddlocationTap(_ sender: UITapGestureRecognizer) {
-        guard let footerView = tableView?.tableFooterView else { return }
-        let footer = footerView as! AddLocationFooter
-        footer.addButton.select(sender)
-        print("tap")
     }
     
 }
