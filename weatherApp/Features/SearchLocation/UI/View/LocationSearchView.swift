@@ -25,4 +25,9 @@ class LocationSearchView: UIView {
         buildViews()
     }
     
+    override func layoutSubviews() {
+        super .layoutSubviews()
+        setDefaultGradient()
+    }
+    
 }

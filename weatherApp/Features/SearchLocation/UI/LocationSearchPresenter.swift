@@ -27,14 +27,16 @@ class LocationSearchPresenter {
     
     func fetchCityList() -> Observable<[CityViewModel]> {
         weatherRepository
-        .fetchSelectedLocations()
-        .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .fetchSelectedLocations()
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .do(onNext: { [weak self] selectedLocations in
                 self?.selectedLocationIds = selectedLocations.map({ Int($0.id) })
             })
+            .observeOn(MainScheduler.instance)
             .flatMap({ [weak self] _ -> Observable<[CityCoreData]> in
                 self?.weatherRepository.fetchCityLists() ?? Observable.of([])
             })
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .flatMap({ [weak self] cityCoreData -> Observable<[CityViewModel]> in
                 guard let self = self else { return Observable.of([]) }
                 

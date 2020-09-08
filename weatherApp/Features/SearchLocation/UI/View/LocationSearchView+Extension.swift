@@ -32,8 +32,6 @@ extension LocationSearchView {
     }
     
     func styleViews() {
-        styleView()
-        styleSearchContainer()
         styleBackButton()
         styleSearchBar()
         styleResultsTableView()
@@ -63,18 +61,10 @@ extension LocationSearchView {
     
     //MARK: - Styling Elements
     
-    private func styleView() {
-        setDefaultGradient()
-    }
-    
     private func styleBackButton() {
         backButton.setImage(UIImage(named: "back-button"), for: .normal)
     }
     
-    
-    private func styleSearchContainer() {
-//        searchContainer.backgroundColor = .white15
-    }
     
     private func styleSearchBar() {
         searchBar.backgroundImage = UIImage()

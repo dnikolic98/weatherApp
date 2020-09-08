@@ -123,6 +123,7 @@ class LocationSearchViewController: UIViewController {
         
         presenter
             .fetchCityList()
+            .observeOn(MainScheduler.instance)
             .bind(to: allCities)
             .disposed(by: allCitiesDisposeBag)
     }
@@ -131,6 +132,8 @@ class LocationSearchViewController: UIViewController {
         Observable.combineLatest(
             locationSearchView.searchBar.rx.text.orEmpty,
             allCities.asObservable())
+            .observeOn(MainScheduler.instance)
+            .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
             .map({ filter, cities in
                 if filter.isEmpty {
                     return []
@@ -138,7 +141,6 @@ class LocationSearchViewController: UIViewController {
                 
                 return cities.filter { $0.name.lowercased().hasPrefix(filter.lowercased()) }
             })
-            .observeOn(MainScheduler.instance)
             .bind(to: citiesFiltered)
             .disposed(by: citiesDisposeBage)
     }
