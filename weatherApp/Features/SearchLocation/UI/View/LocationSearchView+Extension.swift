@@ -29,12 +29,16 @@ extension LocationSearchView {
         
         resultsTableView = UITableView()
         addSubview(resultsTableView)
+        
+        loadingIndicator = UIActivityIndicatorView()
+        addSubview(loadingIndicator)
     }
     
     func styleViews() {
         styleBackButton()
         styleSearchBar()
         styleResultsTableView()
+        styleLoadingIndicator()
     }
     
     func defineLayoutForViews() {
@@ -56,6 +60,10 @@ extension LocationSearchView {
         resultsTableView.autoPinEdge(toSuperviewSafeArea: .leading)
         resultsTableView.autoPinEdge(toSuperviewSafeArea: .trailing)
         resultsTableView.autoPinEdge(toSuperviewSafeArea: .bottom)
+        
+        loadingIndicator.autoSetDimension(.height, toSize: 50)
+        loadingIndicator.autoSetDimension(.width, toSize: 50)
+        loadingIndicator.autoCenterInSuperview()
     }
     
     
@@ -63,6 +71,12 @@ extension LocationSearchView {
     
     private func styleBackButton() {
         backButton.setImage(UIImage(named: "back-button"), for: .normal)
+    }
+    
+    private func styleLoadingIndicator() {
+        loadingIndicator.style = .large
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.color = .white
     }
     
     

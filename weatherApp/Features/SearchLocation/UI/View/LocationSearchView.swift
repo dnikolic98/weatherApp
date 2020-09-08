@@ -14,6 +14,7 @@ class LocationSearchView: UIView {
     var searchBar: UISearchBar!
     var resultsTableView: UITableView!
     var backButton: UIButton!
+    var loadingIndicator: UIActivityIndicatorView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,6 +29,16 @@ class LocationSearchView: UIView {
     override func layoutSubviews() {
         super .layoutSubviews()
         setDefaultGradient()
+    }
+    
+    func startLoadingIndicator() {
+        resultsTableView.isHidden = true
+        loadingIndicator.startAnimating()
+    }
+    
+    func stopLoadingIndicator() {
+        resultsTableView.isHidden = false
+        loadingIndicator.stopAnimating()
     }
     
 }

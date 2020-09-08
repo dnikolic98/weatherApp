@@ -133,12 +133,20 @@ class LocationSearchViewController: UIViewController {
             allCities.asObservable())
             .observeOn(MainScheduler.instance)
             .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
-            .map({ filter, cities in
-                if filter.isEmpty {
+            .do(onNext: { [weak self] query, cities in
+                guard let self = self else { return }
+                if cities.isEmpty {
+                    self.locationSearchView.startLoadingIndicator()
+                } else {
+                    self.locationSearchView.stopLoadingIndicator()
+                }
+            })
+            .map({ query, cities in
+                if query.isEmpty {
                     return []
                 }
                 
-                return cities.filter { $0.name.lowercased().hasPrefix(filter.lowercased()) }
+                return cities.filter { $0.name.lowercased().hasPrefix(query.lowercased()) }
             })
             .bind(to: citiesFiltered)
             .disposed(by: citiesDisposeBage)
