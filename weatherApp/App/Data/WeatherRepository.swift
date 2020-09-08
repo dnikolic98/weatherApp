@@ -34,12 +34,7 @@ class WeatherRepository {
             return weatherService.fetchSeveralCurrentWeather(id: id)
                 .do(onNext: { [weak self] multipleCurrentWeather in
                     guard let self = self else { return }
-                    
-                    let currentWeatherList = multipleCurrentWeather.list
-                    for currentWeather in currentWeatherList {
-                        self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
-                    }
-                    self.coreDataService.saveChanges()
+                    self.createAndSaveCurrentWeather(from: multipleCurrentWeather)
                 })
                 .flatMap({ multipleCurrentWeather -> Observable<[CurrentWeatherCoreData]> in
                     let currentWeatherListCoreData = self.coreDataService.fetchCurrentWeather()
@@ -104,6 +99,14 @@ class WeatherRepository {
                     return .just(currentWeather)
                 })
         }
+    }
+    
+    private func createAndSaveCurrentWeather(from multipleCurrentWeather: MultipleCurrentWeather) {
+        let currentWeatherList = multipleCurrentWeather.list
+        for currentWeather in currentWeatherList {
+            self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
+        }
+        self.coreDataService.saveChanges()
     }
     
     private func startReachability() {
