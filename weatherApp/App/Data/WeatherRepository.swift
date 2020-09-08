@@ -28,7 +28,7 @@ class WeatherRepository {
         switch reachability.connection {
         case .unavailable:
             let currentWeatherListCoreData = coreDataService.fetchCurrentWeather()
-            return Observable.of(currentWeatherListCoreData)
+            return .just(currentWeatherListCoreData)
             
         default:
             return weatherService.fetchSeveralCurrentWeather(id: id)
@@ -43,7 +43,7 @@ class WeatherRepository {
                 })
                 .flatMap({ multipleCurrentWeather -> Observable<[CurrentWeatherCoreData]> in
                     let currentWeatherListCoreData = self.coreDataService.fetchCurrentWeather()
-                    return Observable.of(currentWeatherListCoreData)
+                    return .just(currentWeatherListCoreData)
                 })
         }
     }
@@ -54,7 +54,7 @@ class WeatherRepository {
             guard let forecastedWeather = coreDataService.fetchForecastWeather(coord: coord) else {
                 return Observable.of()
             }
-            return Observable.of(forecastedWeather)
+            return .just(forecastedWeather)
             
         default:
             return weatherService.fetchForecastWeather(coord: coord)
@@ -72,7 +72,7 @@ class WeatherRepository {
                         return Observable.of()
                     }
                     
-                    return Observable.of(forecastedWeather)
+                    return .just(forecastedWeather)
                 })
         }
     }
@@ -83,7 +83,7 @@ class WeatherRepository {
             guard let currentWeather = coreDataService.fetchCurrentWeather(coord: coord) else {
                 return Observable.of()
             }
-            return Observable.of(currentWeather)
+            return .just(currentWeather)
             
         default:
             return weatherService.fetchCurrentWeather(coord: coord)
@@ -101,7 +101,7 @@ class WeatherRepository {
                         return Observable.of()
                     }
                     
-                    return Observable.of(currentWeather)
+                    return .just(currentWeather)
                 })
         }
     }

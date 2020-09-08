@@ -38,7 +38,7 @@ class CurrentWeatherListPresenter {
         return weatherRepository.fetchSeveralCurrentWeather(id: locationIds)
             .flatMap({ currentWeatherCoreData -> Observable<[CurrentWeatherViewModel]> in
                 let currentWeatherViewModels = currentWeatherCoreData.map { CurrentWeatherViewModel(currentWeather: $0) }
-                return Observable.of(currentWeatherViewModels)
+                return .just(currentWeatherViewModels)
             })
             .do(onNext: { [weak self] currentWeatherViewModels in
                 guard let self = self else { return }
@@ -55,7 +55,7 @@ class CurrentWeatherListPresenter {
             })
             .flatMap({ currentWeather -> Observable<CurrentWeatherViewModel> in
                 let currentWeatherViewModel = CurrentWeatherViewModel(currentWeather: currentWeather)
-                return Observable.of(currentWeatherViewModel)
+                return .just(currentWeatherViewModel)
             })
     }
     
