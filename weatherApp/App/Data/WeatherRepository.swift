@@ -36,10 +36,10 @@ class WeatherRepository {
                     guard let self = self else { return }
                     self.createAndSaveCurrentWeather(from: multipleCurrentWeather)
                 })
-                .flatMap({ multipleCurrentWeather -> Observable<[CurrentWeatherCoreData]> in
+                .flatMap { multipleCurrentWeather -> Observable<[CurrentWeatherCoreData]> in
                     let currentWeatherListCoreData = self.coreDataService.fetchCurrentWeather()
                     return .just(currentWeatherListCoreData)
-                })
+                }
         }
     }
     
@@ -59,7 +59,7 @@ class WeatherRepository {
                     self.coreDataService.createForecastedWeatherFrom(forecastedWeather: forecastedWeather)
                     self.coreDataService.saveChanges()
                 })
-                .flatMap({ [weak self] forecastedWeather -> Observable<ForecastedWeatherCoreData> in
+                .flatMap { [weak self] forecastedWeather -> Observable<ForecastedWeatherCoreData> in
                     guard
                         let self = self,
                         let forecastedWeather = self.coreDataService.fetchForecastWeather(coord: coord)
@@ -68,7 +68,7 @@ class WeatherRepository {
                     }
                     
                     return .just(forecastedWeather)
-                })
+                }
         }
     }
     
@@ -88,7 +88,7 @@ class WeatherRepository {
                     self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
                     self.coreDataService.saveChanges()
                 })
-                .flatMap({ [weak self] currentWeather -> Observable<CurrentWeatherCoreData> in
+                .flatMap { [weak self] currentWeather -> Observable<CurrentWeatherCoreData> in
                     guard
                         let self = self,
                         let currentWeather = self.coreDataService.fetchCurrentWeather(coord: coord)
@@ -97,7 +97,7 @@ class WeatherRepository {
                     }
                     
                     return .just(currentWeather)
-                })
+                }
         }
     }
     
