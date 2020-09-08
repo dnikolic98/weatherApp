@@ -129,14 +129,16 @@ class LocationSearchViewController: UIViewController {
     
     private func setupDataFiltering() {
         Observable.combineLatest(
-            locationSearchView.searchBar.rx.text,
+            locationSearchView.searchBar.rx.text.orEmpty,
             allCities.asObservable())
             .map({ filter, cities in
-                if let filter = filter?.lowercased(), !filter.isEmpty {
-                    return cities.filter { $0.name.lowercased().hasPrefix(filter) }
+                if filter.isEmpty {
+                    return []
                 }
-                return []
+                
+                return cities.filter { $0.name.lowercased().hasPrefix(filter.lowercased()) }
             })
+            .observeOn(MainScheduler.instance)
             .bind(to: citiesFiltered)
             .disposed(by: citiesDisposeBage)
     }

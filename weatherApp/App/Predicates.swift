@@ -44,4 +44,8 @@ class Predicates {
         return NSPredicate(format: "id IN %@", ids)
     }
     
+    class func namePredicate(_ name: String) -> NSPredicate {
+        return NSPredicate(format: "name = %@", name)
+    }
+    
 }
