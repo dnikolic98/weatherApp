@@ -25,7 +25,7 @@ class HomeViewController: UIViewController {
     @IBOutlet private weak var currentLocationView: MainInformationView!
     
     @IBAction func addLocationButtonTapped(_ sender: Any) {
-        currentWeatherListPresenter.handleAddLocation()
+        currentWeatherListPresenter.handleAddLocation(assignDelegate: self)
     }
     
     convenience init(currentWeatherListPresenter: CurrentWeatherListPresenter) {
@@ -207,6 +207,14 @@ extension HomeViewController: UITableViewDelegate {
             currentWeatherListPresenter.handleRemoveLocation(id: currentWeather.id, index: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
+    }
+    
+}
+
+extension HomeViewController: LocationSearchDelegate {
+    
+    func didTapNewLocation() {
+        bindViewModel()
     }
     
 }

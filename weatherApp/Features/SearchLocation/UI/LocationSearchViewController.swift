@@ -10,11 +10,16 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+protocol LocationSearchDelegate {
+    func didTapNewLocation()
+}
+
 class LocationSearchViewController: UIViewController {
     
     private let citiesDisposeBage: DisposeBag = DisposeBag()
     private let searchBarDisposeBag: DisposeBag = DisposeBag()
     private var allCitiesDisposeBag: DisposeBag = DisposeBag()
+    private var locationSearchDelegate: LocationSearchDelegate?
     private let presenter: LocationSearchPresenter!
     private let allCities: BehaviorRelay<[CityViewModel]> = BehaviorRelay<[CityViewModel]>(value: [])
     private let citiesFiltered: BehaviorRelay<[CityViewModel]> = BehaviorRelay<[CityViewModel]>(value: [])
@@ -55,6 +60,10 @@ class LocationSearchViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    func setupDelegate(_ delegate: LocationSearchDelegate) {
+        locationSearchDelegate = delegate
     }
     
     private func setupSearchBar() {
@@ -173,6 +182,10 @@ extension LocationSearchViewController: UITableViewDelegate {
         guard let city = citiesFiltered.value.at(indexPath.row) else { return }
         
         presenter.handleCellTap(city: city)
+        
+        if let delegate = locationSearchDelegate {
+            delegate.didTapNewLocation()
+        }
     }
     
 }
