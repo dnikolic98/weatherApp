@@ -123,7 +123,6 @@ class LocationSearchViewController: UIViewController {
         
         presenter
             .fetchCityList()
-            .observeOn(MainScheduler.instance)
             .bind(to: allCities)
             .disposed(by: allCitiesDisposeBag)
     }
