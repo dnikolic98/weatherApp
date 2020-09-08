@@ -30,4 +30,6 @@ class LocalizedStrings {
     
     static let searchLocations = "Search locations"
     
+    static let addLocation = "+ Add location"
+    
 }

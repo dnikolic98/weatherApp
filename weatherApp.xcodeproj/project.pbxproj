@@ -50,6 +50,8 @@
 		A39D475324E5484E00C1C6A3 /* DailyForecastViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39D475224E5484E00C1C6A3 /* DailyForecastViewModel.swift */; };
 		A39D475524E5597100C1C6A3 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39D475424E5597100C1C6A3 /* Date+Extension.swift */; };
 		A39D475724E5709400C1C6A3 /* MultipleCurrentWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39D475624E5709400C1C6A3 /* MultipleCurrentWeather.swift */; };
+		A3A007902506C47D005DABDA /* AddLocationFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A0078F2506C47D005DABDA /* AddLocationFooter.swift */; };
+		A3A007922506C5DC005DABDA /* AddLocationFooter+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A007912506C5DC005DABDA /* AddLocationFooter+extensions.swift */; };
 		A3A58C662502998F00E1FC79 /* CityCoreData+CoreDataProperties copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A58C642502998F00E1FC79 /* CityCoreData+CoreDataProperties copy.swift */; };
 		A3A58C672502998F00E1FC79 /* CityCoreData+CoreDataClass copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A58C652502998F00E1FC79 /* CityCoreData+CoreDataClass copy.swift */; };
 		A3A590B924DD4ED6007D19EE /* WeatherConditionDetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A590B724DD4ED6007D19EE /* WeatherConditionDetailCollectionViewCell.swift */; };
@@ -140,6 +142,8 @@
 		A39D475224E5484E00C1C6A3 /* DailyForecastViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecastViewModel.swift; sourceTree = "<group>"; };
 		A39D475424E5597100C1C6A3 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		A39D475624E5709400C1C6A3 /* MultipleCurrentWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleCurrentWeather.swift; sourceTree = "<group>"; };
+		A3A0078F2506C47D005DABDA /* AddLocationFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationFooter.swift; sourceTree = "<group>"; };
+		A3A007912506C5DC005DABDA /* AddLocationFooter+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AddLocationFooter+extensions.swift"; sourceTree = "<group>"; };
 		A3A58C642502998F00E1FC79 /* CityCoreData+CoreDataProperties copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CityCoreData+CoreDataProperties copy.swift"; sourceTree = "<group>"; };
 		A3A58C652502998F00E1FC79 /* CityCoreData+CoreDataClass copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CityCoreData+CoreDataClass copy.swift"; sourceTree = "<group>"; };
 		A3A590B724DD4ED6007D19EE /* WeatherConditionDetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherConditionDetailCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -470,6 +474,8 @@
 			isa = PBXGroup;
 			children = (
 				A37C882924D9535E007764FA /* WeatherTableViewCell.swift */,
+				A3A0078F2506C47D005DABDA /* AddLocationFooter.swift */,
+				A3A007912506C5DC005DABDA /* AddLocationFooter+extensions.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -763,6 +769,7 @@
 				A39D474924E52DE100C1C6A3 /* DailyWeather.swift in Sources */,
 				A3794AEA24D84B4B008A8779 /* AppDelegate.swift in Sources */,
 				A30DDDE225062CE400B1D833 /* LocationNameCell.swift in Sources */,
+				A3A007902506C47D005DABDA /* AddLocationFooter.swift in Sources */,
 				A3EC098424D8AB72007CDC4D /* CurrentWeather.swift in Sources */,
 				A3BE104824EAA43F006DFA5B /* WeatherServiceProtocol.swift in Sources */,
 				A39D474F24E5332B00C1C6A3 /* ForecastedWeather.swift in Sources */,
@@ -780,6 +787,7 @@
 				A30DDDEB25066A0D00B1D833 /* SelectedLocationCoreData+CoreDataClass.swift in Sources */,
 				A3396EB124F52575009FDBEC /* CoreDataStackProtocol.swift in Sources */,
 				A39D474B24E5309A00C1C6A3 /* DailyTemperature.swift in Sources */,
+				A3A007922506C5DC005DABDA /* AddLocationFooter+extensions.swift in Sources */,
 				A3D3FB9924E4316D00E70AE8 /* SingleWeatherInformation.swift in Sources */,
 				A3DCBF0F24FE43CF00590016 /* URLSession+Extension.swift in Sources */,
 				A3794B0624D85642008A8779 /* WeatherService.swift in Sources */,
