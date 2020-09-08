@@ -9,6 +9,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeViewController" customModule="weatherApp" customModuleProvider="target">
             <connections>
+                <outlet property="addLocationButton" destination="EjW-ci-D2c" id="VYj-Bv-1K8"/>
                 <outlet property="currentLocationView" destination="nah-Fd-LNk" id="7Yt-j2-YFX"/>
                 <outlet property="scrollView" destination="zkp-HS-vh6" id="FIO-i5-9Dc"/>
                 <outlet property="tableView" destination="Er7-qZ-lC4" id="xbI-g3-dnU"/>

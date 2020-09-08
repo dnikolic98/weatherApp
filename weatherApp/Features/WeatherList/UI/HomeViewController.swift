@@ -23,6 +23,7 @@ class HomeViewController: UIViewController {
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var currentLocationView: MainInformationView!
+    @IBOutlet weak var addLocationButton: UIButton!
     
     @IBAction func addLocationButtonTapped(_ sender: Any) {
         currentWeatherListPresenter.handleAddLocation(assignDelegate: self)
@@ -153,6 +154,9 @@ class HomeViewController: UIViewController {
         let rows = currentWeatherListPresenter.numberOfCurrentWeather
         
         tableViewHeightConstraint.constant = CGFloat(rows) * rowHeight
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
     }
     
     private func setGradientBackground() {
@@ -205,7 +209,13 @@ extension HomeViewController: UITableViewDelegate {
         if editingStyle == .delete {
             guard let currentWeather = currentWeatherListPresenter.currentWeather(atIndex: indexPath.row) else { return }
             currentWeatherListPresenter.handleRemoveLocation(id: currentWeather.id, index: indexPath.row)
+            
+            CATransaction.begin()
+            CATransaction.setCompletionBlock {
+                self.refreshTableView()
+            }
             tableView.deleteRows(at: [indexPath], with: .fade)
+            CATransaction.commit()
         }
     }
     
