@@ -46,10 +46,16 @@ class DetailWeatherPresenter {
             .fetchForcastWeather(coord: currentWeather.coord)
             .do(onNext: { [weak self] forecastedWeather in
                 guard let self = self else { return }
-                self.sevenDayForecast = forecastedWeather.forecastedWeather
-                    .map { DailyForecastViewModel(currentWeather: self.currentWeather, dailyWeather: $0 as! DailyWeatherCoreData) }
-                    .sorted { $0.forecastTime < $1.forecastTime }
-                
+                do {
+                    self.sevenDayForecast = try forecastedWeather.forecastedWeather
+                        .map { dailyWeather in
+                            guard let dailyWeather = dailyWeather as? DailyWeatherCoreData else { throw CoreDataErrors.incompatibleCast }
+                            return DailyForecastViewModel(currentWeather: self.currentWeather, dailyWeather: dailyWeather)
+                        }
+                        .sorted { $0.forecastTime < $1.forecastTime }
+                } catch {
+                    self.sevenDayForecast = []
+                }
                 self.setFiveDayList()
             })
     }
