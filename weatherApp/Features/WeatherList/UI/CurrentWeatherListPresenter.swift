@@ -19,6 +19,12 @@ class CurrentWeatherListPresenter {
     private var currentLocation: BehaviorRelay<Coordinates>
     private var locationDisposeBag: DisposeBag = DisposeBag()
     
+    var currentWeatherData: Observable<([CurrentWeatherViewModel], CurrentWeatherViewModel)> {
+       Observable.combineLatest(
+          fetchCurrentWeatherList(),
+          fetchCurrenLocationtWeather())
+    }
+    
     init(weatherRepository: WeatherRepository, locationService: LocationServiceProtocol, navigationService: NavigationService) {
         self.weatherRepository = weatherRepository
         self.navigationService = navigationService
