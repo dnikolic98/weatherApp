@@ -19,7 +19,7 @@ class CurrentWeatherListPresenter {
     private var currentLocation: BehaviorRelay<Coordinates>
     private var locationDisposeBag: DisposeBag = DisposeBag()
     
-    var currentWeatherData: Observable<([CurrentWeatherViewModel], CurrentWeatherViewModel)> {
+    var currentWeatherData: Observable<([CurrentWeatherViewModel], CurrentWeatherViewModel?)> {
        Observable.combineLatest(
           fetchCurrentWeatherList(),
           fetchCurrenLocationtWeather())
@@ -52,14 +52,15 @@ class CurrentWeatherListPresenter {
             })
     }
     
-    func fetchCurrenLocationtWeather() -> Observable<CurrentWeatherViewModel> {
+    func fetchCurrenLocationtWeather() -> Observable<CurrentWeatherViewModel?> {
         return currentLocation
             .asObservable()
-            .flatMap { [weak self] coord -> Observable<CurrentWeatherCoreData> in
-                guard let self = self else { return Observable.of() }
+            .flatMap { [weak self] coord -> Observable<CurrentWeatherCoreData?> in
+                guard let self = self else { return .just(nil) }
                 return self.weatherRepository.fetchCurrentWeather(coord: coord)
             }
-            .flatMap { currentWeather -> Observable<CurrentWeatherViewModel> in
+            .flatMap { currentWeather -> Observable<CurrentWeatherViewModel?> in
+                guard let currentWeather = currentWeather else { return .just(nil) }
                 let currentWeatherViewModel = CurrentWeatherViewModel(currentWeather: currentWeather)
                 return .just(currentWeatherViewModel)
             }
