@@ -9,7 +9,7 @@
 import UIKit
 import PureLayout
 
-extension MainInformationView {
+extension MainInformationView: DesignProtocol {
     
     func buildViews() {
         createViews()

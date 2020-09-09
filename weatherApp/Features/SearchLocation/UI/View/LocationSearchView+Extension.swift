@@ -9,7 +9,7 @@
 import UIKit
 import PureLayout
 
-extension LocationSearchView {
+extension LocationSearchView: DesignProtocol {
     
     func buildViews() {
         createViews()
