@@ -22,9 +22,9 @@ class LocationService: LocationServiceProtocol {
         
         location = locationManager.rx
             .didUpdateLocations
-            .filter { $1.count > 0 }
-            .map {
-                let coord = $1.last!.coordinate
+            .filter { !$1.isEmpty }
+            .map { locationManager, locations in
+                guard let coord = locations.last?.coordinate else { return Coordinates(latitude: 0, longitude: 0) }
                 return Coordinates(latitude: coord.latitude, longitude: coord.longitude)
             }
         

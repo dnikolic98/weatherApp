@@ -41,26 +41,43 @@ class DetailWeatherPresenter {
         return fiveDaysList.at(index)
     }
     
-    func fetchFiveDaysList() -> Observable<ForecastedWeatherCoreData> {
+    func fetchFiveDaysList() -> Observable<ForecastedWeatherCoreData?> {
         return weatherRepository
             .fetchForcastWeather(coord: currentWeather.coord)
             .do(onNext: { [weak self] forecastedWeather in
-                guard let self = self else { return }
-                self.sevenDayForecast = forecastedWeather.forecastedWeather
-                    .map { DailyForecastViewModel(currentWeather: self.currentWeather, dailyWeather: $0 as! DailyWeatherCoreData) }
-                    .sorted { $0.forecastTime < $1.forecastTime }
+                guard
+                    let self = self,
+                    let forecastedWeather = forecastedWeather
+                else {
+                    return
+                }
                 
+                do {
+                    self.sevenDayForecast = try forecastedWeather.forecastedWeather
+                        .map { dailyWeather in
+                            guard let dailyWeather = dailyWeather as? DailyWeatherCoreData else { throw CoreDataErrors.incompatibleCast }
+                            return DailyForecastViewModel(currentWeather: self.currentWeather, dailyWeather: dailyWeather)
+                        }
+                        .sorted { $0.forecastTime < $1.forecastTime }
+                } catch {
+                    self.sevenDayForecast = []
+                }
                 self.setFiveDayList()
             })
     }
     
-    func fetchCurrentWeather() -> Observable<CurrentWeatherCoreData> {
+    func fetchCurrentWeather() -> Observable<CurrentWeatherCoreData?> {
         let coord = currentWeather.coord
         
         return weatherRepository
             .fetchCurrentWeather(coord: coord)
             .do(onNext: { [weak self] currentWeather in
-                guard let self = self else { return }
+                guard
+                    let self = self,
+                    let currentWeather = currentWeather
+                else {
+                    return
+                }
                 self.currentWeather = CurrentWeatherViewModel(currentWeather: currentWeather)
             })
     }
