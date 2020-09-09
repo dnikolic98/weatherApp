@@ -36,7 +36,6 @@
 		A3794B0024D84D81008A8779 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3794AFF24D84D81008A8779 /* HomeViewController.swift */; };
 		A3794B0224D84F77008A8779 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A3794B0124D84F77008A8779 /* HomeViewController.xib */; };
 		A3794B0624D85642008A8779 /* WeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3794B0524D85642008A8779 /* WeatherService.swift */; };
-		A37C882724D949EE007764FA /* Cities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37C882624D949EE007764FA /* Cities.swift */; };
 		A37C882A24D9535E007764FA /* WeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37C882924D9535E007764FA /* WeatherTableViewCell.swift */; };
 		A37C883124D9773E007764FA /* DetailWeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37C882F24D9773E007764FA /* DetailWeatherViewController.swift */; };
 		A37C883224D9773E007764FA /* DetailWeatherViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A37C883024D9773E007764FA /* DetailWeatherViewController.xib */; };
@@ -127,7 +126,6 @@
 		A3794AFF24D84D81008A8779 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		A3794B0124D84F77008A8779 /* HomeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
 		A3794B0524D85642008A8779 /* WeatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherService.swift; sourceTree = "<group>"; };
-		A37C882624D949EE007764FA /* Cities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cities.swift; sourceTree = "<group>"; };
 		A37C882924D9535E007764FA /* WeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCell.swift; sourceTree = "<group>"; };
 		A37C882F24D9773E007764FA /* DetailWeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailWeatherViewController.swift; sourceTree = "<group>"; };
 		A37C883024D9773E007764FA /* DetailWeatherViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailWeatherViewController.xib; sourceTree = "<group>"; };
@@ -606,7 +604,6 @@
 				A3EC098324D8AB72007CDC4D /* CurrentWeather.swift */,
 				A3EC098724D8B336007CDC4D /* Forecast.swift */,
 				A3EC098924D8B34C007CDC4D /* Weather.swift */,
-				A37C882624D949EE007764FA /* Cities.swift */,
 				A39D475024E5449B00C1C6A3 /* Coordinates.swift */,
 				A31ADEDB24E07A4C0071762E /* Wind.swift */,
 				A39D475624E5709400C1C6A3 /* MultipleCurrentWeather.swift */,
@@ -647,6 +644,7 @@
 				A3794AE324D84B4B008A8779 /* Frameworks */,
 				A3794AE424D84B4B008A8779 /* Resources */,
 				F7D0173A7DD3991AC5CD1EBF /* [CP] Embed Pods Frameworks */,
+				A39BC28E25091FD4000CDF13 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -708,6 +706,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		A39BC28E25091FD4000CDF13 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "exit 0\n\nfile=\"unused.rb\"\nif [ -f \"$file\" ]\nthen\necho \"$file found.\"\nruby unused.rb xcode\nelse\necho \"unused.rb doesn't exist\"\nfi\n";
+		};
 		B2DB343E32C4D805B4E96918 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -809,7 +824,6 @@
 				A391440924F80D3F00509A81 /* Predicates.swift in Sources */,
 				A3BABC9024E3F395004FC133 /* SingleWeatherInformationCollectionViewCell.swift in Sources */,
 				A30DDDEC25066A0D00B1D833 /* SelectedLocationCoreData+CoreDataProperties.swift in Sources */,
-				A37C882724D949EE007764FA /* Cities.swift in Sources */,
 				A31ADEDC24E07A4C0071762E /* Wind.swift in Sources */,
 				A3BE170924ED19C4001D9F82 /* CurrentWeatherCoreData+CoreDataClass.swift in Sources */,
 				A353C5AA24EC143F005EBF99 /* WeatherRepository.swift in Sources */,

@@ -18,7 +18,6 @@ class LocationSearchViewController: UIViewController {
     
     private let citiesDisposeBage: DisposeBag = DisposeBag()
     private let searchBarDisposeBag: DisposeBag = DisposeBag()
-    private var allCitiesDisposeBag: DisposeBag = DisposeBag()
     private var locationSearchDelegate: LocationSearchDelegate?
     private let presenter: LocationSearchPresenter!
     private let citiesFiltered: BehaviorRelay<[CityViewModel]> = BehaviorRelay<[CityViewModel]>(value: [])

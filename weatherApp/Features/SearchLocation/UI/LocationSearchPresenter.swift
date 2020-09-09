@@ -11,7 +11,6 @@ import RxCocoa
 
 class LocationSearchPresenter {
     
-    private let cityListdisposeBag: DisposeBag = DisposeBag()
     private let weatherRepository: WeatherRepository
     private let navigationService: NavigationService
     private var selectedLocationIds: [Int] = []
