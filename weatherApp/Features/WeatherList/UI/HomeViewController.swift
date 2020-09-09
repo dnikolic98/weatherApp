@@ -163,9 +163,7 @@ class HomeViewController: UIViewController {
     }
     
     private func setGradientBackground() {
-        guard let currentWeather = currentWeatherListPresenter.currentLocationWeather else {
-            return
-        }
+        guard let currentWeather = currentWeatherListPresenter.currentLocationWeather else { return }
         
         view.setAutomaticGradient(currentWeather: currentWeather)
     }

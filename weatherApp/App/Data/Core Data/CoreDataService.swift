@@ -56,7 +56,7 @@ class CoreDataService: CoreDataServiceProtocol {
     
     func fetchCityList(query: String) -> [CityCoreData] {
         let request: NSFetchRequest<CityCoreData> = CityCoreData.fetchRequest()
-        request.predicate = Predicates.containsNamePredicate(query)
+        request.predicate = Predicates.beginsWithNamePredicate(query)
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         
         guard let cityList = try? mainContext.fetch(request) else {
@@ -186,7 +186,6 @@ class CoreDataService: CoreDataServiceProtocol {
         mainContext.delete(location)
         saveChanges()
     }
-    
     
     //MARK: - Save Changes
     

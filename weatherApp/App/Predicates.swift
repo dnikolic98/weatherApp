@@ -44,7 +44,7 @@ class Predicates {
         return NSPredicate(format: "id IN %@", ids)
     }
     
-    class func containsNamePredicate(_ name: String) -> NSPredicate {
+    class func beginsWithNamePredicate(_ name: String) -> NSPredicate {
         return NSPredicate(format: "name BEGINSWITH[cd] %@", name)
     }
     

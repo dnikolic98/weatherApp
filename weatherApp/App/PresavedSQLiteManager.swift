@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 class PresavedSQLiteManager {
     lazy var applicationDocumentsDirectory: URL = {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!

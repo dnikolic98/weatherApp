@@ -40,7 +40,7 @@ class CurrentWeatherListPresenter {
     
     func fetchCurrentWeatherList() -> Observable<[CurrentWeatherViewModel]> {
         weatherRepository
-        .fetchSelectedLocations()
+            .fetchSelectedLocations()
             .flatMap { [weak self] selectedLocation -> Observable<[CurrentWeatherCoreData]> in
                 guard let self = self else { return .just([]) }
                 let locationIds = selectedLocation.map { Int($0.id) }

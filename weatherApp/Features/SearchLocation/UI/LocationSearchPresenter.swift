@@ -16,7 +16,7 @@ class LocationSearchPresenter {
     private let navigationService: NavigationService
     private var selectedLocationIds: [Int] = []
     
-    init(weatherRepository: WeatherRepository,navigationService: NavigationService) {
+    init(weatherRepository: WeatherRepository, navigationService: NavigationService) {
         self.weatherRepository = weatherRepository
         self.navigationService = navigationService
     }
