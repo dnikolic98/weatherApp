@@ -19,6 +19,11 @@ class CurrentWeatherListPresenter {
     private var locationDisposeBag: DisposeBag = DisposeBag()
     
     var currentLocationWeather: CurrentWeatherViewModel?
+    var currentWeatherData: Observable<([CurrentWeatherViewModel], CurrentWeatherViewModel?)> {
+       Observable.combineLatest(
+          fetchCurrentWeatherList(),
+          fetchCurrenLocationtWeather())
+    }
     
     init(weatherRepository: WeatherRepository, locationService: LocationServiceProtocol, navigationService: NavigationService) {
         self.weatherRepository = weatherRepository
@@ -36,32 +41,33 @@ class CurrentWeatherListPresenter {
     func fetchCurrentWeatherList() -> Observable<[CurrentWeatherViewModel]> {
         weatherRepository
         .fetchSelectedLocations()
-            .flatMap({ [weak self] selectedLocation -> Observable<[CurrentWeatherCoreData]> in
-                guard let self = self else { return Observable.of() }
+            .flatMap { [weak self] selectedLocation -> Observable<[CurrentWeatherCoreData]> in
+                guard let self = self else { return .just([]) }
                 let locationIds = selectedLocation.map { Int($0.id) }
                 return self.weatherRepository.fetchSeveralCurrentWeather(id: locationIds)
-            })
-            .flatMap({ currentWeatherCoreData -> Observable<[CurrentWeatherViewModel]> in
+            }
+            .flatMap { currentWeatherCoreData -> Observable<[CurrentWeatherViewModel]> in
                 let currentWeatherViewModels = currentWeatherCoreData.map { CurrentWeatherViewModel(currentWeather: $0) }
-                return Observable.of(currentWeatherViewModels)
-            })
+                return .just(currentWeatherViewModels)
+            }
             .do(onNext: { [weak self] currentWeatherViewModels in
                 guard let self = self else { return }
                 self.currentWeatherList = currentWeatherViewModels
             })
     }
     
-    func fetchCurrenLocationtWeather() -> Observable<CurrentWeatherViewModel> {
+    func fetchCurrenLocationtWeather() -> Observable<CurrentWeatherViewModel?> {
         return currentLocation
             .asObservable()
-            .flatMap({ [weak self] coord -> Observable<CurrentWeatherCoreData> in
-                guard let self = self else { return Observable.of() }
+            .flatMap { [weak self] coord -> Observable<CurrentWeatherCoreData?> in
+                guard let self = self else { return .empty() }
                 return self.weatherRepository.fetchCurrentWeather(coord: coord)
-            })
-            .flatMap({ currentWeather -> Observable<CurrentWeatherViewModel> in
+            }
+            .flatMap { currentWeather -> Observable<CurrentWeatherViewModel?> in
+                guard let currentWeather = currentWeather else { return .just(nil) }
                 let currentWeatherViewModel = CurrentWeatherViewModel(currentWeather: currentWeather)
-                return Observable.of(currentWeatherViewModel)
-            })
+                return .just(currentWeatherViewModel)
+            }
             .do(onNext: { [weak self] currentWeather in
                 guard let self = self else { return }
                 self.currentLocationWeather = currentWeather

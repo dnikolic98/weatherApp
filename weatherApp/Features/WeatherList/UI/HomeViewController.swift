@@ -75,11 +75,14 @@ class HomeViewController: UIViewController {
     @objc private func bindViewModel() {
         dataDisposeBag = DisposeBag()
         
-        Observable.combineLatest(
-            currentWeatherListPresenter.fetchCurrentWeatherList(),
-            currentWeatherListPresenter.fetchCurrenLocationtWeather())
+        currentWeatherListPresenter.currentWeatherData
             .subscribe(onNext: { [weak self] currentWeatherList, currentLocation in
-                guard let self = self else { return }
+                guard
+                    let self = self,
+                    let currentLocation = currentLocation
+                else {
+                    return
+                }
 
                 self.refreshUI(currentLocation: currentLocation)
             })

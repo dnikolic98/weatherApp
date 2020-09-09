@@ -28,33 +28,28 @@ class WeatherRepository {
         switch reachability.connection {
         case .unavailable:
             let currentWeatherListCoreData = coreDataService.fetchCurrentWeather(id: id)
-            return Observable.of(currentWeatherListCoreData)
+            return .just(currentWeatherListCoreData)
             
         default:
             return weatherService.fetchSeveralCurrentWeather(id: id)
                 .do(onNext: { [weak self] multipleCurrentWeather in
                     guard let self = self else { return }
-                    
-                    let currentWeatherList = multipleCurrentWeather.list
-                    for currentWeather in currentWeatherList {
-                        self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
-                    }
-                    self.coreDataService.saveChanges()
+                    self.createAndSaveCurrentWeather(from: multipleCurrentWeather)
                 })
-                .flatMap({ multipleCurrentWeather -> Observable<[CurrentWeatherCoreData]> in
+                .flatMap { multipleCurrentWeather -> Observable<[CurrentWeatherCoreData]> in
                     let currentWeatherListCoreData = self.coreDataService.fetchCurrentWeather(id: id)
-                    return Observable.of(currentWeatherListCoreData)
-                })
+                    return .just(currentWeatherListCoreData)
+                }
         }
     }
     
-    func fetchForcastWeather(coord: Coordinates) -> Observable<ForecastedWeatherCoreData> {
+    func fetchForcastWeather(coord: Coordinates) -> Observable<ForecastedWeatherCoreData?> {
         switch reachability.connection {
         case .unavailable:
             guard let forecastedWeather = coreDataService.fetchForecastWeather(coord: coord) else {
-                return Observable.of()
+                return .just(nil)
             }
-            return Observable.of(forecastedWeather)
+            return .just(forecastedWeather)
             
         default:
             return weatherService.fetchForecastWeather(coord: coord)
@@ -64,26 +59,26 @@ class WeatherRepository {
                     self.coreDataService.createForecastedWeatherFrom(forecastedWeather: forecastedWeather)
                     self.coreDataService.saveChanges()
                 })
-                .flatMap({ [weak self] forecastedWeather -> Observable<ForecastedWeatherCoreData> in
+                .flatMap { [weak self] forecastedWeather -> Observable<ForecastedWeatherCoreData?> in
                     guard
                         let self = self,
                         let forecastedWeather = self.coreDataService.fetchForecastWeather(coord: coord)
                     else {
-                        return Observable.of()
+                        return .just(nil)
                     }
                     
-                    return Observable.of(forecastedWeather)
-                })
+                    return .just(forecastedWeather)
+                }
         }
     }
     
-    func fetchCurrentWeather(coord: Coordinates) -> Observable<CurrentWeatherCoreData> {
+    func fetchCurrentWeather(coord: Coordinates) -> Observable<CurrentWeatherCoreData?> {
         switch reachability.connection {
         case .unavailable:
             guard let currentWeather = coreDataService.fetchCurrentWeather(coord: coord) else {
-                return Observable.of()
+                return .just(nil)
             }
-            return Observable.of(currentWeather)
+            return .just(currentWeather)
             
         default:
             return weatherService.fetchCurrentWeather(coord: coord)
@@ -93,27 +88,35 @@ class WeatherRepository {
                     self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
                     self.coreDataService.saveChanges()
                 })
-                .flatMap({ [weak self] currentWeather -> Observable<CurrentWeatherCoreData> in
+                .flatMap { [weak self] currentWeather -> Observable<CurrentWeatherCoreData?> in
                     guard
                         let self = self,
                         let currentWeather = self.coreDataService.fetchCurrentWeather(coord: coord)
                     else {
-                        return Observable.of()
+                        return .just(nil)
                     }
                     
-                    return Observable.of(currentWeather)
-                })
+                    return .just(currentWeather)
+                }
         }
+    }
+    
+    private func createAndSaveCurrentWeather(from multipleCurrentWeather: MultipleCurrentWeather) {
+        let currentWeatherList = multipleCurrentWeather.list
+        for currentWeather in currentWeatherList {
+            self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
+        }
+        self.coreDataService.saveChanges()
     }
     
     func fetchCityLists() -> Observable<[CityCoreData]> {
         let cityList = coreDataService.fetchCityList()
-        return Observable.of(cityList)
+        return .just(cityList)
     }
     
     func fetchSelectedLocations() -> Observable<[SelectedLocationCoreData]> {
         let selectedLocations = coreDataService.fetchSelectedLocations()
-        return Observable.of(selectedLocations)
+        return .just(selectedLocations)
     }
     
     func selectLocation(id: Int) {

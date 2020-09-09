@@ -24,7 +24,7 @@ class WeatherService: WeatherServiceProtocol {
     
     func fetchSeveralCurrentWeather(id: [Int]) -> Observable<MultipleCurrentWeather> {
         if id.isEmpty {
-            return Observable.of(MultipleCurrentWeather(list: []))
+            return .just(MultipleCurrentWeather(list: []))
         }
         
         let severalIds = id.map { String($0) }.joined(separator:",")

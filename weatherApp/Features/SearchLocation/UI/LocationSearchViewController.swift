@@ -141,13 +141,13 @@ class LocationSearchViewController: UIViewController {
                     self.locationSearchView.stopLoadingIndicator()
                 }
             })
-            .map({ query, cities in
+            .map { query, cities in
                 if query.isEmpty {
                     return []
                 }
                 
                 return cities.filter { $0.name.lowercased().hasPrefix(query.lowercased()) }
-            })
+            }
             .bind(to: citiesFiltered)
             .disposed(by: citiesDisposeBage)
     }

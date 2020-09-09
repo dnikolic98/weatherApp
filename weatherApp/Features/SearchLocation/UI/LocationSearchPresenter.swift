@@ -30,21 +30,21 @@ class LocationSearchPresenter {
             .fetchSelectedLocations()
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .do(onNext: { [weak self] selectedLocations in
-                self?.selectedLocationIds = selectedLocations.map({ Int($0.id) })
+                self?.selectedLocationIds = selectedLocations.map { Int($0.id) }
             })
-            .flatMap({ [weak self] _ -> Observable<[CityCoreData]> in
-                self?.weatherRepository.fetchCityLists() ?? Observable.of([])
-            })
-            .flatMap({ [weak self] cityCoreData -> Observable<[CityViewModel]> in
-                guard let self = self else { return Observable.of([]) }
+            .flatMap { [weak self] _ -> Observable<[CityCoreData]> in
+                self?.weatherRepository.fetchCityLists() ?? .just([])
+            }
+            .flatMap { [weak self] cityCoreData -> Observable<[CityViewModel]> in
+                guard let self = self else { return .just([]) }
                 
                 let cityViewModels = cityCoreData.map { city -> CityViewModel in
                     let selected = self.selectedLocationIds.contains(Int(city.id))
                     return CityViewModel(city: city, isSelected: selected)
                 }
                 
-                return Observable.of(cityViewModels)
-            })
+                return .just(cityViewModels)
+            }
     }
     
     func handleCellTap(city: CityViewModel) {
