@@ -109,8 +109,8 @@ class WeatherRepository {
         self.coreDataService.saveChanges()
     }
     
-    func fetchCityLists() -> Observable<[CityCoreData]> {
-        let cityList = coreDataService.fetchCityList()
+    func fetchCityLists(query: String) -> Observable<[CityCoreData]> {
+        let cityList = coreDataService.fetchCityList(query: query)
         return .just(cityList)
     }
     

@@ -21,7 +21,6 @@ class LocationSearchViewController: UIViewController {
     private var allCitiesDisposeBag: DisposeBag = DisposeBag()
     private var locationSearchDelegate: LocationSearchDelegate?
     private let presenter: LocationSearchPresenter!
-    private let allCities: BehaviorRelay<[CityViewModel]> = BehaviorRelay<[CityViewModel]>(value: [])
     private let citiesFiltered: BehaviorRelay<[CityViewModel]> = BehaviorRelay<[CityViewModel]>(value: [])
     private var locationSearchView: LocationSearchView {
         return self.view as! LocationSearchView
@@ -43,7 +42,6 @@ class LocationSearchViewController: UIViewController {
         setupKeyboardDismissGestureRecognizer()
         setupBackButton()
         setupTableView()
-        bindAllCities()
         setupDataFiltering()
         setupTableViewDataReloading()
     }
@@ -118,36 +116,31 @@ class LocationSearchViewController: UIViewController {
         locationSearchView.backButton.addTarget(presenter, action: #selector(presenter.handleBackButtonTapped), for: .touchUpInside)
     }
     
-    private func bindAllCities() {
-        allCitiesDisposeBag = DisposeBag()
-        
-        presenter
-            .fetchCityList()
-            .bind(to: allCities)
-            .disposed(by: allCitiesDisposeBag)
-    }
-    
     private func setupDataFiltering() {
-        Observable.combineLatest(
-            locationSearchView.searchBar.rx.text.orEmpty,
-            allCities.asObservable())
-            .observeOn(MainScheduler.instance)
+        locationSearchView.searchBar.rx.text.orEmpty
             .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
-            .do(onNext: { [weak self] query, cities in
-                guard let self = self else { return }
-                if cities.isEmpty {
-                    self.locationSearchView.startLoadingIndicator()
-                } else {
-                    self.locationSearchView.stopLoadingIndicator()
+            .flatMap { [weak self] query -> Observable<[CityViewModel]> in
+                guard
+                    let self = self,
+                    !query.isEmpty
+                else {
+                    return .just([])
                 }
-            })
-            .map { query, cities in
-                if query.isEmpty {
-                    return []
+                self.locationSearchView.startLoadingIndicator()
+                return self.presenter.fetchCityList(query: query)
+            }
+            .observeOn(MainScheduler.instance)
+            .do(onNext: { [weak self] cityViewModels in
+                guard
+                    let self = self,
+                    !cityViewModels.isEmpty
+                else {
+                    return
                 }
                 
-                return cities.filter { $0.name.lowercased().hasPrefix(query.lowercased()) }
-            }
+                self.locationSearchView.stopLoadingIndicator()
+            
+            })
             .bind(to: citiesFiltered)
             .disposed(by: citiesDisposeBage)
     }

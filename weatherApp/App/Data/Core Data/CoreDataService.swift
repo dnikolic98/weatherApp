@@ -54,8 +54,9 @@ class CoreDataService: CoreDataServiceProtocol {
         return forecastedWeatherCoreData?.first
     }
     
-    func fetchCityList() -> [CityCoreData] {
+    func fetchCityList(query: String) -> [CityCoreData] {
         let request: NSFetchRequest<CityCoreData> = CityCoreData.fetchRequest()
+        request.predicate = Predicates.containsNamePredicate(query)
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         
         guard let cityList = try? mainContext.fetch(request) else {

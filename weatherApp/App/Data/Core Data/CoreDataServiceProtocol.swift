@@ -16,7 +16,7 @@ protocol CoreDataServiceProtocol {
     
     func fetchCurrentWeather(coord: Coordinates) -> CurrentWeatherCoreData?
     
-    func fetchCityList() -> [CityCoreData]
+    func fetchCityList(query: String) -> [CityCoreData]
     
     func fetchSelectedLocations() -> [SelectedLocationCoreData]
     
