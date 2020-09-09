@@ -69,8 +69,7 @@ class CurrentWeatherListPresenter {
                 return .just(currentWeatherViewModel)
             }
             .do(onNext: { [weak self] currentWeather in
-                guard let self = self else { return }
-                self.currentLocationWeather = currentWeather
+                self?.currentLocationWeather = currentWeather
             })
     }
     
