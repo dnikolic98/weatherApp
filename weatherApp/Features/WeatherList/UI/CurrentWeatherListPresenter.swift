@@ -56,7 +56,7 @@ class CurrentWeatherListPresenter {
         return currentLocation
             .asObservable()
             .flatMap { [weak self] coord -> Observable<CurrentWeatherCoreData?> in
-                guard let self = self else { return .just(nil) }
+                guard let self = self else { return .empty() }
                 return self.weatherRepository.fetchCurrentWeather(coord: coord)
             }
             .flatMap { currentWeather -> Observable<CurrentWeatherViewModel?> in
