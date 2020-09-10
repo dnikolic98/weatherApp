@@ -14,6 +14,7 @@ class LocationSearchPresenter {
     private let weatherRepository: WeatherRepository
     private let navigationService: NavigationService
     private var selectedLocationIds: [Int] = []
+    private var dataSourceData: [CityViewModel] = []
     
     init(weatherRepository: WeatherRepository, navigationService: NavigationService) {
         self.weatherRepository = weatherRepository
@@ -24,7 +25,7 @@ class LocationSearchPresenter {
         navigationService.goBack()
     }
     
-    func fetchCityList(query: String) -> Observable<[CityViewModel]> {
+    func fetchCityList(query: String) -> Observable<[SectionOfCityViewModels]> {
         weatherRepository
             .fetchSelectedLocations()
             .observeOn(MainScheduler.instance)
@@ -45,9 +46,14 @@ class LocationSearchPresenter {
                 
                 return .just(cityViewModels)
             }
+            .do(onNext: { [weak self] cityViewModels in
+                self?.dataSourceData = cityViewModels
+            })
+            .map { [SectionOfCityViewModels(items: $0)] }
     }
     
-    func handleCellTap(city: CityViewModel) {
+    func handleCellTap(index: Int) {
+        guard let city = dataSourceData.at(index) else { return }
         weatherRepository.selectLocation(id: city.id)
         navigationService.goBack()
     }

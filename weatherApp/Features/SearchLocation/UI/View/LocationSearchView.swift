@@ -32,12 +32,10 @@ class LocationSearchView: UIView {
     }
     
     func startLoadingIndicator() {
-        resultsTableView.isHidden = true
         loadingIndicator.startAnimating()
     }
     
     func stopLoadingIndicator() {
-        resultsTableView.isHidden = false
         loadingIndicator.stopAnimating()
     }
     

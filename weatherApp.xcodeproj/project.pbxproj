@@ -19,6 +19,7 @@
 		A328A87C2501366800C67BDD /* LocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A328A87B2501366800C67BDD /* LocationSearchView.swift */; };
 		A328A87E2501377900C67BDD /* LocationSearchView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A328A87D2501377900C67BDD /* LocationSearchView+Extension.swift */; };
 		A328A88025013BDA00C67BDD /* LocationSearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A328A87F25013BDA00C67BDD /* LocationSearchPresenter.swift */; };
+		A329B347250A7303003DE908 /* SectionOfCityViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A329B346250A7303003DE908 /* SectionOfCityViewModels.swift */; };
 		A3396EB124F52575009FDBEC /* CoreDataStackProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3396EB024F52575009FDBEC /* CoreDataStackProtocol.swift */; };
 		A3396EB324F5271F009FDBEC /* CoreDataServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3396EB224F5271F009FDBEC /* CoreDataServiceProtocol.swift */; };
 		A3396EB724F54BD8009FDBEC /* MainInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3396EB624F54BD8009FDBEC /* MainInformationView.swift */; };
@@ -109,6 +110,7 @@
 		A328A87B2501366800C67BDD /* LocationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchView.swift; sourceTree = "<group>"; };
 		A328A87D2501377900C67BDD /* LocationSearchView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocationSearchView+Extension.swift"; sourceTree = "<group>"; };
 		A328A87F25013BDA00C67BDD /* LocationSearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchPresenter.swift; sourceTree = "<group>"; };
+		A329B346250A7303003DE908 /* SectionOfCityViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionOfCityViewModels.swift; sourceTree = "<group>"; };
 		A3396EB024F52575009FDBEC /* CoreDataStackProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStackProtocol.swift; sourceTree = "<group>"; };
 		A3396EB224F5271F009FDBEC /* CoreDataServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataServiceProtocol.swift; sourceTree = "<group>"; };
 		A3396EB624F54BD8009FDBEC /* MainInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainInformationView.swift; sourceTree = "<group>"; };
@@ -241,6 +243,14 @@
 			path = UI;
 			sourceTree = "<group>";
 		};
+		A329B345250A7214003DE908 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A329B346250A7303003DE908 /* SectionOfCityViewModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		A3396EB424F54B81009FDBEC /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -262,6 +272,7 @@
 		A339C30B250253F700C2DD85 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				A329B345250A7214003DE908 /* Models */,
 				A3A58C632502991000E1FC79 /* CoreDataModels */,
 			);
 			path = Data;
@@ -822,6 +833,7 @@
 				A347B73824E2027A00DB5C85 /* Array+Extension.swift in Sources */,
 				A3BE172524ED2E39001D9F82 /* DailyWeatherCoreData+CoreDataClass.swift in Sources */,
 				A3BE172624ED2E39001D9F82 /* DailyWeatherCoreData+CoreDataProperties.swift in Sources */,
+				A329B347250A7303003DE908 /* SectionOfCityViewModels.swift in Sources */,
 				A3BE178324ED2FAB001D9F82 /* CurrentWeatherCoreData+CoreDataProperties.swift in Sources */,
 				A3A58C672502998F00E1FC79 /* CityCoreData+CoreDataClass.swift in Sources */,
 				A3A81ECE24F3F2A8009B7674 /* CoreDataService.swift in Sources */,
