@@ -118,7 +118,7 @@ class LocationSearchViewController: UIViewController {
     private func setupDataFiltering() {
         locationSearchView.searchBar.rx.text.orEmpty
             .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
-            .flatMap { [weak self] query -> Observable<[CityViewModel]> in
+            .flatMapLatest { [weak self] query -> Observable<[CityViewModel]> in
                 guard
                     let self = self,
                     !query.isEmpty

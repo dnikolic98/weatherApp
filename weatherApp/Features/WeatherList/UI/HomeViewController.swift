@@ -127,7 +127,6 @@ class HomeViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.isScrollEnabled = false
         
-        tableViewHeightConstraint.constant = CGFloat(0)
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.typeName)
     }
     
