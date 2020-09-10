@@ -1,4 +1,5 @@
 PODS:
+  - Differentiator (4.0.1)
   - Kingfisher (5.14.1):
     - Kingfisher/Core (= 5.14.1)
   - Kingfisher/Core (5.14.1)
@@ -12,6 +13,10 @@ PODS:
   - RxCoreLocation/Core (1.5.0):
     - RxCocoa (~> 5.1)
     - RxSwift (~> 5.1)
+  - RxDataSources (4.0.1):
+    - Differentiator (~> 4.0)
+    - RxCocoa (~> 5.0)
+    - RxSwift (~> 5.0)
   - RxRelay (5.1.1):
     - RxSwift (~> 5)
   - RxSwift (5.1.1)
@@ -22,27 +27,32 @@ DEPENDENCIES:
   - ReachabilitySwift
   - RxCocoa (~> 5)
   - RxCoreLocation (~> 1.4)
+  - RxDataSources (~> 4.0)
   - RxSwift (~> 5)
 
 SPEC REPOS:
   trunk:
+    - Differentiator
     - Kingfisher
     - PureLayout
     - ReachabilitySwift
     - RxCocoa
     - RxCoreLocation
+    - RxDataSources
     - RxRelay
     - RxSwift
 
 SPEC CHECKSUMS:
+  Differentiator: 886080237d9f87f322641dedbc5be257061b0602
   Kingfisher: 8050bc6f7f68cbf3908bd04df7ccbac188f6d6d6
   PureLayout: bd3c4ec3a3819ad387c99ebb72c6b129c3ed4d2d
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
   RxCoreLocation: 4789d980742b21c087062387f6758b456221fb2f
+  RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
   RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
 
-PODFILE CHECKSUM: 57f1c1af0a0e34cfa4e7e618d18558026fbc44b1
+PODFILE CHECKSUM: 387e423cf670d1b36ad748a4a3cc6081b67ad11a
 
 COCOAPODS: 1.9.3
