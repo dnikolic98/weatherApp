@@ -49,7 +49,7 @@ class DetailWeatherViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        view.setGradientBackground(startColor: .grayBlueTint, endColor: .darkNavyBlue)
+        setGradientBackground()
     }
     
     //MARK: - Data
@@ -98,7 +98,7 @@ class DetailWeatherViewController: UIViewController {
         let numOfRows = detailWeatherPresenter?.numberOfConditionRows ?? 0
         
         detailsCollectionView.collectionViewLayout = createCollectionViewLayout(rowHeight: detailsCollectioViewRowHeight, columns: detailsNumOfColumns)
-        detailsCollectionView.layer.cornerRadius = 10
+        detailsCollectionView.layer.cornerRadius = 15
         detailsCollectionView.register(WeatherConditionDetailCollectionViewCell.self, forCellWithReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName)
         
         detailsCollectionViewHeightConstraint.constant = detailsCollectioViewRowHeight * CGFloat(numOfRows) + padding * CGFloat(numOfRows + 1)
@@ -106,7 +106,7 @@ class DetailWeatherViewController: UIViewController {
     
     private func setupDaysCollectionView() {
         daysCollectionView.collectionViewLayout = createCollectionViewLayout(rowHeight: daysCollectioViewRowHeight, columns: numberOfDays)
-        daysCollectionView.layer.cornerRadius = 10
+        daysCollectionView.layer.cornerRadius = 15
         daysCollectionView.register(SingleWeatherInformationCollectionViewCell.self, forCellWithReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName)
     }
     
@@ -143,8 +143,15 @@ class DetailWeatherViewController: UIViewController {
     private func refreshUI() {
         DispatchQueue.main.async {
             self.setWeatherInformation()
+            self.setGradientBackground()
         }
         refreshCollectionViewData()
+    }
+    
+    
+    private func setGradientBackground() {
+        let currentWeather = detailWeatherPresenter.currentWeather
+        view.setAutomaticGradient(currentWeather: currentWeather)
     }
     
 }

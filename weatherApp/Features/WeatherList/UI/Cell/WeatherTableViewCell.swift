@@ -111,7 +111,7 @@ class WeatherTableViewCell: UITableViewCell {
         let horizontalPadding: CGFloat = 20
         
         let maskLayer = CALayer()
-        maskLayer.cornerRadius = 10
+        maskLayer.cornerRadius = 15
         maskLayer.backgroundColor = UIColor.black.cgColor
         maskLayer.frame = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.width, height: bounds.height).insetBy(dx: horizontalPadding / 2, dy: verticalPadding / 2)
         layer.mask = maskLayer

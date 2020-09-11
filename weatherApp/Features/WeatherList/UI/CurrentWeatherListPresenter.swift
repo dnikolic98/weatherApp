@@ -12,13 +12,13 @@ import RxCocoa
 class CurrentWeatherListPresenter {
     
     private var currentWeatherList: [CurrentWeatherViewModel] = []
-    private var currentLocationWeather: CurrentWeatherViewModel?
     private let weatherRepository: WeatherRepository
     private let navigationService: NavigationService
     private let locationService: LocationServiceProtocol
     private var currentLocation: BehaviorRelay<Coordinates>
     private var locationDisposeBag: DisposeBag = DisposeBag()
     
+    var currentLocationWeather: CurrentWeatherViewModel?
     var currentWeatherData: Observable<([CurrentWeatherViewModel], CurrentWeatherViewModel?)> {
        Observable.combineLatest(
           fetchCurrentWeatherList(),
@@ -64,6 +64,9 @@ class CurrentWeatherListPresenter {
                 let currentWeatherViewModel = CurrentWeatherViewModel(currentWeather: currentWeather)
                 return .just(currentWeatherViewModel)
             }
+            .do(onNext: { [weak self] currentWeather in
+                self?.currentLocationWeather = currentWeather
+            })
     }
     
     func currentWeather(atIndex index: Int) -> CurrentWeatherViewModel? {
