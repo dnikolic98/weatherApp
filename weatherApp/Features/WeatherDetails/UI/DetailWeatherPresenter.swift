@@ -13,33 +13,24 @@ class DetailWeatherPresenter {
     
     private var currentWeatherDisposeBag: DisposeBag = DisposeBag()
     private var fiveDaysDisposeBag: DisposeBag = DisposeBag()
+    private var conditionListDisposeBag = DisposeBag()
     private let weatherRepository: WeatherRepository
-    private var weatherConditionList: [ConditionInformationViewModel] = []
     
     var currentWeather: BehaviorRelay<CurrentWeatherViewModel?>
     var fiveDaysList: BehaviorRelay<[SectionOfSingleWeatherInformation]>
+    var weatherConditionList: BehaviorRelay<[SectionOfConditionInformation]>
     var weatherData: Observable<(CurrentWeatherViewModel?, [SectionOfSingleWeatherInformation])> {
         Observable.combineLatest(currentWeather.asObservable(),
                            fiveDaysList.asObservable())
-        
     }
-    var numberOfConditions: Int {
-        weatherConditionList.count
-    }
-    var numberOfConditionRows: Int {
-        (numberOfConditions / 2 + numberOfConditions % 2)
-    }
-    
+
     init(currentWeather: CurrentWeatherViewModel, weatherRepository: WeatherRepository) {
         self.currentWeather = BehaviorRelay<CurrentWeatherViewModel?>(value: currentWeather)
         self.fiveDaysList = BehaviorRelay<[SectionOfSingleWeatherInformation]>(value: [])
+        self.weatherConditionList = BehaviorRelay<[SectionOfConditionInformation]>(value: [])
         self.weatherRepository = weatherRepository
 
-        setWeatherConditionList()
-    }
-    
-    func weatherCondition(atIndex index: Int) -> ConditionInformationViewModel? {
-        return weatherConditionList.at(index)
+        bindConditionList()
     }
     
     func bindCurrentWeather() -> BehaviorRelay<CurrentWeatherViewModel?> {
@@ -52,7 +43,7 @@ class DetailWeatherPresenter {
         return fiveDaysList
     }
     
-    func fetchCurrentWeather() {
+    private func fetchCurrentWeather() {
         currentWeatherDisposeBag = DisposeBag()
         guard let coord = currentWeather.value?.coord else { return }
         
@@ -66,7 +57,7 @@ class DetailWeatherPresenter {
             .disposed(by: currentWeatherDisposeBag)
     }
     
-    func fetchFiveDaysList() {
+    private func fetchFiveDaysList() {
         fiveDaysDisposeBag = DisposeBag()
         
         fetchDailyForecast()
@@ -115,9 +106,25 @@ class DetailWeatherPresenter {
             }
     }
     
+    private func bindConditionList() {
+        currentWeather.subscribe(onNext: { [weak self] currentWeather in
+            guard
+                let self = self,
+                let currentWeather = currentWeather
+            else {
+                return
+            }
+            let conditionInformation = self.createWeatherConditionList(currentWeather: currentWeather)
+            self.weatherConditionList.accept([SectionOfConditionInformation(items: conditionInformation)])
+        })
+        .disposed(by: conditionListDisposeBag)
+    }
     
-    private func setWeatherConditionList() {
-        guard let current = currentWeather.value else { return }
+    
+    private func createWeatherConditionList(currentWeather: CurrentWeatherViewModel?) -> [ConditionInformationViewModel] {
+        guard let current = currentWeather else { return [] }
+        
+        var weatherConditionList: [ConditionInformationViewModel] = []
         
         let feelsLikeTemperatureValue = String(format: LocalizedStrings.temperatureValueFormat, current.feelsLikeTemperature)
         let humidityValue = String(format: LocalizedStrings.percentageValueFormat, current.humidity)
@@ -133,6 +140,8 @@ class DetailWeatherPresenter {
         weatherConditionList.append(humidity)
         weatherConditionList.append(pressure)
         weatherConditionList.append(windSpeed)
+        
+        return weatherConditionList
     }
     
 }

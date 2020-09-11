@@ -23,7 +23,6 @@ class LocationSearchViewController: UIViewController {
     private let tableViewDisposeBag: DisposeBag = DisposeBag()
     private var locationSearchDelegate: LocationSearchDelegate?
     private let presenter: LocationSearchPresenter!
-    private let citiesFiltered: BehaviorRelay<[CityViewModel]> = BehaviorRelay<[CityViewModel]>(value: [])
     private var dataSource: RxTableViewSectionedReloadDataSource<SectionOfCityViewModels>!
     private var locationSearchView: LocationSearchView {
         view as! LocationSearchView

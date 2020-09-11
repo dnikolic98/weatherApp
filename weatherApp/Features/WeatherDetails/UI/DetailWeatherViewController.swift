@@ -18,6 +18,7 @@ class DetailWeatherViewController: UIViewController {
     private let daysCollectioViewRowHeight = SingleWeatherInformationCollectionViewCell.height
     private var refreshControl: UIRefreshControl!
     private var fiveDaysDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>!
+    private var conditionListDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfConditionInformation>!
     private var dataDisposeBag: DisposeBag = DisposeBag()
     private var timerDisposeBag: DisposeBag = DisposeBag()
     private var refreshDisposeBag: DisposeBag = DisposeBag()
@@ -46,6 +47,7 @@ class DetailWeatherViewController: UIViewController {
             setWeatherInformation(currentWeather: currentWeather)
         }
         setupFiveDaysDataSource()
+        setupConditionListDataSource()
         setupCollectionViews()
         bindViewModel()
         startTimer()
@@ -73,6 +75,10 @@ class DetailWeatherViewController: UIViewController {
         detailWeatherPresenter.bindFiveDaysList()
             .bind(to: daysCollectionView.rx.items(dataSource: fiveDaysDataSource))
             .disposed(by: dataDisposeBag)
+        
+        detailWeatherPresenter.weatherConditionList
+            .bind(to: detailsCollectionView.rx.items(dataSource: conditionListDataSource))
+            .disposed(by: dataDisposeBag)
     }
     
     private func startTimer() {
@@ -92,6 +98,15 @@ class DetailWeatherViewController: UIViewController {
             configureCell: { _, collectionView, indexPath, item in
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName, for: indexPath) as! SingleWeatherInformationCollectionViewCell
                 cell.set(weatherInfo: item)
+                return cell
+        })
+    }
+    
+    private func setupConditionListDataSource() {
+        conditionListDataSource = RxCollectionViewSectionedReloadDataSource<SectionOfConditionInformation>(
+            configureCell: { _, collectionView, indexPath, item in
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName, for: indexPath) as! WeatherConditionDetailCollectionViewCell
+                cell.set(conditionViewModel: item)
                 return cell
         })
     }
@@ -118,14 +133,12 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func setupCollectionViews() {
-        detailsCollectionView.dataSource = self
-        
         setupDetailsCollectionView()
         setupDaysCollectionView()
     }
     
     private func setupDetailsCollectionView() {
-        let numOfRows = detailWeatherPresenter?.numberOfConditionRows ?? 0
+        let numOfRows = 2
         
         detailsCollectionView.collectionViewLayout = createCollectionViewLayout(rowHeight: detailsCollectioViewRowHeight, columns: detailsNumOfColumns)
         detailsCollectionView.layer.cornerRadius = 15
@@ -174,26 +187,6 @@ class DetailWeatherViewController: UIViewController {
     
     private func setGradientBackground(currentWeather: CurrentWeatherViewModel) {
         view.setAutomaticGradient(currentWeather: currentWeather)
-    }
-    
-}
-
-//MARK: - CollectionView DataSource
-
-extension DetailWeatherViewController: UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return detailWeatherPresenter.numberOfConditions
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName, for: indexPath) as! WeatherConditionDetailCollectionViewCell
-        
-        if let condition = detailWeatherPresenter.weatherCondition(atIndex: indexPath.row) {
-            cell.set(conditionViewModel: condition)
-        }
-        return cell
     }
     
 }
