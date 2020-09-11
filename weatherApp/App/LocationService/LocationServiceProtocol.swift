@@ -6,10 +6,10 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
+import RxSwift
+
 protocol LocationServiceProtocol {
     
-    typealias LocationServiceCompletion = (Coordinates?, Error?) -> (Void)
-    
-    func getLocation(completion: @escaping LocationServiceCompletion)
+    var location: Observable<Coordinates> { get }
     
 }

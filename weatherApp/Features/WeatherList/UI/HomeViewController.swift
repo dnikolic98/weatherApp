@@ -15,6 +15,7 @@ class HomeViewController: UIViewController {
     private let rowHeight = WeatherTableViewCell.height
     private var refreshControl: UIRefreshControl!
     private var currentWeatherListPresenter: CurrentWeatherListPresenter!
+    private var dataDisposeBag: DisposeBag = DisposeBag()
     private var timerDisposeBag: DisposeBag = DisposeBag()
     private let dataRefreshPeriod: Int = 60 * 2
     
@@ -65,29 +66,20 @@ class HomeViewController: UIViewController {
     //MARK: - TableView Data
     
     @objc private func bindViewModel() {
-        currentWeatherListPresenter.fetchCurrentWeatherList() { [weak self] currentWeatherList in
-            guard
-                let self = self,
-                !currentWeatherList.isEmpty
-            else {
-                return
-            }
-            
-            self.refreshTableView()
-        }
+        dataDisposeBag = DisposeBag()
         
-        self.currentWeatherListPresenter.fetchCurrentWeather() { [weak self] currentLocation in
-            guard
-                let self = self,
-                let currentLocation = currentLocation
-            else {
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self.currentLocationView.set(currentWeather: currentLocation)
-            }
-        }
+        currentWeatherListPresenter.currentWeatherData
+            .subscribe(onNext: { [weak self] currentWeatherList, currentLocation in
+                guard
+                    let self = self,
+                    let currentLocation = currentLocation
+                else {
+                    return
+                }
+
+                self.refreshUI(currentLocation: currentLocation)
+            })
+            .disposed(by: dataDisposeBag)
     }
     
     private func startTimer() {
@@ -136,6 +128,13 @@ class HomeViewController: UIViewController {
        refreshControl = UIRefreshControl()
        refreshControl.addTarget(self, action: #selector(bindViewModel), for: UIControl.Event.valueChanged)
        scrollView.refreshControl = refreshControl
+    }
+    
+    private func refreshUI(currentLocation: CurrentWeatherViewModel) {
+        DispatchQueue.main.async {
+            self.currentLocationView.set(currentWeather: currentLocation)
+        }
+        refreshTableView()
     }
     
     private func refreshTableView() {

@@ -7,4 +7,5 @@ target 'weatherApp' do
   pod 'ReachabilitySwift'
   pod 'RxSwift', '~> 5'
   pod 'RxCocoa', '~> 5'
+  pod 'RxCoreLocation', '~> 1.4'
 end

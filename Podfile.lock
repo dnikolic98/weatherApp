@@ -7,6 +7,11 @@ PODS:
   - RxCocoa (5.1.1):
     - RxRelay (~> 5)
     - RxSwift (~> 5)
+  - RxCoreLocation (1.5.0):
+    - RxCoreLocation/Core (= 1.5.0)
+  - RxCoreLocation/Core (1.5.0):
+    - RxCocoa (~> 5.1)
+    - RxSwift (~> 5.1)
   - RxRelay (5.1.1):
     - RxSwift (~> 5)
   - RxSwift (5.1.1)
@@ -16,6 +21,7 @@ DEPENDENCIES:
   - PureLayout
   - ReachabilitySwift
   - RxCocoa (~> 5)
+  - RxCoreLocation (~> 1.4)
   - RxSwift (~> 5)
 
 SPEC REPOS:
@@ -24,6 +30,7 @@ SPEC REPOS:
     - PureLayout
     - ReachabilitySwift
     - RxCocoa
+    - RxCoreLocation
     - RxRelay
     - RxSwift
 
@@ -32,9 +39,10 @@ SPEC CHECKSUMS:
   PureLayout: bd3c4ec3a3819ad387c99ebb72c6b129c3ed4d2d
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
+  RxCoreLocation: 4789d980742b21c087062387f6758b456221fb2f
   RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
 
-PODFILE CHECKSUM: fb43f9e91362eb2b0c6ff18791330fb4d081e37f
+PODFILE CHECKSUM: 57f1c1af0a0e34cfa4e7e618d18558026fbc44b1
 
 COCOAPODS: 1.9.3

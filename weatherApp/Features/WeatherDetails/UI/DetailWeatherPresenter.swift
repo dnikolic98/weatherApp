@@ -6,6 +6,8 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
+import RxSwift
+
 class DetailWeatherPresenter {
     
     private let weatherRepository: WeatherRepository
@@ -39,39 +41,45 @@ class DetailWeatherPresenter {
         return fiveDaysList.at(index)
     }
     
-    func fetchFiveDaysList(completion: @escaping ((ForecastedWeatherCoreData?) -> Void)) {
-        weatherRepository.fetchForcastWeather(coord: currentWeather.coord) { [weak self] fiveDaysForecast in
-            guard
-                let self = self,
-                let fiveDaysForecast = fiveDaysForecast
-            else {
-                completion(nil)
-                return
-            }
-            
-            self.sevenDayForecast = fiveDaysForecast.forecastedWeather
-                .map { DailyForecastViewModel(currentWeather: self.currentWeather, dailyWeather: $0 as! DailyWeatherCoreData) }
-                .sorted { $0.forecastTime < $1.forecastTime }
-            
-            self.setFiveDayList()
-            completion(fiveDaysForecast)
-        }
+    func fetchFiveDaysList() -> Observable<ForecastedWeatherCoreData?> {
+        return weatherRepository
+            .fetchForcastWeather(coord: currentWeather.coord)
+            .do(onNext: { [weak self] forecastedWeather in
+                guard
+                    let self = self,
+                    let forecastedWeather = forecastedWeather
+                else {
+                    return
+                }
+                
+                do {
+                    self.sevenDayForecast = try forecastedWeather.forecastedWeather
+                        .map { dailyWeather in
+                            guard let dailyWeather = dailyWeather as? DailyWeatherCoreData else { throw CoreDataErrors.incompatibleCast }
+                            return DailyForecastViewModel(currentWeather: self.currentWeather, dailyWeather: dailyWeather)
+                        }
+                        .sorted { $0.forecastTime < $1.forecastTime }
+                } catch {
+                    self.sevenDayForecast = []
+                }
+                self.setFiveDayList()
+            })
     }
     
-    func fetchCurrentWeather(completion: @escaping ((CurrentWeatherViewModel?) -> Void)) {
+    func fetchCurrentWeather() -> Observable<CurrentWeatherCoreData?> {
         let coord = currentWeather.coord
-        weatherRepository.fetchCurrentWeather(coord: coord) { [weak self] currentWeather in
-            guard
-                let self = self,
-                let currentWeather = currentWeather
-            else {
-                completion(nil)
-                return
-            }
-            
-            self.currentWeather = CurrentWeatherViewModel(currentWeather: currentWeather)
-            completion(self.currentWeather)
-        }
+        
+        return weatherRepository
+            .fetchCurrentWeather(coord: coord)
+            .do(onNext: { [weak self] currentWeather in
+                guard
+                    let self = self,
+                    let currentWeather = currentWeather
+                else {
+                    return
+                }
+                self.currentWeather = CurrentWeatherViewModel(currentWeather: currentWeather)
+            })
     }
     
     private func setWeatherConditionList() {

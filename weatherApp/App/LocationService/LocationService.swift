@@ -7,31 +7,29 @@
 //
 
 import CoreLocation
+import RxSwift
+import RxCoreLocation
 
-class LocationService: NSObject, LocationServiceProtocol {
+class LocationService: LocationServiceProtocol {
+
+    private (set) var location: Observable<Coordinates>
+
+    private let locationManager = CLLocationManager()
     
-    private var locationManager: CLLocationManager!
-    
-    var completion: LocationServiceCompletion!
-    
-    func getLocation(completion: @escaping LocationServiceCompletion) {
-        self.completion = completion
+    init() {
+        locationManager.distanceFilter = kCLDistanceFilterNone;
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
         
-        startLocationService()
-    }
-    
-    func locationToCoordinates(location: CLLocation) -> Coordinates {
-        let lon = location.coordinate.longitude
-        let lat = location.coordinate.latitude
-        return Coordinates(latitude: lat, longitude: lon)
-    }
-    
-    private func startLocationService() {
-        locationManager = CLLocationManager()
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        location = locationManager.rx
+            .didUpdateLocations
+            .filter { !$1.isEmpty }
+            .map { locationManager, locations in
+                guard let coord = locations.last?.coordinate else { return Coordinates(latitude: 0, longitude: 0) }
+                return Coordinates(latitude: coord.latitude, longitude: coord.longitude)
+            }
+        
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
     }
-    
+
 }

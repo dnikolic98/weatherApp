@@ -6,6 +6,9 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
+import RxSwift
+import RxCocoa
+
 class CurrentWeatherListPresenter {
     
     private var currentWeatherList: [CurrentWeatherViewModel] = []
@@ -13,57 +16,54 @@ class CurrentWeatherListPresenter {
     private let weatherRepository: WeatherRepository
     private let navigationService: NavigationService
     private let locationService: LocationServiceProtocol
+    private var currentLocation: BehaviorRelay<Coordinates>
+    private var locationDisposeBag: DisposeBag = DisposeBag()
+    
+    var currentWeatherData: Observable<([CurrentWeatherViewModel], CurrentWeatherViewModel?)> {
+       Observable.combineLatest(
+          fetchCurrentWeatherList(),
+          fetchCurrenLocationtWeather())
+    }
     
     init(weatherRepository: WeatherRepository, locationService: LocationServiceProtocol, navigationService: NavigationService) {
         self.weatherRepository = weatherRepository
         self.navigationService = navigationService
         self.locationService = locationService
+        self.currentLocation = BehaviorRelay<Coordinates>(value: Coordinates(latitude: 0, longitude: 0))
+        
+        bindCurrentLocation()
     }
     
     var numberOfCurrentWeather: Int {
         currentWeatherList.count
     }
     
-    func fetchCurrentWeatherList(completion: @escaping (([CurrentWeatherViewModel]) -> Void)) {
+    func fetchCurrentWeatherList() -> Observable<[CurrentWeatherViewModel]> {
         let locationIds = Cities.allCases.map { $0.rawValue }
         
-        weatherRepository.fetchSeveralCurrentWeather(id: locationIds) { [weak self] currentWeatherList in
-            guard
-                let self = self,
-                !currentWeatherList.isEmpty
-            else {
-                completion([])
-                return
+        return weatherRepository.fetchSeveralCurrentWeather(id: locationIds)
+            .flatMap { currentWeatherCoreData -> Observable<[CurrentWeatherViewModel]> in
+                let currentWeatherViewModels = currentWeatherCoreData.map { CurrentWeatherViewModel(currentWeather: $0) }
+                return .just(currentWeatherViewModels)
             }
-            
-            self.currentWeatherList = currentWeatherList.map { CurrentWeatherViewModel(currentWeather: $0) }
-            completion(self.currentWeatherList)
-        }
+            .do(onNext: { [weak self] currentWeatherViewModels in
+                guard let self = self else { return }
+                self.currentWeatherList = currentWeatherViewModels
+            })
     }
     
-    func fetchCurrentWeather(completion: @escaping ((CurrentWeatherViewModel?) -> Void)) {
-        locationService.getLocation { [weak self] (coordinates, error) -> (Void) in
-            guard
-                let self = self,
-                let coord = coordinates
-            else {
-                completion(nil)
-                return
+    func fetchCurrenLocationtWeather() -> Observable<CurrentWeatherViewModel?> {
+        return currentLocation
+            .asObservable()
+            .flatMap { [weak self] coord -> Observable<CurrentWeatherCoreData?> in
+                guard let self = self else { return .empty() }
+                return self.weatherRepository.fetchCurrentWeather(coord: coord)
             }
-            
-            self.weatherRepository.fetchCurrentWeather(coord: coord) { [weak self] currentWeather in
-                guard
-                    let self = self,
-                    let currentWeather = currentWeather
-                else {
-                    completion(nil)
-                    return
-                }
-                
-                self.currentLocationWeather = CurrentWeatherViewModel(currentWeather: currentWeather)
-                completion(self.currentLocationWeather)
+            .flatMap { currentWeather -> Observable<CurrentWeatherViewModel?> in
+                guard let currentWeather = currentWeather else { return .just(nil) }
+                let currentWeatherViewModel = CurrentWeatherViewModel(currentWeather: currentWeather)
+                return .just(currentWeatherViewModel)
             }
-        }
     }
     
     func currentWeather(atIndex index: Int) -> CurrentWeatherViewModel? {
@@ -72,6 +72,13 @@ class CurrentWeatherListPresenter {
     
     func handleSelectedLocation(currentWeather: CurrentWeatherViewModel) {
         navigationService.goToDetailWeather(currentWeather: currentWeather)
+    }
+    
+    private func bindCurrentLocation() {
+        locationService
+            .location
+            .bind(to: currentLocation)
+            .disposed(by: locationDisposeBag)
     }
     
 }
