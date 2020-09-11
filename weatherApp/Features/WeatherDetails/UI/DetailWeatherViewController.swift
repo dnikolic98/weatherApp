@@ -9,6 +9,7 @@
 import UIKit
 import Kingfisher
 import RxSwift
+import RxDataSources
 
 class DetailWeatherViewController: UIViewController {
     
@@ -16,8 +17,10 @@ class DetailWeatherViewController: UIViewController {
     private let detailsCollectioViewRowHeight = WeatherConditionDetailCollectionViewCell.height
     private let daysCollectioViewRowHeight = SingleWeatherInformationCollectionViewCell.height
     private var refreshControl: UIRefreshControl!
+    private var fiveDaysDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>!
     private var dataDisposeBag: DisposeBag = DisposeBag()
     private var timerDisposeBag: DisposeBag = DisposeBag()
+    private var refreshDisposeBag: DisposeBag = DisposeBag()
     private let detailsNumOfColumns = 2
     private let numberOfDays = 5
     private let padding: CGFloat = 10
@@ -39,17 +42,23 @@ class DetailWeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setWeatherInformation()
+        if let currentWeather = detailWeatherPresenter.currentWeather.value {
+            setWeatherInformation(currentWeather: currentWeather)
+        }
+        setupFiveDaysDataSource()
         setupCollectionViews()
         bindViewModel()
         startTimer()
         configurePullToRefresh()
+        setupRefreshData()
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        setGradientBackground()
+        if let currentWeather = detailWeatherPresenter.currentWeather.value {
+            setGradientBackground(currentWeather: currentWeather)
+        }
     }
     
     //MARK: - Data
@@ -57,13 +66,12 @@ class DetailWeatherViewController: UIViewController {
     @objc private func bindViewModel() {
         dataDisposeBag = DisposeBag()
         
-        Observable.combineLatest(
-            detailWeatherPresenter.fetchFiveDaysList(),
-            detailWeatherPresenter.fetchCurrentWeather())
-            .subscribe(onNext: { [weak self] forecastedWeather, currentWeather in
-                guard let self = self else { return }
-                self.refreshUI()
-            })
+        detailWeatherPresenter.bindCurrentWeather()
+            .subscribe()
+            .disposed(by: dataDisposeBag)
+        
+        detailWeatherPresenter.bindFiveDaysList()
+            .bind(to: daysCollectionView.rx.items(dataSource: fiveDaysDataSource))
             .disposed(by: dataDisposeBag)
     }
     
@@ -79,16 +87,38 @@ class DetailWeatherViewController: UIViewController {
             .disposed(by: timerDisposeBag)
     }
     
+    private func setupFiveDaysDataSource() {
+        fiveDaysDataSource = RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>(
+            configureCell: { _, collectionView, indexPath, item in
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName, for: indexPath) as! SingleWeatherInformationCollectionViewCell
+                cell.set(weatherInfo: item)
+                return cell
+        })
+    }
+    
+    private func setupRefreshData() {
+        detailWeatherPresenter.weatherData
+            .subscribe(onNext: { [weak self] currentWeather, _ in
+            guard
+                let self = self,
+                let currentWeather = currentWeather
+            else {
+                return
+            }
+                self.refreshUI(currentWeather: currentWeather)
+            })
+            .disposed(by: refreshDisposeBag)
+    }
+    
     //MARK: - UI elements setup
     
-    private func setWeatherInformation() {
-        let currentWeather = detailWeatherPresenter.currentWeather
+    private func setWeatherInformation(currentWeather: CurrentWeatherViewModel) {
+        guard let currentWeather = detailWeatherPresenter.currentWeather.value else { return }
         mainInformationView.set(currentWeather: currentWeather)
     }
     
     private func setupCollectionViews() {
         detailsCollectionView.dataSource = self
-        daysCollectionView.dataSource = self
         
         setupDetailsCollectionView()
         setupDaysCollectionView()
@@ -133,24 +163,16 @@ class DetailWeatherViewController: UIViewController {
        scrollView.refreshControl = refreshControl
     }
     
-    private func refreshCollectionViewData() {
+    private func refreshUI(currentWeather: CurrentWeatherViewModel) {
         DispatchQueue.main.async {
+            self.setWeatherInformation(currentWeather: currentWeather)
+            self.setGradientBackground(currentWeather: currentWeather)
             self.daysCollectionView.reloadData()
             self.refreshControl.endRefreshing()
         }
     }
     
-    private func refreshUI() {
-        DispatchQueue.main.async {
-            self.setWeatherInformation()
-            self.setGradientBackground()
-        }
-        refreshCollectionViewData()
-    }
-    
-    
-    private func setGradientBackground() {
-        let currentWeather = detailWeatherPresenter.currentWeather
+    private func setGradientBackground(currentWeather: CurrentWeatherViewModel) {
         view.setAutomaticGradient(currentWeather: currentWeather)
     }
     
@@ -161,32 +183,17 @@ class DetailWeatherViewController: UIViewController {
 extension DetailWeatherViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        if collectionView == detailsCollectionView {
-            return detailWeatherPresenter.numberOfConditions
-        } else {
-            return detailWeatherPresenter.numberOfDays
-        }
+        return detailWeatherPresenter.numberOfConditions
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if collectionView == detailsCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName, for: indexPath) as! WeatherConditionDetailCollectionViewCell
-            
-            if let condition = detailWeatherPresenter.weatherCondition(atIndex: indexPath.row) {
-                cell.set(conditionViewModel: condition)
-            }
-            return cell
-            
-        } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName, for: indexPath) as! SingleWeatherInformationCollectionViewCell
-            
-            if let weatherInfo = detailWeatherPresenter.fiveDays(atIndex: indexPath.row) {
-                cell.set(weatherInfo: weatherInfo)
-            }
-            return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName, for: indexPath) as! WeatherConditionDetailCollectionViewCell
+        
+        if let condition = detailWeatherPresenter.weatherCondition(atIndex: indexPath.row) {
+            cell.set(conditionViewModel: condition)
         }
+        return cell
     }
     
 }
