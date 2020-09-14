@@ -145,7 +145,7 @@ class DetailWeatherViewController: UIViewController {
         detailWeatherPresenter.isReachable()
             .subscribe(onNext: { [weak self] reachable in
                 guard let self = self else { return }
-                guard !reachable else {
+                guard reachable else {
                     self.showInternetWarning()
                     return
                 }
