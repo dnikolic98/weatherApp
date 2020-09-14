@@ -23,6 +23,7 @@ class DetailWeatherViewController: UIViewController {
     private var timerDisposeBag: DisposeBag = DisposeBag()
     private var refreshDisposeBag: DisposeBag = DisposeBag()
     private var reachableDisposeBag: DisposeBag = DisposeBag()
+    private let warningAnimationTime: TimeInterval = 0.25
     private let detailsNumOfColumns = 2
     private let numberOfDays = 5
     private let padding: CGFloat = 10
@@ -154,20 +155,26 @@ class DetailWeatherViewController: UIViewController {
             .disposed(by: reachableDisposeBag)
     }
     
-       private func showInternetWarning() {
-           DispatchQueue.main.async {
-               self.noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
-               self.noInternetWarningView.isHidden = false
-               self.noInternetWarningHeight.constant = UserWarningView.height
-           }
-       }
-       
-       private func hideInternetWarning() {
-           DispatchQueue.main.async {
-               self.noInternetWarningView.isHidden = true
-               self.noInternetWarningHeight.constant = CGFloat(0)
-           }
-       }
+    private func showInternetWarning() {
+        DispatchQueue.main.async {
+            self.noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
+            self.noInternetWarningView.isHidden = false
+            UIView.animate(withDuration: self.warningAnimationTime, animations: {
+                self.noInternetWarningHeight.constant = UserWarningView.height
+                self.noInternetWarningView.layoutIfNeeded()
+            })
+        }
+    }
+    
+    private func hideInternetWarning() {
+        DispatchQueue.main.async {
+            self.noInternetWarningView.isHidden = true
+            UIView.animate(withDuration: self.warningAnimationTime, animations: {
+                self.noInternetWarningHeight.constant = CGFloat(0)
+                self.noInternetWarningView.layoutIfNeeded()
+            })
+        }
+    }
     
     private func setupDetailsCollectionView() {
         let numOfRows = 2

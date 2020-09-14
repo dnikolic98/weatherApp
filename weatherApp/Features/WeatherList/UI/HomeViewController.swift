@@ -20,6 +20,7 @@ class HomeViewController: UIViewController {
     private var reachableDisposeBag: DisposeBag = DisposeBag()
     private var locationsDisposeBag: DisposeBag = DisposeBag()
     private let dataRefreshPeriod: Int = 60 * 2
+    private let warningAnimationTime: TimeInterval = 0.25
     
     @IBOutlet weak var noInternetViewHeight: NSLayoutConstraint!
     @IBOutlet weak var noLocationViewHeight: NSLayoutConstraint!
@@ -134,7 +135,7 @@ class HomeViewController: UIViewController {
         DispatchQueue.main.async {
             self.noLocationsWarningView.setWarning(warningText: warning)
             self.noLocationsWarningView.isHidden = false
-            UIView.animate(withDuration: 0.25, animations: {
+            UIView.animate(withDuration: self.warningAnimationTime, animations: {
                 self.noLocationViewHeight.constant = UserWarningView.height
                 self.noLocationsWarningView.layoutIfNeeded()
             })
@@ -144,7 +145,7 @@ class HomeViewController: UIViewController {
     private func hideLocationsWarning() {
         DispatchQueue.main.async {
             self.noLocationsWarningView.isHidden = true
-            UIView.animate(withDuration: 0.25, animations: {
+            UIView.animate(withDuration: self.warningAnimationTime, animations: {
                 self.noLocationViewHeight.constant = CGFloat(0)
                 self.noLocationsWarningView.layoutIfNeeded()
             })
@@ -168,7 +169,7 @@ class HomeViewController: UIViewController {
         DispatchQueue.main.async {
             self.noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
             self.noInternetWarningView.isHidden = false
-            UIView.animate(withDuration: 0.25, animations: {
+            UIView.animate(withDuration: self.warningAnimationTime, animations: {
                 self.noInternetViewHeight.constant = UserWarningView.height
                 self.noInternetWarningView.layoutIfNeeded()
             })
@@ -178,7 +179,7 @@ class HomeViewController: UIViewController {
     private func hideInternetWarning() {
         DispatchQueue.main.async {
             self.noInternetWarningView.isHidden = true
-            UIView.animate(withDuration: 0.25, animations: {
+            UIView.animate(withDuration: self.warningAnimationTime, animations: {
                 self.noInternetViewHeight.constant = CGFloat(0)
                 self.noInternetWarningView.layoutIfNeeded()
             })
