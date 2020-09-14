@@ -1,5 +1,6 @@
 PODS:
   - Differentiator (4.0.1)
+  - Hero (1.5.0)
   - Kingfisher (5.14.1):
     - Kingfisher/Core (= 5.14.1)
   - Kingfisher/Core (5.14.1)
@@ -26,6 +27,7 @@ PODS:
   - RxSwift (5.1.1)
 
 DEPENDENCIES:
+  - Hero
   - Kingfisher (~> 5.0)
   - PureLayout
   - RxCocoa (~> 5)
@@ -37,6 +39,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Differentiator
+    - Hero
     - Kingfisher
     - PureLayout
     - ReachabilitySwift
@@ -49,6 +52,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Differentiator: 886080237d9f87f322641dedbc5be257061b0602
+  Hero: b7385b75e7259da62f4f85462f59a5082d66b058
   Kingfisher: 8050bc6f7f68cbf3908bd04df7ccbac188f6d6d6
   PureLayout: bd3c4ec3a3819ad387c99ebb72c6b129c3ed4d2d
   ReachabilitySwift: 4032e2f59586e11e3b0ebe15b167abdd587a388b
@@ -59,6 +63,6 @@ SPEC CHECKSUMS:
   RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
 
-PODFILE CHECKSUM: 239a73e334e12507dd1d63853f3fe1ce74f551ee
+PODFILE CHECKSUM: 93baa8478fe5161af2a577ffb97ed3a6d54ee310
 
 COCOAPODS: 1.9.3

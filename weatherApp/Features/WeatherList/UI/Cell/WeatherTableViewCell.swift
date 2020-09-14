@@ -8,6 +8,7 @@
 
 import UIKit
 import Kingfisher
+import Hero
 
 class WeatherTableViewCell: UITableViewCell {
     
@@ -64,6 +65,15 @@ class WeatherTableViewCell: UITableViewCell {
         return "\(max) / \(min)"
     }
     
+    private func setupHero() {
+        contentView.hero.id = "view"
+        locationNameLabel.hero.id = "locationName"
+        weatherIcon.hero.id = "weatherIcon"
+        currentTempLabel.hero.modifiers = [.fade]
+        minMaxTempLabel.hero.modifiers = [.fade]
+        weatherDescriptionLabel.hero.id = "weatherDescription"
+    }
+    
     //MARK: - Styling UI Elements
     
     private func commonInit() {
@@ -73,6 +83,7 @@ class WeatherTableViewCell: UITableViewCell {
         styleCurrentTempLabel()
         styleMinMaxTempLabel()
         setupLayout()
+        setupHero()
         
         backgroundColor = .white15
     }

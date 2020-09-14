@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Hero
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         navigationController = UINavigationController()
+        navigationController.hero.isEnabled = true
         let navigationService = NavigationService(navigationController: navigationController, appDependencies: appDependencies)
         if let window = window {
             navigationService.presentInWindow(window: window)

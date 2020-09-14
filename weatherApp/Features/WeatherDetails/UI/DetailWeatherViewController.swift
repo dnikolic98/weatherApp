@@ -10,6 +10,7 @@ import UIKit
 import Kingfisher
 import RxSwift
 import RxDataSources
+import Hero
 
 class DetailWeatherViewController: UIViewController {
     
@@ -58,6 +59,15 @@ class DetailWeatherViewController: UIViewController {
         configurePullToRefresh()
         setupRefreshData()
         bindReachable()
+        setupHero()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        mainInformationView.temperatureStackView.isHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        mainInformationView.temperatureStackView.isHidden = true
     }
     
     override func viewWillLayoutSubviews() {
@@ -128,6 +138,18 @@ class DetailWeatherViewController: UIViewController {
                 self.refreshUI(currentWeather: currentWeather)
             })
             .disposed(by: refreshDisposeBag)
+    }
+    
+    private func setupHero() {
+        hero.isEnabled = true
+        
+        mainInformationView.hero.id = "view"
+        mainInformationView.locationNameLabel.hero.id = "locationName"
+        mainInformationView.weatherIcon.hero.id = "weatherIcon"
+        mainInformationView.temperatureStackView.hero.id = "minMaxStack"
+        mainInformationView.currentTempLabel.hero.id = "currentTemp"
+        mainInformationView.currentTempLabel.hero.modifiers = [.fade]
+        mainInformationView.weatherDescriptionLabel.hero.id = "weatherDescription"
     }
     
     //MARK: - UI elements setup
