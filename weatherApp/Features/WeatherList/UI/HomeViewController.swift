@@ -23,7 +23,7 @@ class HomeViewController: UIViewController {
     
     @IBOutlet weak var noInternetViewHeight: NSLayoutConstraint!
     @IBOutlet weak var noLocationViewHeight: NSLayoutConstraint!
-    @IBOutlet weak var noLocationsWarningLabel: UserWarningView!
+    @IBOutlet weak var noLocationsWarningView: UserWarningView!
     @IBOutlet weak var noInternetWarningView: UserWarningView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var tableView: UITableView!
@@ -132,16 +132,22 @@ class HomeViewController: UIViewController {
     
     private func showLocationsWarning(warning: String) {
         DispatchQueue.main.async {
-            self.noLocationsWarningLabel.setWarning(warningText: warning)
-            self.noLocationsWarningLabel.isHidden = false
-            self.noLocationViewHeight.constant = UserWarningView.height
+            self.noLocationsWarningView.setWarning(warningText: warning)
+            self.noLocationsWarningView.isHidden = false
+            UIView.animate(withDuration: 0.25, animations: {
+                self.noLocationViewHeight.constant = UserWarningView.height
+                self.noLocationsWarningView.layoutIfNeeded()
+            })
         }
     }
     
     private func hideLocationsWarning() {
         DispatchQueue.main.async {
-            self.noLocationsWarningLabel.isHidden = true
-            self.noLocationViewHeight.constant = CGFloat(0)
+            self.noLocationsWarningView.isHidden = true
+            UIView.animate(withDuration: 0.25, animations: {
+                self.noLocationViewHeight.constant = CGFloat(0)
+                self.noLocationsWarningView.layoutIfNeeded()
+            })
         }
     }
     
@@ -162,14 +168,20 @@ class HomeViewController: UIViewController {
         DispatchQueue.main.async {
             self.noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
             self.noInternetWarningView.isHidden = false
-            self.noInternetViewHeight.constant = UserWarningView.height
+            UIView.animate(withDuration: 0.25, animations: {
+                self.noInternetViewHeight.constant = UserWarningView.height
+                self.noInternetWarningView.layoutIfNeeded()
+            })
         }
     }
     
     private func hideInternetWarning() {
         DispatchQueue.main.async {
             self.noInternetWarningView.isHidden = true
-            self.noInternetViewHeight.constant = CGFloat(0)
+            UIView.animate(withDuration: 0.25, animations: {
+                self.noInternetViewHeight.constant = CGFloat(0)
+                self.noInternetWarningView.layoutIfNeeded()
+            })
         }
     }
     
