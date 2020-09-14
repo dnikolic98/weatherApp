@@ -18,8 +18,8 @@ class HomeViewController: UIViewController {
     private var dataDisposeBag: DisposeBag = DisposeBag()
     private var timerDisposeBag: DisposeBag = DisposeBag()
     private var reachableDisposeBag: DisposeBag = DisposeBag()
+    private var locationsDisposeBag: DisposeBag = DisposeBag()
     private let dataRefreshPeriod: Int = 60 * 2
-    private let warningViewHeight: CGFloat = 50
     
     @IBOutlet weak var noInternetViewHeight: NSLayoutConstraint!
     @IBOutlet weak var noLocationViewHeight: NSLayoutConstraint!
@@ -127,13 +127,13 @@ class HomeViewController: UIViewController {
                 
                 self.hideLocationsWarning()
             })
-            .disposed(by: reachableDisposeBag)
+            .disposed(by: locationsDisposeBag)
     }
     
     private func showLocationsWarning(warning: String) {
         noLocationsWarningLabel.setWarning(warningText: warning)
         noLocationsWarningLabel.isHidden = false
-        noLocationViewHeight.constant = warningViewHeight
+        noLocationViewHeight.constant = UserWarningView.height
     }
     
     private func hideLocationsWarning() {
@@ -157,7 +157,7 @@ class HomeViewController: UIViewController {
     private func showInternetWarning() {
         noInternetWarningView.setWarning(warningText: LocalizedStrings.internetWarning)
         noInternetWarningView.isHidden = false
-        noInternetViewHeight.constant = warningViewHeight
+        noInternetViewHeight.constant = UserWarningView.height
     }
     
     private func hideInternetWarning() {

@@ -22,11 +22,14 @@ class DetailWeatherViewController: UIViewController {
     private var dataDisposeBag: DisposeBag = DisposeBag()
     private var timerDisposeBag: DisposeBag = DisposeBag()
     private var refreshDisposeBag: DisposeBag = DisposeBag()
+    private var reachableDisposeBag: DisposeBag = DisposeBag()
     private let detailsNumOfColumns = 2
     private let numberOfDays = 5
     private let padding: CGFloat = 10
     private let dataRefreshPeriod: Int = 60 * 2
     
+    @IBOutlet weak var noInternetWarningHeight: NSLayoutConstraint!
+    @IBOutlet weak var noInternetWarningView: UserWarningView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var mainInformationView: MainInformationView!
     @IBOutlet private weak var detailsCollectionView: UICollectionView!
@@ -53,6 +56,7 @@ class DetailWeatherViewController: UIViewController {
         startTimer()
         configurePullToRefresh()
         setupRefreshData()
+        bindReachable()
     }
     
     override func viewWillLayoutSubviews() {
@@ -136,6 +140,30 @@ class DetailWeatherViewController: UIViewController {
         setupDetailsCollectionView()
         setupDaysCollectionView()
     }
+    
+    private func bindReachable() {
+           detailWeatherPresenter.isReachable()
+               .subscribe(onNext: { [weak self] reachable in
+                   guard let self = self else { return }
+                   if !reachable {
+                       self.showInternetWarning()
+                   } else {
+                       self.hideInternetWarning()
+                   }
+               })
+               .disposed(by: reachableDisposeBag)
+       }
+       
+       private func showInternetWarning() {
+           noInternetWarningView.setWarning(warningText: LocalizedStrings.internetWarning)
+           noInternetWarningView.isHidden = false
+           noInternetWarningHeight.constant = UserWarningView.height
+       }
+       
+       private func hideInternetWarning() {
+           noInternetWarningView.isHidden = true
+           noInternetWarningHeight.constant = CGFloat(0)
+       }
     
     private func setupDetailsCollectionView() {
         let numOfRows = 2

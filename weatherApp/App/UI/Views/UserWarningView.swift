@@ -10,6 +10,7 @@ import UIKit
 
 class UserWarningView: UIView {
     
+    static let height: CGFloat = 50
     var warningInfo: UILabel!
     
     override init(frame: CGRect) {
