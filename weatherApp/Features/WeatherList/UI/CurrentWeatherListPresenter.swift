@@ -80,6 +80,14 @@ class CurrentWeatherListPresenter {
             .asObservable()
     }
     
+    func checkLocationsAllowed() -> Bool {
+        locationService.checkLocationServicesAuthorization()
+    }
+    
+    func areLocationsEnabled() -> Observable<Bool> {
+        locationService.isEnabled
+    }
+    
     func currentWeather(atIndex index: Int) -> CurrentWeatherViewModel? {
         return currentWeatherList.at(index)
     }

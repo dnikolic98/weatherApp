@@ -52,6 +52,7 @@ class HomeViewController: UIViewController {
         configurePullToRefresh()
         startTimer()
         bindReachable()
+        bindLocationsEnabled()
         
         view.setDefaultGradient()
     }
@@ -109,6 +110,36 @@ class HomeViewController: UIViewController {
     }
     
     //MARK: - UI elements setup
+    
+    private func bindLocationsEnabled() {
+        currentWeatherListPresenter.areLocationsEnabled()
+            .subscribe(onNext: { [weak self] enabled in
+                guard let self = self else { return }
+                guard enabled else {
+                    self.showLocationsWarning(warning: LocalizedStrings.disabledLocationsWarning)
+                    return
+                }
+
+                guard self.currentWeatherListPresenter.checkLocationsAllowed() else {
+                    self.showLocationsWarning(warning: LocalizedStrings.authLocationsWarning)
+                    return
+                }
+                
+                self.hideLocationsWarning()
+            })
+            .disposed(by: reachableDisposeBag)
+    }
+    
+    private func showLocationsWarning(warning: String) {
+        noLocationsWarningLabel.setWarning(warningText: warning)
+        noLocationsWarningLabel.isHidden = false
+        noLocationViewHeight.constant = warningViewHeight
+    }
+    
+    private func hideLocationsWarning() {
+        noLocationsWarningLabel.isHidden = true
+        noLocationViewHeight.constant = CGFloat(0)
+    }
     
     private func bindReachable() {
         currentWeatherListPresenter.isReachable()

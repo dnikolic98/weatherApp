@@ -28,7 +28,7 @@ extension UserWarningView: DesignProtocol {
     
     func defineLayoutForViews() {
         warningInfo.autoPinEdge(.leading, to: .leading, of: self, withOffset: 15)
-        warningInfo.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: 15)
+        warningInfo.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -15)
         warningInfo.autoPinEdge(.bottom, to: .bottom, of: self)
         warningInfo.autoPinEdge(.top, to: .top, of: self)
     }
@@ -39,7 +39,7 @@ extension UserWarningView: DesignProtocol {
     }
     
     private func styleWarningLabel() {
-        warningInfo.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        warningInfo.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         warningInfo.adjustsFontSizeToFitWidth = true
         warningInfo.minimumScaleFactor = 0.5
         warningInfo.textColor = .white
