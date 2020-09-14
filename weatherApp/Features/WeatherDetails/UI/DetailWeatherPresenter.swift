@@ -43,6 +43,12 @@ class DetailWeatherPresenter {
         return fiveDaysList
     }
     
+    func isReachable() -> Observable<Bool> {
+        weatherRepository
+            .isReachable
+            .asObservable()
+    }
+    
     private func fetchCurrentWeather() {
         currentWeatherDisposeBag = DisposeBag()
         guard let coord = currentWeather.value?.coord else { return }
