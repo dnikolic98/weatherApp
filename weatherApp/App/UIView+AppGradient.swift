@@ -17,14 +17,14 @@ extension UIView {
         let sunset = currentWeather.sunset
         
         if currentTime > sunrise && currentTime < sunset {
-            setGradientBackground(startColor: .darkPurple, endColor: .teal)
+            setAnimatedGradientBackground(startColor: .darkPurple, endColor: .teal)
         } else {
-            setGradientBackground(startColor: .grayBlueTint, endColor: .darkNavyBlue)
+            setAnimatedGradientBackground(startColor: .grayBlueTint, endColor: .darkNavyBlue)
         }
     }
     
     func setDefaultGradient() {
-        setGradientBackground(startColor: .darkPurple, endColor: .darkNavyBlue)
+        setAnimatedGradientBackground(startColor: .darkPurple, endColor: .darkNavyBlue)
     }
     
 }
