@@ -119,7 +119,7 @@ class HomeViewController: UIViewController {
                     self.showLocationsWarning(warning: LocalizedStrings.disabledLocationsWarning)
                     return
                 }
-
+                
                 guard self.currentWeatherListPresenter.checkLocationsAllowed() else {
                     self.showLocationsWarning(warning: LocalizedStrings.authLocationsWarning)
                     return
@@ -145,11 +145,11 @@ class HomeViewController: UIViewController {
         currentWeatherListPresenter.isReachable()
             .subscribe(onNext: { [weak self] reachable in
                 guard let self = self else { return }
-                if !reachable {
+                guard !reachable else {
                     self.showInternetWarning()
-                } else {
-                    self.hideInternetWarning()
+                    return
                 }
+                self.hideInternetWarning()
             })
             .disposed(by: reachableDisposeBag)
     }

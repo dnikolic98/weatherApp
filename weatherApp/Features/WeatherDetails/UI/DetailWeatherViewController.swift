@@ -142,28 +142,28 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func bindReachable() {
-           detailWeatherPresenter.isReachable()
-               .subscribe(onNext: { [weak self] reachable in
-                   guard let self = self else { return }
-                   if !reachable {
-                       self.showInternetWarning()
-                   } else {
-                       self.hideInternetWarning()
-                   }
-               })
-               .disposed(by: reachableDisposeBag)
-       }
+        detailWeatherPresenter.isReachable()
+            .subscribe(onNext: { [weak self] reachable in
+                guard let self = self else { return }
+                guard !reachable else {
+                    self.showInternetWarning()
+                    return
+                }
+                self.hideInternetWarning()
+            })
+            .disposed(by: reachableDisposeBag)
+    }
        
-       private func showInternetWarning() {
-           noInternetWarningView.setWarning(warningText: LocalizedStrings.internetWarning)
-           noInternetWarningView.isHidden = false
-           noInternetWarningHeight.constant = UserWarningView.height
-       }
-       
-       private func hideInternetWarning() {
-           noInternetWarningView.isHidden = true
-           noInternetWarningHeight.constant = CGFloat(0)
-       }
+    private func showInternetWarning() {
+        noInternetWarningView.setWarning(warningText: LocalizedStrings.internetWarning)
+        noInternetWarningView.isHidden = false
+        noInternetWarningHeight.constant = UserWarningView.height
+    }
+    
+    private func hideInternetWarning() {
+        noInternetWarningView.isHidden = true
+        noInternetWarningHeight.constant = CGFloat(0)
+    }
     
     private func setupDetailsCollectionView() {
         let numOfRows = 2
@@ -199,9 +199,9 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func configurePullToRefresh() {
-       refreshControl = UIRefreshControl()
-       refreshControl.addTarget(self, action: #selector(bindViewModel), for: UIControl.Event.valueChanged)
-       scrollView.refreshControl = refreshControl
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(bindViewModel), for: UIControl.Event.valueChanged)
+        scrollView.refreshControl = refreshControl
     }
     
     private func refreshUI(currentWeather: CurrentWeatherViewModel) {
