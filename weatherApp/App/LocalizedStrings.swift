@@ -30,4 +30,5 @@ class LocalizedStrings {
     
     static let searchLocations = "Search locations"
     
+    static let internetWarning = "No internet connection"
 }

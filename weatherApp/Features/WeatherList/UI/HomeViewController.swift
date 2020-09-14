@@ -19,7 +19,12 @@ class HomeViewController: UIViewController {
     private var timerDisposeBag: DisposeBag = DisposeBag()
     private var reachableDisposeBag: DisposeBag = DisposeBag()
     private let dataRefreshPeriod: Int = 60 * 2
+    private let warningViewHeight: CGFloat = 50
     
+    @IBOutlet weak var noInternetViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var noLocationViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var noLocationsWarningLabel: UserWarningView!
+    @IBOutlet weak var noInternetWarningView: UserWarningView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
@@ -107,15 +112,26 @@ class HomeViewController: UIViewController {
     
     private func bindReachable() {
         currentWeatherListPresenter.isReachable()
-        .debug()
-            .subscribe(onNext: { reachable in
+            .subscribe(onNext: { [weak self] reachable in
+                guard let self = self else { return }
                 if !reachable {
-                    print("nema")
+                    self.showInternetWarning()
                 } else {
-                    print("woo")
+                    self.hideInternetWarning()
                 }
             })
             .disposed(by: reachableDisposeBag)
+    }
+    
+    private func showInternetWarning() {
+        noInternetWarningView.setWarning(warningText: LocalizedStrings.internetWarning)
+        noInternetWarningView.isHidden = false
+        noInternetViewHeight.constant = warningViewHeight
+    }
+    
+    private func hideInternetWarning() {
+        noInternetWarningView.isHidden = true
+        noInternetViewHeight.constant = CGFloat(0)
     }
     
     private func styleNavgiationBar() {
