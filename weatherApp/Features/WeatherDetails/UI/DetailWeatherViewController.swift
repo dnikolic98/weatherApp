@@ -154,20 +154,20 @@ class DetailWeatherViewController: UIViewController {
             .disposed(by: reachableDisposeBag)
     }
     
-       private func showInternetWarning() {
-           DispatchQueue.main.async {
-               self.noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
-               self.noInternetWarningView.isHidden = false
-               self.noInternetWarningHeight.constant = UserWarningView.height
-           }
-       }
-       
-       private func hideInternetWarning() {
-           DispatchQueue.main.async {
-               self.noInternetWarningView.isHidden = true
-               self.noInternetWarningHeight.constant = CGFloat(0)
-           }
-       }
+    private func showInternetWarning() {
+        DispatchQueue.main.async {
+            self.noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
+            self.noInternetWarningView.isHidden = false
+            self.noInternetWarningHeight.constant = UserWarningView.height
+        }
+    }
+    
+    private func hideInternetWarning() {
+        DispatchQueue.main.async {
+            self.noInternetWarningView.isHidden = true
+            self.noInternetWarningHeight.constant = CGFloat(0)
+        }
+    }
     
     private func setupDetailsCollectionView() {
         let numOfRows = 2
