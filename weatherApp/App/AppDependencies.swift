@@ -19,7 +19,7 @@ class AppDependencies {
     }()
     
     lazy var reachability: Reachability = {
-        try! Reachability()
+        try! Reachability()!
     }()
     
     lazy var coreDataStack: CoreDataStack = {

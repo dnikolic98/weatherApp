@@ -17,6 +17,7 @@ class HomeViewController: UIViewController {
     private var currentWeatherListPresenter: CurrentWeatherListPresenter!
     private var dataDisposeBag: DisposeBag = DisposeBag()
     private var timerDisposeBag: DisposeBag = DisposeBag()
+    private var reachableDisposeBag: DisposeBag = DisposeBag()
     private let dataRefreshPeriod: Int = 60 * 2
     
     @IBOutlet private weak var scrollView: UIScrollView!
@@ -45,6 +46,7 @@ class HomeViewController: UIViewController {
         bindViewModel()
         configurePullToRefresh()
         startTimer()
+        bindReachable()
         
         view.setDefaultGradient()
     }
@@ -102,6 +104,19 @@ class HomeViewController: UIViewController {
     }
     
     //MARK: - UI elements setup
+    
+    private func bindReachable() {
+        currentWeatherListPresenter.isReachable()
+        .debug()
+            .subscribe(onNext: { reachable in
+                if !reachable {
+                    print("nema")
+                } else {
+                    print("woo")
+                }
+            })
+            .disposed(by: reachableDisposeBag)
+    }
     
     private func styleNavgiationBar() {
         // set navigationBar title and back button color, title font size and back button text
