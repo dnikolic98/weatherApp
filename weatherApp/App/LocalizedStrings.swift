@@ -30,7 +30,7 @@ class LocalizedStrings {
     
     static let searchLocations = "Search locations"
     
-    static let internetWarning = "No internet connection"
+    static let noInternetWarning = "No internet connection"
     
     static let disabledLocationsWarning = "Please enable location services"
     

@@ -155,7 +155,7 @@ class DetailWeatherViewController: UIViewController {
     }
        
     private func showInternetWarning() {
-        noInternetWarningView.setWarning(warningText: LocalizedStrings.internetWarning)
+        noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
         noInternetWarningView.isHidden = false
         noInternetWarningHeight.constant = UserWarningView.height
     }

@@ -30,8 +30,9 @@ class LocationService: LocationServiceProtocol {
             }
         
         isEnabled = Observable
-            .combineLatest(locationManager.rx.isEnabled,
-                           locationManager.rx.didChangeAuthorization)
+            .combineLatest(
+                locationManager.rx.isEnabled,
+                locationManager.rx.didChangeAuthorization)
             .flatMap { enabled, _  -> Observable<Bool> in
                 .just(enabled)
             }

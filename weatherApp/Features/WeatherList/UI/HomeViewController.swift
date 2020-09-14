@@ -155,7 +155,7 @@ class HomeViewController: UIViewController {
     }
     
     private func showInternetWarning() {
-        noInternetWarningView.setWarning(warningText: LocalizedStrings.internetWarning)
+        noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
         noInternetWarningView.isHidden = false
         noInternetViewHeight.constant = UserWarningView.height
     }
