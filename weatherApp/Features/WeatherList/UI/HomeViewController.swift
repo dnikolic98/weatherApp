@@ -131,21 +131,25 @@ class HomeViewController: UIViewController {
     }
     
     private func showLocationsWarning(warning: String) {
-        noLocationsWarningLabel.setWarning(warningText: warning)
-        noLocationsWarningLabel.isHidden = false
-        noLocationViewHeight.constant = UserWarningView.height
+        DispatchQueue.main.async {
+            self.noLocationsWarningLabel.setWarning(warningText: warning)
+            self.noLocationsWarningLabel.isHidden = false
+            self.noLocationViewHeight.constant = UserWarningView.height
+        }
     }
     
     private func hideLocationsWarning() {
-        noLocationsWarningLabel.isHidden = true
-        noLocationViewHeight.constant = CGFloat(0)
+        DispatchQueue.main.async {
+            self.noLocationsWarningLabel.isHidden = true
+            self.noLocationViewHeight.constant = CGFloat(0)
+        }
     }
     
     private func bindReachable() {
         currentWeatherListPresenter.isReachable()
             .subscribe(onNext: { [weak self] reachable in
                 guard let self = self else { return }
-                guard !reachable else {
+                guard reachable else {
                     self.showInternetWarning()
                     return
                 }
@@ -155,14 +159,18 @@ class HomeViewController: UIViewController {
     }
     
     private func showInternetWarning() {
-        noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
-        noInternetWarningView.isHidden = false
-        noInternetViewHeight.constant = UserWarningView.height
+        DispatchQueue.main.async {
+            self.noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
+            self.noInternetWarningView.isHidden = false
+            self.noInternetViewHeight.constant = UserWarningView.height
+        }
     }
     
     private func hideInternetWarning() {
-        noInternetWarningView.isHidden = true
-        noInternetViewHeight.constant = CGFloat(0)
+        DispatchQueue.main.async {
+            self.noInternetWarningView.isHidden = true
+            self.noInternetViewHeight.constant = CGFloat(0)
+        }
     }
     
     private func styleNavgiationBar() {
