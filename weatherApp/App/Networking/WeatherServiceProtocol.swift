@@ -15,4 +15,5 @@ protocol WeatherServiceProtocol {
     func fetchSeveralCurrentWeather(id: [Int]) -> Observable<MultipleCurrentWeather>
     
     func fetchCurrentWeather(coord: Coordinates) -> Observable<CurrentWeather>
+    
 }
