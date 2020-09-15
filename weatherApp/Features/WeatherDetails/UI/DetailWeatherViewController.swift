@@ -10,7 +10,6 @@ import UIKit
 import Kingfisher
 import RxSwift
 import RxDataSources
-import Hero
 
 class DetailWeatherViewController: UIViewController {
     
@@ -141,15 +140,8 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func setupHero() {
-        hero.isEnabled = true
         guard let currentWeather = detailWeatherPresenter.currentWeather.value else { return }
-        
-        mainInformationView.hero.id = "\(currentWeather.id)"
-        mainInformationView.locationNameLabel.hero.modifiers = [.fade]
-        mainInformationView.weatherIcon.hero.modifiers = [.fade]
-//        mainInformationView.temperatureStackView.hero.modifiers = [.fade]
-        mainInformationView.currentTempLabel.hero.modifiers = [.fade]
-        mainInformationView.weatherDescriptionLabel.hero.modifiers = [.fade]
+        mainInformationView.setupHero(currentWeather: currentWeather)
     }
     
     //MARK: - UI elements setup
