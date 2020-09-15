@@ -24,7 +24,7 @@ class HomeViewController: UIViewController {
     
     @IBOutlet weak var noInternetViewHeight: NSLayoutConstraint!
     @IBOutlet weak var noLocationViewHeight: NSLayoutConstraint!
-    @IBOutlet weak var noLocationsWarningView: UserWarningView!
+    @IBOutlet weak var noLocationWarningView: UserWarningView!
     @IBOutlet weak var noInternetWarningView: UserWarningView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var tableView: UITableView!
@@ -133,21 +133,21 @@ class HomeViewController: UIViewController {
     
     private func showLocationsWarning(warning: String) {
         DispatchQueue.main.async {
-            self.noLocationsWarningView.setWarning(warningText: warning)
-            self.noLocationsWarningView.isHidden = false
+            self.noLocationWarningView.setWarning(warningText: warning)
+            self.noLocationWarningView.isHidden = false
             UIView.animate(withDuration: self.warningAnimationTime, animations: {
                 self.noLocationViewHeight.constant = UserWarningView.height
-                self.noLocationsWarningView.layoutIfNeeded()
+                self.noLocationWarningView.layoutIfNeeded()
             })
         }
     }
     
     private func hideLocationsWarning() {
         DispatchQueue.main.async {
-            self.noLocationsWarningView.isHidden = true
+            self.noLocationWarningView.isHidden = true
             UIView.animate(withDuration: self.warningAnimationTime, animations: {
                 self.noLocationViewHeight.constant = CGFloat(0)
-                self.noLocationsWarningView.layoutIfNeeded()
+                self.noLocationWarningView.layoutIfNeeded()
             })
         }
     }
