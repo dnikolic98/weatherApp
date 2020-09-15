@@ -7,35 +7,38 @@
 //
 
 import UIKit
-import Kingfisher
 import RxSwift
 import RxDataSources
 
 class DetailWeatherViewController: UIViewController {
     
-    private var detailWeatherPresenter: DetailWeatherPresenter!
-    private let detailsCollectioViewRowHeight = WeatherConditionDetailCollectionViewCell.height
-    private let daysCollectioViewRowHeight = SingleWeatherInformationCollectionViewCell.height
-    private var refreshControl: UIRefreshControl!
-    private var fiveDaysDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>!
-    private var conditionListDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfConditionInformation>!
-    private var dataDisposeBag: DisposeBag = DisposeBag()
-    private var timerDisposeBag: DisposeBag = DisposeBag()
-    private var refreshDisposeBag: DisposeBag = DisposeBag()
-    private var reachableDisposeBag: DisposeBag = DisposeBag()
+    //MARK: - Properties
+    
     private let warningAnimationTime: TimeInterval = 0.25
     private let detailsNumOfColumns = 2
     private let numberOfDays = 5
     private let padding: CGFloat = 10
     private let dataRefreshPeriod: Int = 60 * 2
+    private let detailsCollectioViewRowHeight = WeatherConditionDetailCollectionViewCell.height
+    private let daysCollectioViewRowHeight = SingleWeatherInformationCollectionViewCell.height
+    private var dataDisposeBag: DisposeBag = DisposeBag()
+    private var timerDisposeBag: DisposeBag = DisposeBag()
+    private var refreshDisposeBag: DisposeBag = DisposeBag()
+    private var reachableDisposeBag: DisposeBag = DisposeBag()
+    private var detailWeatherPresenter: DetailWeatherPresenter!
+    private var refreshControl: UIRefreshControl!
+    private var fiveDaysDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>!
+    private var conditionListDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfConditionInformation>!
     
-    @IBOutlet weak var noInternetWarningHeight: NSLayoutConstraint!
-    @IBOutlet weak var noInternetWarningView: UserWarningView!
+    @IBOutlet private weak var noInternetWarningHeight: NSLayoutConstraint!
+    @IBOutlet private weak var noInternetWarningView: UserWarningView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var mainInformationView: MainInformationView!
     @IBOutlet private weak var detailsCollectionView: UICollectionView!
     @IBOutlet private weak var detailsCollectionViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var daysCollectionView: UICollectionView!
+    
+    //MARK: - Initialization
     
     convenience init(detailWeatherPresenter: DetailWeatherPresenter) {
         self.init()
@@ -76,7 +79,7 @@ class DetailWeatherViewController: UIViewController {
         }
     }
     
-    //MARK: - Data
+    //MARK: - Data binding and timer
     
     @objc private func bindViewModel() {
         dataDisposeBag = DisposeBag()
@@ -94,6 +97,11 @@ class DetailWeatherViewController: UIViewController {
             .disposed(by: dataDisposeBag)
     }
     
+    private func setWeatherInformation(currentWeather: CurrentWeatherViewModel) {
+        guard let currentWeather = detailWeatherPresenter.currentWeather.value else { return }
+        mainInformationView.set(currentWeather: currentWeather)
+    }
+    
     private func startTimer() {
         timerDisposeBag = DisposeBag()
         
@@ -105,6 +113,8 @@ class DetailWeatherViewController: UIViewController {
             })
             .disposed(by: timerDisposeBag)
     }
+    
+    //MARK: - RxDataSources setup
     
     private func setupFiveDaysDataSource() {
         fiveDaysDataSource = RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>(
@@ -124,6 +134,8 @@ class DetailWeatherViewController: UIViewController {
         })
     }
     
+    //MARK: - Refresh setup
+    
     private func setupRefreshData() {
         detailWeatherPresenter.weatherData
             .subscribe(onNext: { [weak self] currentWeather, _ in
@@ -138,17 +150,22 @@ class DetailWeatherViewController: UIViewController {
             .disposed(by: refreshDisposeBag)
     }
     
-    //MARK: - UI elements setup
-    
-    private func setWeatherInformation(currentWeather: CurrentWeatherViewModel) {
-        guard let currentWeather = detailWeatherPresenter.currentWeather.value else { return }
-        mainInformationView.set(currentWeather: currentWeather)
+    private func configurePullToRefresh() {
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(bindViewModel), for: UIControl.Event.valueChanged)
+        scrollView.refreshControl = refreshControl
     }
     
-    private func setupCollectionViews() {
-        setupDetailsCollectionView()
-        setupDaysCollectionView()
+    private func refreshUI(currentWeather: CurrentWeatherViewModel) {
+        DispatchQueue.main.async {
+            self.setWeatherInformation(currentWeather: currentWeather)
+            self.setGradientBackground(currentWeather: currentWeather)
+            self.daysCollectionView.reloadData()
+            self.refreshControl.endRefreshing()
+        }
     }
+    
+    //MARK: - Warning setup
     
     private func bindReachable() {
         detailWeatherPresenter.isReachable()
@@ -184,10 +201,17 @@ class DetailWeatherViewController: UIViewController {
         }
     }
     
+    //MARK: - ColectionViews Setup
+    
+    private func setupCollectionViews() {
+        setupDetailsCollectionView()
+        setupDaysCollectionView()
+    }
+    
     private func setupDetailsCollectionView() {
         let numOfRows = 2
         
-        detailsCollectionView.collectionViewLayout = createCollectionViewLayout(rowHeight: detailsCollectioViewRowHeight, columns: detailsNumOfColumns)
+        detailsCollectionView.collectionViewLayout = UICollectionViewLayout.createStaticWidthDistributionLayout(columns: detailsNumOfColumns, padding: padding, rowHeight: detailsCollectioViewRowHeight)
         detailsCollectionView.layer.cornerRadius = 15
         detailsCollectionView.register(WeatherConditionDetailCollectionViewCell.self, forCellWithReuseIdentifier: WeatherConditionDetailCollectionViewCell.typeName)
         
@@ -195,42 +219,12 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func setupDaysCollectionView() {
-        daysCollectionView.collectionViewLayout = createCollectionViewLayout(rowHeight: daysCollectioViewRowHeight, columns: numberOfDays)
+        daysCollectionView.collectionViewLayout = UICollectionViewLayout.createStaticWidthDistributionLayout(columns: numberOfDays, padding: padding, rowHeight: daysCollectioViewRowHeight)
         daysCollectionView.layer.cornerRadius = 15
         daysCollectionView.register(SingleWeatherInformationCollectionViewCell.self, forCellWithReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName)
     }
     
-    private func createCollectionViewLayout(rowHeight: CGFloat, columns: Int) -> UICollectionViewLayout {
-        let layoutSize = NSCollectionLayoutSize(
-            widthDimension: NSCollectionLayoutDimension.fractionalWidth(1),
-            heightDimension: NSCollectionLayoutDimension.estimated(rowHeight)
-        )
-        
-        let item = NSCollectionLayoutItem(layoutSize: layoutSize)
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: layoutSize, subitem: item, count: columns)
-        group.interItemSpacing = .fixed(padding)
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: padding, leading: padding, bottom: padding, trailing: padding)
-        section.interGroupSpacing = padding
-        
-        return UICollectionViewCompositionalLayout(section: section)
-    }
-    
-    private func configurePullToRefresh() {
-        refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(bindViewModel), for: UIControl.Event.valueChanged)
-        scrollView.refreshControl = refreshControl
-    }
-    
-    private func refreshUI(currentWeather: CurrentWeatherViewModel) {
-        DispatchQueue.main.async {
-            self.setWeatherInformation(currentWeather: currentWeather)
-            self.setGradientBackground(currentWeather: currentWeather)
-            self.daysCollectionView.reloadData()
-            self.refreshControl.endRefreshing()
-        }
-    }
+    //MARK: - Gradient setup
     
     private func setGradientBackground(currentWeather: CurrentWeatherViewModel) {
         view.setAutomaticGradient(currentWeather: currentWeather)
