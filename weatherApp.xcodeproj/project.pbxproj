@@ -257,11 +257,30 @@
 			path = UI;
 			sourceTree = "<group>";
 		};
+		A32C773325113BE000FE97C1 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				A3BD78DF24E29713003723DE /* UIColor+AppColors.swift */,
+				A3BD78EA24E2A052003723DE /* LocalizedStrings.swift */,
+				A391440824F80D3F00509A81 /* Predicates.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		A32C773425113C1800FE97C1 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				A3BE104524EA9B7D006DFA5B /* NavigationService.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
 		A3396EB424F54B81009FDBEC /* UI */ = {
 			isa = PBXGroup;
 			children = (
 				A3396EB524F54B8A009FDBEC /* Views */,
 				A39BC291250921A0000CDF13 /* DesginProtocol.swift */,
+				A3D867802500FB78003DE8A0 /* UIView+AppGradient.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -429,6 +448,9 @@
 		A3BD78DB24E293F5003723DE /* App */ = {
 			isa = PBXGroup;
 			children = (
+				A3BD78E924E298C0003723DE /* Networking */,
+				A32C773425113C1800FE97C1 /* Navigation */,
+				A32C773325113BE000FE97C1 /* Constants */,
 				A3F1D9FB250223CC005E505D /* Resources */,
 				A393604D25080EBF00C2508E /* Errors */,
 				A3C78D1224FFEA8100E42688 /* LocationService */,
@@ -436,11 +458,6 @@
 				A3A81ECF24F3F3B9009B7674 /* Data */,
 				A3794AE924D84B4B008A8779 /* AppDelegate.swift */,
 				A3BE104924EAA96B006DFA5B /* AppDependencies.swift */,
-				A3BE104524EA9B7D006DFA5B /* NavigationService.swift */,
-				A3BD78DF24E29713003723DE /* UIColor+AppColors.swift */,
-				A3BD78EA24E2A052003723DE /* LocalizedStrings.swift */,
-				A391440824F80D3F00509A81 /* Predicates.swift */,
-				A3D867802500FB78003DE8A0 /* UIView+AppGradient.swift */,
 				A34F120C25028F81006E9F13 /* PresavedSQLiteManager.swift */,
 			);
 			path = App;
@@ -481,9 +498,9 @@
 		A3BD78E124E297A3003723DE /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				A328A875250130CF00C67BDD /* SearchLocation */,
 				A3BD78E324E297CA003723DE /* WeatherList */,
 				A3BD78E224E297BE003723DE /* WeatherDetails */,
+				A328A875250130CF00C67BDD /* SearchLocation */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -552,7 +569,6 @@
 			children = (
 				A3BE16FC24ED195E001D9F82 /* CoreData Models */,
 				A3EC097E24D85AC6007CDC4D /* Models */,
-				A3BD78E924E298C0003723DE /* Networking */,
 			);
 			path = Data;
 			sourceTree = "<group>";
