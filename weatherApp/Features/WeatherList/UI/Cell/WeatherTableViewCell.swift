@@ -45,6 +45,7 @@ class WeatherTableViewCell: UITableViewCell {
         currentTempLabel.text = ""
         locationNameLabel.text = ""
         weatherIcon.image = nil
+        contentView.hero.id = ""
     }
     
     func set(withWeather currentWeather: CurrentWeatherViewModel) {
@@ -52,6 +53,7 @@ class WeatherTableViewCell: UITableViewCell {
         weatherDescriptionLabel.text = currentWeather.weatherDescription.firstCapitalized
         currentTempLabel.text = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.temperature)
         minMaxTempLabel.text = minMaxTemperatureFormat(min: currentWeather.minTemperature, max: currentWeather.maxTemperature)
+        contentView.hero.id = "\(currentWeather.id)"
         
         let urlString = currentWeather.weatherIconUrlString
         if let url = URL(string: urlString) {
@@ -66,12 +68,11 @@ class WeatherTableViewCell: UITableViewCell {
     }
     
     private func setupHero() {
-        contentView.hero.id = "view"
-        locationNameLabel.hero.id = "locationName"
-        weatherIcon.hero.id = "weatherIcon"
+        locationNameLabel.hero.modifiers = [.fade]
+        weatherIcon.hero.modifiers = [.fade]
         currentTempLabel.hero.modifiers = [.fade]
         minMaxTempLabel.hero.modifiers = [.fade]
-        weatherDescriptionLabel.hero.id = "weatherDescription"
+        weatherDescriptionLabel.hero.modifiers = [.fade]
     }
     
     //MARK: - Styling UI Elements

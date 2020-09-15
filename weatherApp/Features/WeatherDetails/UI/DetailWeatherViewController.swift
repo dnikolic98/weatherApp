@@ -142,14 +142,14 @@ class DetailWeatherViewController: UIViewController {
     
     private func setupHero() {
         hero.isEnabled = true
+        guard let currentWeather = detailWeatherPresenter.currentWeather.value else { return }
         
-        mainInformationView.hero.id = "view"
-        mainInformationView.locationNameLabel.hero.id = "locationName"
-        mainInformationView.weatherIcon.hero.id = "weatherIcon"
-        mainInformationView.temperatureStackView.hero.id = "minMaxStack"
-        mainInformationView.currentTempLabel.hero.id = "currentTemp"
+        mainInformationView.hero.id = "\(currentWeather.id)"
+        mainInformationView.locationNameLabel.hero.modifiers = [.fade]
+        mainInformationView.weatherIcon.hero.modifiers = [.fade]
+//        mainInformationView.temperatureStackView.hero.modifiers = [.fade]
         mainInformationView.currentTempLabel.hero.modifiers = [.fade]
-        mainInformationView.weatherDescriptionLabel.hero.id = "weatherDescription"
+        mainInformationView.weatherDescriptionLabel.hero.modifiers = [.fade]
     }
     
     //MARK: - UI elements setup
