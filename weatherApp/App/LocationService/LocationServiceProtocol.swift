@@ -11,7 +11,9 @@ import RxSwift
 protocol LocationServiceProtocol {
     
     var location: Observable<Coordinates> { get }
+    
     var isEnabled: Observable<Bool> { get }
+    
     func checkLocationServicesAuthorization() -> Bool
     
 }

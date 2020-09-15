@@ -229,9 +229,9 @@
 		A31C944F24F40145003BFA47 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				A30B48012510C2BF0085A62C /* FetchedResultsController+Rx.swift */,
-				A30B48022510C2BF0085A62C /* NSManagedObjectContext+Rx.swift */,
-				A31C945024F40176003BFA47 /* NSManagedObject+Extension.swift */,
+				A32C773625113FC500FE97C1 /* RxCoreData */,
+				A3C9307324F5049400B07ED0 /* CoreDataStack */,
+				A32C773725113FD600FE97C1 /* FirstOrCreate */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -273,6 +273,23 @@
 				A3BE104524EA9B7D006DFA5B /* NavigationService.swift */,
 			);
 			path = Navigation;
+			sourceTree = "<group>";
+		};
+		A32C773625113FC500FE97C1 /* RxCoreData */ = {
+			isa = PBXGroup;
+			children = (
+				A30B48012510C2BF0085A62C /* FetchedResultsController+Rx.swift */,
+				A30B48022510C2BF0085A62C /* NSManagedObjectContext+Rx.swift */,
+			);
+			path = RxCoreData;
+			sourceTree = "<group>";
+		};
+		A32C773725113FD600FE97C1 /* FirstOrCreate */ = {
+			isa = PBXGroup;
+			children = (
+				A31C945024F40176003BFA47 /* NSManagedObject+Extension.swift */,
+			);
+			path = FirstOrCreate;
 			sourceTree = "<group>";
 		};
 		A3396EB424F54B81009FDBEC /* UI */ = {
@@ -448,12 +465,12 @@
 		A3BD78DB24E293F5003723DE /* App */ = {
 			isa = PBXGroup;
 			children = (
-				A3BD78E924E298C0003723DE /* Networking */,
-				A32C773425113C1800FE97C1 /* Navigation */,
-				A32C773325113BE000FE97C1 /* Constants */,
 				A3F1D9FB250223CC005E505D /* Resources */,
-				A393604D25080EBF00C2508E /* Errors */,
+				A32C773325113BE000FE97C1 /* Constants */,
+				A3BD78E924E298C0003723DE /* Networking */,
 				A3C78D1224FFEA8100E42688 /* LocationService */,
+				A32C773425113C1800FE97C1 /* Navigation */,
+				A393604D25080EBF00C2508E /* Errors */,
 				A3396EB424F54B81009FDBEC /* UI */,
 				A3A81ECF24F3F3B9009B7674 /* Data */,
 				A3794AE924D84B4B008A8779 /* AppDelegate.swift */,
@@ -467,7 +484,6 @@
 			isa = PBXGroup;
 			children = (
 				A3DCBF1024FE569C00590016 /* URLSession */,
-				A3C9307324F5049400B07ED0 /* Data */,
 				A31C944F24F40145003BFA47 /* CoreData */,
 				A3BD78DE24E294E7003723DE /* UIExtensions */,
 				A3BD78DD24E294C4003723DE /* FoundationExtensions */,
@@ -639,13 +655,13 @@
 			path = LocationService;
 			sourceTree = "<group>";
 		};
-		A3C9307324F5049400B07ED0 /* Data */ = {
+		A3C9307324F5049400B07ED0 /* CoreDataStack */ = {
 			isa = PBXGroup;
 			children = (
 				A3BE16F724ED13CE001D9F82 /* CoreDataStack.swift */,
 				A3396EB024F52575009FDBEC /* CoreDataStackProtocol.swift */,
 			);
-			path = Data;
+			path = CoreDataStack;
 			sourceTree = "<group>";
 		};
 		A3DCBF1024FE569C00590016 /* URLSession */ = {
