@@ -59,7 +59,7 @@ class HomeViewController: UIViewController {
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        refreshTableView()
+        tableView.reloadData()
     }
     
     override func viewWillLayoutSubviews() {
@@ -71,7 +71,7 @@ class HomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
-        refreshTableView()
+        tableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -244,6 +244,10 @@ class HomeViewController: UIViewController {
         }
     }
     
+    private func refreshTableView(completion: @escaping (() -> Void)) {
+        refreshTableView()
+    }
+    
     private func setGradientBackground() {
         guard let currentWeather = currentWeatherListPresenter.currentLocationWeather else { return }
         
@@ -291,12 +295,14 @@ extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             guard let currentWeather = currentWeatherListPresenter.currentWeather(atIndex: indexPath.row) else { return }
-            currentWeatherListPresenter.handleRemoveLocation(id: currentWeather.id, index: indexPath.row)
             
             CATransaction.begin()
             CATransaction.setCompletionBlock {
-                self.refreshTableView()
+                self.refreshTableView {
+                    self.currentWeatherListPresenter.handleRemoveLocation(id: currentWeather.id)
+                }
             }
+            currentWeatherListPresenter.currentWeatherRemoveItem(atIndex: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             CATransaction.commit()
         }

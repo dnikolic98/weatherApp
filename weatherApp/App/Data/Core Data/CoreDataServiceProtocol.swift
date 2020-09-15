@@ -6,19 +6,21 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
+import RxSwift
+
 protocol CoreDataServiceProtocol {
     
     //MARK: - Fetches
     
-    func fetchCurrentWeather(id: [Int]) -> [CurrentWeatherCoreData]
+    func fetchCurrentWeather(id: [Int]) -> Observable<[CurrentWeatherCoreData]>
     
-    func fetchForecastWeather(coord: Coordinates) -> ForecastedWeatherCoreData?
+    func fetchForecastWeather(coord: Coordinates) -> Observable<ForecastedWeatherCoreData?>
     
-    func fetchCurrentWeather(coord: Coordinates) -> CurrentWeatherCoreData?
+    func fetchCurrentWeather(coord: Coordinates) -> Observable<CurrentWeatherCoreData?>
     
-    func fetchCityList(query: String) -> [CityCoreData]
+    func fetchCityList(query: String) -> Observable<[CityCoreData]>
     
-    func fetchSelectedLocations() -> [SelectedLocationCoreData]
+    func fetchSelectedLocations() -> Observable<[SelectedLocationCoreData]>
     
     //MARK: - Create CoreData Models
     

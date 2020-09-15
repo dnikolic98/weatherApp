@@ -139,7 +139,7 @@ class LocationSearchViewController: UIViewController {
                 
                 self.presenter.handleCellTap(index: indexPath.row)
                 if let delegate = self.locationSearchDelegate {
-                    delegate.didTapNewLocation()
+//                    delegate.didTapNewLocation()
                 }
             })
             .disposed(by: tableViewDisposeBag)
