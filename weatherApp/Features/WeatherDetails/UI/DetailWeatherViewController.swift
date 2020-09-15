@@ -58,7 +58,6 @@ class DetailWeatherViewController: UIViewController {
         configurePullToRefresh()
         setupRefreshData()
         bindReachable()
-        setupHero()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -137,11 +136,6 @@ class DetailWeatherViewController: UIViewController {
                 self.refreshUI(currentWeather: currentWeather)
             })
             .disposed(by: refreshDisposeBag)
-    }
-    
-    private func setupHero() {
-        guard let currentWeather = detailWeatherPresenter.currentWeather.value else { return }
-        mainInformationView.setupHero(currentWeather: currentWeather)
     }
     
     //MARK: - UI elements setup

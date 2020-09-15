@@ -296,8 +296,8 @@
 			isa = PBXGroup;
 			children = (
 				A3396EB524F54B8A009FDBEC /* Views */,
-				A39BC291250921A0000CDF13 /* DesginProtocol.swift */,
 				A3D867802500FB78003DE8A0 /* UIView+AppGradient.swift */,
+				A39BC291250921A0000CDF13 /* DesginProtocol.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";

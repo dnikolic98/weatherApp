@@ -9,5 +9,7 @@
 import Foundation
 
 enum CoreDataErrors: Error {
+    
     case incompatibleCast
+    
 }

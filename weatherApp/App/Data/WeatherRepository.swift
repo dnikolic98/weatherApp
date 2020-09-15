@@ -14,11 +14,15 @@ import RxReachability
 
 class WeatherRepository {
     
+    //MARK: - Properties
+    
     var reachabilityDisposeBag: DisposeBag = DisposeBag()
     let weatherService: WeatherServiceProtocol
     let coreDataService: CoreDataServiceProtocol
     var reachability: Reachability
     var isReachable: BehaviorRelay<Bool>
+    
+    //MARK: - Initalization
     
     init(weatherService: WeatherServiceProtocol, coreDataService: CoreDataServiceProtocol, reachability: Reachability) {
         self.weatherService = weatherService
@@ -29,6 +33,8 @@ class WeatherRepository {
         startReachability()
         bindReachability()
     }
+    
+    //MARK: - Fetching data
     
     func fetchSeveralCurrentWeather(id: [Int]) -> Observable<[CurrentWeatherCoreData]> {
         switch reachability.connection {
@@ -84,14 +90,6 @@ class WeatherRepository {
         }
     }
     
-    private func createAndSaveCurrentWeather(from multipleCurrentWeather: MultipleCurrentWeather) {
-        let currentWeatherList = multipleCurrentWeather.list
-        for currentWeather in currentWeatherList {
-            self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
-        }
-        self.coreDataService.saveChanges()
-    }
-    
     func fetchCityLists(query: String) -> Observable<[CityCoreData]> {
         return coreDataService.fetchCityList(query: query)
     }
@@ -100,6 +98,8 @@ class WeatherRepository {
         return coreDataService.fetchSelectedLocations()
     }
     
+    //MARK: - User location selection methods
+    
     func selectLocation(id: Int) {
         coreDataService.createSelectedLocationFrom(id: id)
         coreDataService.saveChanges()
@@ -107,6 +107,16 @@ class WeatherRepository {
     
     func deselectLocation(id: Int) {
         coreDataService.removeSelectedLocation(id: id)
+    }
+    
+    //MARK: - Helpers
+    
+    private func createAndSaveCurrentWeather(from multipleCurrentWeather: MultipleCurrentWeather) {
+        let currentWeatherList = multipleCurrentWeather.list
+        for currentWeather in currentWeatherList {
+            self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
+        }
+        self.coreDataService.saveChanges()
     }
     
     private func startReachability() {

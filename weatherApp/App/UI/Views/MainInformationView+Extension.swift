@@ -144,7 +144,6 @@ extension MainInformationView: DesignProtocol {
         maxTempLabel.textColor = .white
     }
     
-    
     private func styleUpdatedInfoLabel() {
         updatedInfoLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         updatedInfoLabel.adjustsFontSizeToFitWidth = true
