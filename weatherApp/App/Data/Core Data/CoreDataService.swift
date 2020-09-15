@@ -77,7 +77,7 @@ class CoreDataService: CoreDataServiceProtocol {
     
     func fetchSelectedLocations() -> Observable<[SelectedLocationCoreData]> {
         let request: NSFetchRequest<SelectedLocationCoreData> = SelectedLocationCoreData.fetchRequest()
-        request.sortDescriptors = []
+        request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
         
         return mainContext.rx_entities(request as! NSFetchRequest<NSFetchRequestResult>)
             .flatMap { fetchedManagedObject -> Observable<[SelectedLocationCoreData]> in

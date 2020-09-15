@@ -228,26 +228,24 @@ class HomeViewController: UIViewController {
     }
     
     private func refreshTableView() {
-        refreshTableView(completion: { })
+        DispatchQueue.main.async {
+            self.refreshTableViewHeight()
+            self.refreshControl.endRefreshing()
+        }
     }
     
-    private func refreshTableViewHeight(completion: @escaping (() -> Void)) {
+    private func refreshTableViewHeight() {
         let rows = currentWeatherListPresenter.numberOfCurrentWeather
-        
-        tableViewHeightConstraint.constant = CGFloat(rows) * rowHeight
-        UIView.animate(withDuration: 0.3, animations: {
-            self.view.layoutIfNeeded()
+
+        self.tableViewHeightConstraint.constant = CGFloat(rows) * self.rowHeight
+        UIView.animate(withDuration: 0.5) {
             self.tableView.reloadData()
-        }, completion: { completed in
-            completion()
-        })
+            self.view.layoutIfNeeded()
+        }
     }
     
     private func refreshTableView(completion: @escaping (() -> Void)) {
-        DispatchQueue.main.async {
-            self.refreshTableViewHeight(completion: { completion() })
-            self.refreshControl.endRefreshing()
-        }
+        refreshTableView()
     }
     
     private func setGradientBackground() {
@@ -298,15 +296,7 @@ extension HomeViewController: UITableViewDelegate {
         if editingStyle == .delete {
             guard let currentWeather = currentWeatherListPresenter.currentWeather(atIndex: indexPath.row) else { return }
             
-            CATransaction.begin()
-            CATransaction.setCompletionBlock {
-                self.refreshTableView(completion: {
-                    self.currentWeatherListPresenter.handleRemoveLocation(id: currentWeather.id)
-                })
-            }
-            currentWeatherListPresenter.currentWeatherRemoveItem(atIndex: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            CATransaction.commit()
+            currentWeatherListPresenter.handleRemoveLocation(id: currentWeather.id)
         }
     }
     
