@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class HomeViewController: UIViewController {
+class WeatherListViewController: UIViewController {
     
     //MARK: - Properties
     
@@ -22,7 +22,7 @@ class HomeViewController: UIViewController {
     private var reachableDisposeBag: DisposeBag = DisposeBag()
     private var locationsDisposeBag: DisposeBag = DisposeBag()
     private var refreshControl: UIRefreshControl!
-    private var currentWeatherListPresenter: CurrentWeatherListPresenter!
+    private var currentWeatherListPresenter: WeatherListPresenter!
     
     @IBOutlet private weak var noInternetViewHeight: NSLayoutConstraint!
     @IBOutlet private weak var noLocationViewHeight: NSLayoutConstraint!
@@ -42,10 +42,10 @@ class HomeViewController: UIViewController {
     
     //MARK: - Initialization
     
-    convenience init(currentWeatherListPresenter: CurrentWeatherListPresenter) {
+    convenience init(with presenter: WeatherListPresenter) {
         self.init()
 
-        self.currentWeatherListPresenter = currentWeatherListPresenter
+        self.currentWeatherListPresenter = presenter
     }
     
     //MARK: - Overrides
@@ -267,7 +267,7 @@ class HomeViewController: UIViewController {
 
 //MARK: - TableView DataSource
 
-extension HomeViewController: UITableViewDataSource {
+extension WeatherListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return currentWeatherListPresenter.numberOfCurrentWeather
@@ -287,7 +287,7 @@ extension HomeViewController: UITableViewDataSource {
 
 //MARK: - TableView Delegate
 
-extension HomeViewController: UITableViewDelegate {
+extension WeatherListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return rowHeight

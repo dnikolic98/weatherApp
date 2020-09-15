@@ -9,7 +9,7 @@
 import RxSwift
 import RxCocoa
 
-class CurrentWeatherListPresenter {
+class WeatherListPresenter {
     
     //MARK: - Properties
     

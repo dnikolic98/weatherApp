@@ -40,9 +40,9 @@ class DetailWeatherViewController: UIViewController {
     
     //MARK: - Initialization
     
-    convenience init(detailWeatherPresenter: DetailWeatherPresenter) {
+    convenience init(with presenter: DetailWeatherPresenter) {
         self.init()
-        self.detailWeatherPresenter = detailWeatherPresenter
+        self.detailWeatherPresenter = presenter
     }
     
     //MARK: - Overrides

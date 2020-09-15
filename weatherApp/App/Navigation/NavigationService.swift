@@ -31,14 +31,14 @@ class NavigationService {
     //MARK: - Public navigation methods
     
     func goToHome() {
-        let presenter = CurrentWeatherListPresenter(weatherRepository: appDependencies.weatherRepository, locationService: appDependencies.locationService, navigationService: self)
-        let viewController = HomeViewController(currentWeatherListPresenter: presenter)
+        let presenter = WeatherListPresenter(weatherRepository: appDependencies.weatherRepository, locationService: appDependencies.locationService, navigationService: self)
+        let viewController = WeatherListViewController(with: presenter)
         navigationController?.pushViewController(viewController, animated: true)
     }
     
     func goToDetailWeather(currentWeather: CurrentWeatherViewModel) {
         let presenter = DetailWeatherPresenter(currentWeather: currentWeather, weatherRepository: appDependencies.weatherRepository)
-        let viewController = DetailWeatherViewController(detailWeatherPresenter: presenter)
+        let viewController = DetailWeatherViewController(with: presenter)
         navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
         navigationController?.pushViewController(viewController, animated: true)
     }
