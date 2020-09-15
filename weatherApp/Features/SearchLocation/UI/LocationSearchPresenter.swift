@@ -11,19 +11,21 @@ import RxCocoa
 
 class LocationSearchPresenter {
     
+    //MARK: - Properties
+    
     private let weatherRepository: WeatherRepository
     private let navigationService: NavigationService
     private var selectedLocationIds: [Int] = []
     private var dataSourceData: [CityViewModel] = []
+    
+    //MARK: - Initialization
     
     init(weatherRepository: WeatherRepository, navigationService: NavigationService) {
         self.weatherRepository = weatherRepository
         self.navigationService = navigationService
     }
     
-    @objc func handleBackButtonTapped() {
-        navigationService.goBack()
-    }
+    //MARK: - Fetching ViewModel
     
     func fetchCityList(query: String) -> Observable<[SectionOfCityViewModels]> {
         weatherRepository
@@ -51,6 +53,14 @@ class LocationSearchPresenter {
             })
             .map { [SectionOfCityViewModels(items: $0)] }
     }
+    
+    //MARK: - Back button action
+    
+    @objc func handleBackButtonTapped() {
+        navigationService.goBack()
+    }
+    
+    //MARK: - Cell select action
     
     func handleCellTap(index: Int) {
         guard let city = dataSourceData.at(index) else { return }

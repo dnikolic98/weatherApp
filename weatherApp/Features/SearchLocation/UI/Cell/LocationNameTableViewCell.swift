@@ -10,11 +10,15 @@ import UIKit
 
 class LocationNameTableViewCell: UITableViewCell {
     
+    //MARK: - Properties
+    
     var nameLabel: UILabel!
     
     static var typeName: String {
         String(describing: self)
     }
+    
+    //MARK: - Initialization
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -37,6 +41,8 @@ class LocationNameTableViewCell: UITableViewCell {
         setLayerMask()
     }
     
+    //MARK: - Public methods
+    
     func set(with city: CityViewModel) {
         nameLabel.text = city.name
         if city.selected {
@@ -44,6 +50,8 @@ class LocationNameTableViewCell: UITableViewCell {
             isUserInteractionEnabled = false
         }
     }
+    
+    //MARK: - Helpers
     
     private func setLayerMask() {
         let verticalPadding: CGFloat = 10

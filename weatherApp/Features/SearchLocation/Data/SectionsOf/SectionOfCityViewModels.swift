@@ -10,7 +10,7 @@ import RxDataSources
 
 struct SectionOfCityViewModels {
     
-  var items: [Item]
+    var items: [Item]
     
 }
 
