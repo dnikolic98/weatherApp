@@ -11,6 +11,8 @@ import RxCocoa
 
 class DetailWeatherPresenter {
     
+    //MARK: - Properties
+    
     private var currentWeatherDisposeBag: DisposeBag = DisposeBag()
     private var fiveDaysDisposeBag: DisposeBag = DisposeBag()
     private var conditionListDisposeBag = DisposeBag()
@@ -23,6 +25,8 @@ class DetailWeatherPresenter {
         Observable.combineLatest(currentWeather.asObservable(),
                            fiveDaysList.asObservable())
     }
+    
+    //MARK: - Initialization
 
     init(currentWeather: CurrentWeatherViewModel, weatherRepository: WeatherRepository) {
         self.currentWeather = BehaviorRelay<CurrentWeatherViewModel?>(value: currentWeather)
@@ -32,6 +36,8 @@ class DetailWeatherPresenter {
 
         bindConditionList()
     }
+    
+    //MARK: - Public methods for binding to observables
     
     func bindCurrentWeather() -> BehaviorRelay<CurrentWeatherViewModel?> {
         fetchCurrentWeather()
@@ -48,6 +54,8 @@ class DetailWeatherPresenter {
             .isReachable
             .asObservable()
     }
+    
+    //MARK: - Private presenter data binidng
     
     private func fetchCurrentWeather() {
         currentWeatherDisposeBag = DisposeBag()
@@ -126,6 +134,7 @@ class DetailWeatherPresenter {
         .disposed(by: conditionListDisposeBag)
     }
     
+    //MARK: - Helpers
     
     private func createWeatherConditionList(currentWeather: CurrentWeatherViewModel?) -> [ConditionInformationViewModel] {
         guard let current = currentWeather else { return [] }
