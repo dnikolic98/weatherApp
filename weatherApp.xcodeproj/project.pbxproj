@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		13E8F276292783AC56A01250 /* Pods_weatherApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2CBE0A15CAE8FD584CED745 /* Pods_weatherApp.framework */; };
+		A30B48032510C2BF0085A62C /* FetchedResultsController+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30B48012510C2BF0085A62C /* FetchedResultsController+Rx.swift */; };
+		A30B48042510C2BF0085A62C /* NSManagedObjectContext+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30B48022510C2BF0085A62C /* NSManagedObjectContext+Rx.swift */; };
 		A30DDDE225062CE400B1D833 /* LocationNameTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30DDDE125062CE300B1D833 /* LocationNameTableViewCell.swift */; };
 		A30DDDE42506518300B1D833 /* CellBackgrounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30DDDE32506518300B1D833 /* CellBackgrounds.swift */; };
 		A30DDDEB25066A0D00B1D833 /* SelectedLocationCoreData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30DDDE925066A0D00B1D833 /* SelectedLocationCoreData+CoreDataClass.swift */; };
@@ -103,6 +105,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A30B48012510C2BF0085A62C /* FetchedResultsController+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FetchedResultsController+Rx.swift"; sourceTree = "<group>"; };
+		A30B48022510C2BF0085A62C /* NSManagedObjectContext+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+Rx.swift"; sourceTree = "<group>"; };
 		A30DDDE125062CE300B1D833 /* LocationNameTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationNameTableViewCell.swift; sourceTree = "<group>"; };
 		A30DDDE32506518300B1D833 /* CellBackgrounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellBackgrounds.swift; sourceTree = "<group>"; };
 		A30DDDE925066A0D00B1D833 /* SelectedLocationCoreData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SelectedLocationCoreData+CoreDataClass.swift"; path = "/Users/dario/Documents/projects/weatherApp/weatherApp/Features/SearchLocation/Data/CoreDataModels/SelectedLocationCoreData+CoreDataClass.swift"; sourceTree = "<absolute>"; };
@@ -222,12 +226,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		A31C944F24F40145003BFA47 /* CoreDataExtensions */ = {
+		A31C944F24F40145003BFA47 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				A30B48012510C2BF0085A62C /* FetchedResultsController+Rx.swift */,
+				A30B48022510C2BF0085A62C /* NSManagedObjectContext+Rx.swift */,
 				A31C945024F40176003BFA47 /* NSManagedObject+Extension.swift */,
 			);
-			path = CoreDataExtensions;
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 		A328A875250130CF00C67BDD /* SearchLocation */ = {
@@ -445,7 +451,7 @@
 			children = (
 				A3DCBF1024FE569C00590016 /* URLSession */,
 				A3C9307324F5049400B07ED0 /* Data */,
-				A31C944F24F40145003BFA47 /* CoreDataExtensions */,
+				A31C944F24F40145003BFA47 /* CoreData */,
 				A3BD78DE24E294E7003723DE /* UIExtensions */,
 				A3BD78DD24E294C4003723DE /* FoundationExtensions */,
 			);
@@ -890,7 +896,9 @@
 				A3AB21CA250FCFD4003940CF /* UserWarningView.swift in Sources */,
 				A39D475324E5484E00C1C6A3 /* DailyForecastViewModel.swift in Sources */,
 				A3BE172824ED2E39001D9F82 /* DailyTemperatureCoreData+CoreDataClass.swift in Sources */,
+				A30B48032510C2BF0085A62C /* FetchedResultsController+Rx.swift in Sources */,
 				A328A88025013BDA00C67BDD /* LocationSearchPresenter.swift in Sources */,
+				A30B48042510C2BF0085A62C /* NSManagedObjectContext+Rx.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
