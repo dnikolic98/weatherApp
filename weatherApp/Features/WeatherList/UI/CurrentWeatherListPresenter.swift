@@ -96,8 +96,8 @@ class CurrentWeatherListPresenter {
         navigationService.goToDetailWeather(currentWeather: currentWeather)
     }
     
-    func handleAddLocation(assignDelegate: LocationSearchDelegate) {
-        navigationService.goToSearchLocation(delegate: assignDelegate)
+    func handleAddLocation() {
+        navigationService.goToSearchLocation()
     }
     
     func handleRemoveLocation(id: Int) {

@@ -35,10 +35,9 @@ class NavigationService {
         navigationController?.pushViewController(DetailWeatherViewController(detailWeatherPresenter: presenter), animated: true)
     }
     
-    func goToSearchLocation(delegate: LocationSearchDelegate) {
+    func goToSearchLocation() {
         let presenter = LocationSearchPresenter(weatherRepository: appDependencies.weatherRepository, navigationService: self)
         let viewController = LocationSearchViewController(with: presenter)
-        viewController.setupDelegate(delegate)
         navigationController?.heroNavigationAnimationType = .cover(direction: .up)
         navigationController?.pushViewController(viewController, animated: true)
     }

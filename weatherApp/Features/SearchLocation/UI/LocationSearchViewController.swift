@@ -11,17 +11,12 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-protocol LocationSearchDelegate {
-    func didTapNewLocation()
-}
-
 class LocationSearchViewController: UIViewController {
     
     private var throttleTime: RxTimeInterval = .milliseconds(500)
     private let citiesDisposeBage: DisposeBag = DisposeBag()
     private let searchBarDisposeBag: DisposeBag = DisposeBag()
     private let tableViewDisposeBag: DisposeBag = DisposeBag()
-    private var locationSearchDelegate: LocationSearchDelegate?
     private let presenter: LocationSearchPresenter!
     private var dataSource: RxTableViewSectionedReloadDataSource<SectionOfCityViewModels>!
     private var locationSearchView: LocationSearchView {
@@ -67,10 +62,6 @@ class LocationSearchViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
-    
-    func setupDelegate(_ delegate: LocationSearchDelegate) {
-        locationSearchDelegate = delegate
     }
     
     private func setupSearchBar() {
@@ -138,9 +129,6 @@ class LocationSearchViewController: UIViewController {
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 
                 self.presenter.handleCellTap(index: indexPath.row)
-                if let delegate = self.locationSearchDelegate {
-//                    delegate.didTapNewLocation()
-                }
             })
             .disposed(by: tableViewDisposeBag)
     }

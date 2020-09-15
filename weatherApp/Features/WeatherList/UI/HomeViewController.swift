@@ -33,7 +33,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var addLocationButton: UIButton!
     
     @IBAction func addLocationButtonTapped(_ sender: Any) {
-        currentWeatherListPresenter.handleAddLocation(assignDelegate: self)
+        currentWeatherListPresenter.handleAddLocation()
     }
     
     convenience init(currentWeatherListPresenter: CurrentWeatherListPresenter) {
@@ -228,24 +228,26 @@ class HomeViewController: UIViewController {
     }
     
     private func refreshTableView() {
-        DispatchQueue.main.async {
-            self.refreshTableViewHeight()
-            self.tableView.reloadData()
-            self.refreshControl.endRefreshing()
-        }
+        refreshTableView(completion: { })
     }
     
-    private func refreshTableViewHeight() {
+    private func refreshTableViewHeight(completion: @escaping (() -> Void)) {
         let rows = currentWeatherListPresenter.numberOfCurrentWeather
         
         tableViewHeightConstraint.constant = CGFloat(rows) * rowHeight
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.3, animations: {
             self.view.layoutIfNeeded()
-        }
+            self.tableView.reloadData()
+        }, completion: { completed in
+            completion()
+        })
     }
     
     private func refreshTableView(completion: @escaping (() -> Void)) {
-        refreshTableView()
+        DispatchQueue.main.async {
+            self.refreshTableViewHeight(completion: { completion() })
+            self.refreshControl.endRefreshing()
+        }
     }
     
     private func setGradientBackground() {
@@ -298,22 +300,14 @@ extension HomeViewController: UITableViewDelegate {
             
             CATransaction.begin()
             CATransaction.setCompletionBlock {
-                self.refreshTableView {
+                self.refreshTableView(completion: {
                     self.currentWeatherListPresenter.handleRemoveLocation(id: currentWeather.id)
-                }
+                })
             }
             currentWeatherListPresenter.currentWeatherRemoveItem(atIndex: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             CATransaction.commit()
         }
-    }
-    
-}
-
-extension HomeViewController: LocationSearchDelegate {
-    
-    func didTapNewLocation() {
-        bindViewModel()
     }
     
 }
