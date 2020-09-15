@@ -34,14 +34,14 @@ extension UIView {
             CATransaction.setCompletionBlock {
                 gradientLayer.colors = newColors
             }
-            gradientLayer.add(getGradientAnimation(toValue: newColors), forKey: "colorChange")
+            gradientLayer.add(createGradientAnimation(toValue: newColors), forKey: "colorChange")
             CATransaction.commit()
         }
         
         layer.insertSublayer(gradientLayer, at: 0)
     }
     
-    func getGradientAnimation(toValue: [CGColor]) -> CABasicAnimation {
+    func createGradientAnimation(toValue: [CGColor]) -> CABasicAnimation {
         let gradientChangeAnimation = CABasicAnimation(keyPath: "colors")
         
         gradientChangeAnimation.duration = 2.0
