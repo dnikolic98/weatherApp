@@ -2,7 +2,7 @@
 //  CityCoreData+CoreDataClass.swift
 //  
 //
-//  Created by Dario Nikolic on 16/09/2020.
+//  Created by Dario Nikolic on 04/09/2020.
 //
 //
 

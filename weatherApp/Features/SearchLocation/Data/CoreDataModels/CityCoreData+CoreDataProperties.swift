@@ -2,7 +2,7 @@
 //  CityCoreData+CoreDataProperties.swift
 //  
 //
-//  Created by Dario Nikolic on 16/09/2020.
+//  Created by Dario Nikolic on 04/09/2020.
 //
 //
 
@@ -16,8 +16,8 @@ extension CityCoreData {
         return NSFetchRequest<CityCoreData>(entityName: "CityCoreData")
     }
 
-    @NSManaged public var country: String?
+    @NSManaged public var country: String
     @NSManaged public var id: Int64
-    @NSManaged public var name: String?
+    @NSManaged public var name: String
 
 }
