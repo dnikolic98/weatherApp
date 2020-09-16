@@ -18,9 +18,7 @@ protocol LocationSearchDelegate {
 class LocationSearchViewController: UIViewController {
     
     private var throttleTime: RxTimeInterval = .milliseconds(500)
-    private let citiesDisposeBage: DisposeBag = DisposeBag()
-    private let searchBarDisposeBag: DisposeBag = DisposeBag()
-    private let tableViewDisposeBag: DisposeBag = DisposeBag()
+    private let viewControllerDisposeBag: DisposeBag = DisposeBag()
     private var locationSearchDelegate: LocationSearchDelegate?
     private var presenter: LocationSearchPresenter!
     private var dataSource: RxTableViewSectionedReloadDataSource<SectionOfCityViewModels>!
@@ -77,14 +75,14 @@ class LocationSearchViewController: UIViewController {
             .subscribe({ [weak self] _ in
                 self?.locationSearchView.searchBar.setShowsCancelButton(true, animated: true)
             })
-            .disposed(by: searchBarDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
         
         locationSearchView.searchBar.rx
             .textDidEndEditing
             .subscribe({ [weak self] _ in
                 self?.locationSearchView.searchBar.setShowsCancelButton(false, animated: true)
             })
-            .disposed(by: searchBarDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
     }
     
     private func setupSearchButtonInteractions() {
@@ -94,7 +92,7 @@ class LocationSearchViewController: UIViewController {
             .subscribe({ [weak self] _ in
                 self?.endEditingSearchBar()
             })
-            .disposed(by: searchBarDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
     }
     
     @objc private func endEditingSearchBar() {
@@ -121,7 +119,7 @@ class LocationSearchViewController: UIViewController {
     }
     
     private func configureTableView() {
-        tableView.rx.setDelegate(self).disposed(by: tableViewDisposeBag)
+        tableView.rx.setDelegate(self).disposed(by: viewControllerDisposeBag)
         tableView.register(LocationNameTableViewCell.self, forCellReuseIdentifier: LocationNameTableViewCell.typeName)
         
         Observable.zip(
@@ -136,7 +134,7 @@ class LocationSearchViewController: UIViewController {
                     delegate.didTapNewLocation()
                 }
             })
-            .disposed(by: tableViewDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
     }
     
     private func bindTableViewData() {
@@ -157,7 +155,7 @@ class LocationSearchViewController: UIViewController {
                 self?.locationSearchView.stopLoadingIndicator()
             })
             .bind(to: tableView.rx.items(dataSource: dataSource))
-            .disposed(by: citiesDisposeBage)
+            .disposed(by: viewControllerDisposeBag)
     }
     
 }
