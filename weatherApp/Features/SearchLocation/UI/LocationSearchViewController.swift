@@ -22,7 +22,7 @@ class LocationSearchViewController: UIViewController {
     private let searchBarDisposeBag: DisposeBag = DisposeBag()
     private let tableViewDisposeBag: DisposeBag = DisposeBag()
     private var locationSearchDelegate: LocationSearchDelegate?
-    private let presenter: LocationSearchPresenter!
+    private var presenter: LocationSearchPresenter!
     private var dataSource: RxTableViewSectionedReloadDataSource<SectionOfCityViewModels>!
     private var locationSearchView: LocationSearchView {
         view as! LocationSearchView
@@ -31,13 +31,9 @@ class LocationSearchViewController: UIViewController {
         locationSearchView.resultsTableView
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    init(with presenter: LocationSearchPresenter) {
+    convenience init(with presenter: LocationSearchPresenter) {
+        self.init()
         self.presenter = presenter
-        super.init(nibName: nil, bundle: nil)
     }
     
     override func viewDidLoad() {
