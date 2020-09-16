@@ -24,12 +24,11 @@ class LocationSearchViewController: UIViewController {
     private var locationSearchDelegate: LocationSearchDelegate?
     private var presenter: LocationSearchPresenter!
     private var dataSource: RxTableViewSectionedReloadDataSource<SectionOfCityViewModels>!
-    private var locationSearchView: LocationSearchView {
-        view as! LocationSearchView
-    }
     private var tableView: UITableView {
         locationSearchView.resultsTableView
     }
+    
+    var locationSearchView: LocationSearchView!
     
     convenience init(with presenter: LocationSearchPresenter) {
         self.init()
@@ -39,6 +38,7 @@ class LocationSearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        buildViews()
         setupDataSource()
         configureTableView()
         setupSearchBar()
@@ -49,10 +49,6 @@ class LocationSearchViewController: UIViewController {
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         tableView.reloadData()
-    }
-    
-    override func loadView() {
-        self.view = LocationSearchView(frame: UIScreen.main.bounds)
     }
     
     override func viewWillAppear(_ animated: Bool) {
