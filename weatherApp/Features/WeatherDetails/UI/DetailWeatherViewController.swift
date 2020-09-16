@@ -110,6 +110,7 @@ class DetailWeatherViewController: UIViewController {
     
     private func setupRefreshData() {
         detailWeatherPresenter.weatherData
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] currentWeather, _ in
             guard
                 let self = self,
@@ -174,12 +175,10 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func refreshUI(currentWeather: CurrentWeatherViewModel) {
-        DispatchQueue.main.async {
-            self.setWeatherInformation(currentWeather: currentWeather)
-            self.setGradientBackground(currentWeather: currentWeather)
-            self.daysCollectionView.reloadData()
-            self.refreshControl.endRefreshing()
-        }
+        self.setWeatherInformation(currentWeather: currentWeather)
+        self.setGradientBackground(currentWeather: currentWeather)
+        self.daysCollectionView.reloadData()
+        self.refreshControl.endRefreshing()
     }
     
     private func setGradientBackground(currentWeather: CurrentWeatherViewModel) {
