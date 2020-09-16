@@ -21,9 +21,8 @@ class LocationSearchViewController: UIViewController {
     private var locationSearchDelegate: LocationSearchDelegate?
     private var presenter: LocationSearchPresenter!
     private let citiesFiltered: BehaviorRelay<[CityViewModel]> = BehaviorRelay<[CityViewModel]>(value: [])
-    private var locationSearchView: LocationSearchView {
-        return self.view as! LocationSearchView
-    }
+    
+    var locationSearchView: LocationSearchView!
     
     convenience init(with presenter: LocationSearchPresenter) {
         self.init()
@@ -33,16 +32,13 @@ class LocationSearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        buildViews()
         setupSearchBar()
         setupKeyboardDismissGestureRecognizer()
         setupBackButton()
         setupTableView()
         setupDataFiltering()
         setupTableViewDataReloading()
-    }
-    
-    override func loadView() {
-        self.view = LocationSearchView(frame: UIScreen.main.bounds)
     }
     
     override func viewWillAppear(_ animated: Bool) {
