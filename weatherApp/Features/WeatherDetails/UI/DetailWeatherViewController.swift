@@ -20,8 +20,7 @@ class DetailWeatherViewController: UIViewController {
     private var fiveDaysDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>!
     private var conditionListDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfConditionInformation>!
     private var dataDisposeBag: DisposeBag = DisposeBag()
-    private var timerDisposeBag: DisposeBag = DisposeBag()
-    private var refreshDisposeBag: DisposeBag = DisposeBag()
+    private var viewControllerDisposeBag: DisposeBag = DisposeBag()
     private let detailsNumOfColumns = 2
     private let numberOfDays = 5
     private let padding: CGFloat = 10
@@ -82,15 +81,13 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func startTimer() {
-        timerDisposeBag = DisposeBag()
-        
         Observable<Int>
             .timer(.seconds(0), period: .seconds(dataRefreshPeriod), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.bindViewModel()
             })
-            .disposed(by: timerDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
     }
     
     private func setupFiveDaysDataSource() {
@@ -122,7 +119,7 @@ class DetailWeatherViewController: UIViewController {
             }
                 self.refreshUI(currentWeather: currentWeather)
             })
-            .disposed(by: refreshDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
     }
     
     //MARK: - UI elements setup
