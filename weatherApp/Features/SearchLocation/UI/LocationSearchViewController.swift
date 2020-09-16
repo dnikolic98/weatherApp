@@ -19,19 +19,15 @@ class LocationSearchViewController: UIViewController {
     private let citiesDisposeBage: DisposeBag = DisposeBag()
     private let searchBarDisposeBag: DisposeBag = DisposeBag()
     private var locationSearchDelegate: LocationSearchDelegate?
-    private let presenter: LocationSearchPresenter!
+    private var presenter: LocationSearchPresenter!
     private let citiesFiltered: BehaviorRelay<[CityViewModel]> = BehaviorRelay<[CityViewModel]>(value: [])
     private var locationSearchView: LocationSearchView {
         return self.view as! LocationSearchView
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    init(with presenter: LocationSearchPresenter) {
+    convenience init(with presenter: LocationSearchPresenter) {
+        self.init()
         self.presenter = presenter
-        super.init(nibName: nil, bundle: nil)
     }
     
     override func viewDidLoad() {
