@@ -124,12 +124,14 @@ class LocationSearchViewController: UIViewController {
         tableView.rx.setDelegate(self).disposed(by: tableViewDisposeBag)
         tableView.register(LocationNameTableViewCell.self, forCellReuseIdentifier: LocationNameTableViewCell.typeName)
         
-        tableView.rx.itemSelected
-            .subscribe(onNext: { [weak self] indexPath in
+        Observable.zip(
+            tableView.rx.itemSelected,
+            tableView.rx.modelSelected(CityViewModel.self))
+            .subscribe(onNext: { [weak self] indexPath, location in
                 guard let self = self else { return }
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 
-                self.presenter.handleCellTap(index: indexPath.row)
+                self.presenter.handleCellTap(city: location)
                 if let delegate = self.locationSearchDelegate {
                     delegate.didTapNewLocation()
                 }
