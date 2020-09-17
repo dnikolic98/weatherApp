@@ -860,7 +860,6 @@
 				A329B347250A7303003DE908 /* SectionOfCityViewModels.swift in Sources */,
 				A3BE178324ED2FAB001D9F82 /* CurrentWeatherCoreData+CoreDataProperties.swift in Sources */,
 				A3AB21CC250FD012003940CF /* UserWarningView+Design.swift in Sources */,
-				A3A58C672502998F00E1FC79 /* CityCoreData+CoreDataClass.swift in Sources */,
 				A3A81ECE24F3F2A8009B7674 /* CoreDataService.swift in Sources */,
 				A3E516AC24DCAD600013F4CE /* UIView+Extension.swift in Sources */,
 				A3794B0024D84D81008A8779 /* HomeViewController.swift in Sources */,

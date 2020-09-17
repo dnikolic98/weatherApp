@@ -31,9 +31,7 @@ class DetailWeatherPresenter {
     }
     
     func isReachable() -> Observable<Bool> {
-        weatherRepository
-            .isReachable
-            .asObservable()
+        weatherRepository.isReachable
     }
     
     func fetchCurrentWeather() -> Observable<CurrentWeatherViewModel?> {

@@ -74,10 +74,7 @@ class CurrentWeatherListPresenter {
     }
     
     func isReachable() -> Observable<Bool> {
-        weatherRepository
-            .isReachable
-            .skip(1)
-            .asObservable()
+        weatherRepository.isReachable
     }
     
     func checkLocationsAllowed() -> Bool {
