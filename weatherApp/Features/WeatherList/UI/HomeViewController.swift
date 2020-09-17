@@ -95,8 +95,7 @@ class HomeViewController: UIViewController {
         Observable<Int>
             .timer(.seconds(0), period: .seconds(dataRefreshPeriod), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.bindViewModel()
+                self?.bindViewModel()
             })
             .disposed(by: timerDisposeBag)
     }

@@ -42,24 +42,19 @@ class DetailWeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let currentWeather = detailWeatherPresenter.currentWeather.value {
-            setWeatherInformation(currentWeather: currentWeather)
-        }
+        setWeatherInformation(currentWeather: detailWeatherPresenter.currentWeather)
         setupFiveDaysDataSource()
         setupConditionListDataSource()
         setupCollectionViews()
         bindViewModel()
         startTimer()
         configurePullToRefresh()
-        setupRefreshData()
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        if let currentWeather = detailWeatherPresenter.currentWeather.value {
-            setGradientBackground(currentWeather: currentWeather)
-        }
+        setGradientBackground(currentWeather: detailWeatherPresenter.currentWeather)
     }
     
     //MARK: - Data
@@ -67,11 +62,20 @@ class DetailWeatherViewController: UIViewController {
     @objc private func bindViewModel() {
         dataDisposeBag = DisposeBag()
         
-        detailWeatherPresenter.bindCurrentWeather()
-            .subscribe()
+        detailWeatherPresenter.fetchCurrentWeather()
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] currentWeather in
+                guard
+                    let self = self,
+                    let currentWeather = currentWeather
+                else {
+                    return
+                }
+                self.refreshUI(currentWeather: currentWeather)
+            })
             .disposed(by: dataDisposeBag)
         
-        detailWeatherPresenter.bindFiveDaysList()
+        detailWeatherPresenter.fetchFiveDaysList()
             .bind(to: daysCollectionView.rx.items(dataSource: fiveDaysDataSource))
             .disposed(by: dataDisposeBag)
         
@@ -84,8 +88,7 @@ class DetailWeatherViewController: UIViewController {
         Observable<Int>
             .timer(.seconds(0), period: .seconds(dataRefreshPeriod), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.bindViewModel()
+                self?.bindViewModel()
             })
             .disposed(by: viewControllerDisposeBag)
     }
@@ -108,25 +111,9 @@ class DetailWeatherViewController: UIViewController {
         })
     }
     
-    private func setupRefreshData() {
-        detailWeatherPresenter.weatherData
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [weak self] currentWeather, _ in
-            guard
-                let self = self,
-                let currentWeather = currentWeather
-            else {
-                return
-            }
-                self.refreshUI(currentWeather: currentWeather)
-            })
-            .disposed(by: viewControllerDisposeBag)
-    }
-    
     //MARK: - UI elements setup
     
     private func setWeatherInformation(currentWeather: CurrentWeatherViewModel) {
-        guard let currentWeather = detailWeatherPresenter.currentWeather.value else { return }
         mainInformationView.set(currentWeather: currentWeather)
     }
     
@@ -177,7 +164,6 @@ class DetailWeatherViewController: UIViewController {
     private func refreshUI(currentWeather: CurrentWeatherViewModel) {
         self.setWeatherInformation(currentWeather: currentWeather)
         self.setGradientBackground(currentWeather: currentWeather)
-        self.daysCollectionView.reloadData()
         self.refreshControl.endRefreshing()
     }
     
