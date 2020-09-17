@@ -210,7 +210,7 @@ class HomeViewController: UIViewController {
     private func refreshTableViewHeight() {
         let rows = currentWeatherListPresenter.numberOfCurrentWeather
 
-        self.tableViewHeightConstraint.constant = CGFloat(rows) * self.rowHeight
+        tableViewHeightConstraint.constant = CGFloat(rows) * rowHeight
         UIView.animate(withDuration: 0.5) {
             self.tableView.reloadData()
             self.view.layoutIfNeeded()
