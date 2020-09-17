@@ -130,27 +130,21 @@ class DetailWeatherViewController: UIViewController {
             .isReachable
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] reachable in
-                guard let self = self else { return }
-                guard reachable else {
-                    self.showInternetWarning()
-                    return
-                }
-                self.hideInternetWarning()
+                self?.showInternetWarning(!reachable)
             })
             .disposed(by: viewControllerDisposeBag)
     }
     
-    private func showInternetWarning() {
-        self.noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
-        self.noInternetWarningView.isHidden = false
-        self.noInternetWarningHeight.constant = UserWarningView.height
-        
-    }
-    
-    private func hideInternetWarning() {
-        self.noInternetWarningView.isHidden = true
-        self.noInternetWarningHeight.constant = CGFloat(0)
-        
+    private func showInternetWarning(_ showWarning: Bool) {
+        switch showWarning {
+        case true:
+            noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
+            noInternetWarningView.isHidden = false
+            noInternetWarningHeight.constant = UserWarningView.height
+        case false:
+            noInternetWarningView.isHidden = true
+            noInternetWarningHeight.constant = CGFloat(0)
+        }
     }
     
     private func setupDetailsCollectionView() {

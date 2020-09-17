@@ -111,34 +111,30 @@ class HomeViewController: UIViewController {
     private func bindLocationsEnabled() {
         currentWeatherListPresenter
             .areLocationsEnabled
-            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] enabled in
                 guard let self = self else { return }
                 guard enabled else {
-                    self.showLocationsWarning(warning: LocalizedStrings.disabledLocationsWarning)
+                    self.showLocationsWarning(!enabled, warning: LocalizedStrings.disabledLocationsWarning)
                     return
                 }
                 
-                guard self.currentWeatherListPresenter.areLocationsAllowed else {
-                    self.showLocationsWarning(warning: LocalizedStrings.authLocationsWarning)
-                    return
-                }
-                
-                self.hideLocationsWarning()
+                let allowed = self.currentWeatherListPresenter.areLocationsAllowed
+                self.showLocationsWarning(!allowed, warning: LocalizedStrings.authLocationsWarning)
             })
             .disposed(by: viewControllerDisposeBag)
     }
     
-    private func showLocationsWarning(warning: String) {
-        self.noLocationsWarningLabel.setWarning(warningText: warning)
-        self.noLocationsWarningLabel.isHidden = false
-        self.noLocationViewHeight.constant = UserWarningView.height
-        
-    }
-    
-    private func hideLocationsWarning() {
-        self.noLocationsWarningLabel.isHidden = true
-        self.noLocationViewHeight.constant = CGFloat(0)
+    private func showLocationsWarning(_ showWarning: Bool, warning: String) {
+        switch showWarning {
+        case true:
+            noLocationsWarningLabel.setWarning(warningText: warning)
+            noLocationsWarningLabel.isHidden = false
+            noLocationViewHeight.constant = UserWarningView.height
+        case false:
+            noInternetWarningView.isHidden = true
+            noLocationsWarningLabel.isHidden = true
+            noLocationViewHeight.constant = CGFloat(0)
+        }
     }
     
     private func bindReachable() {
@@ -146,25 +142,21 @@ class HomeViewController: UIViewController {
             .isReachable
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] reachable in
-                guard let self = self else { return }
-                guard reachable else {
-                    self.showInternetWarning()
-                    return
-                }
-                self.hideInternetWarning()
+                self?.showInternetWarning(!reachable)
             })
             .disposed(by: viewControllerDisposeBag)
     }
     
-    private func showInternetWarning() {
-        self.noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
-        self.noInternetWarningView.isHidden = false
-        self.noInternetViewHeight.constant = UserWarningView.height
-    }
-    
-    private func hideInternetWarning() {
-        self.noInternetWarningView.isHidden = true
-        self.noInternetViewHeight.constant = CGFloat(0)
+    private func showInternetWarning(_ showWarning: Bool) {
+        switch showWarning {
+        case true:
+            noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
+            noInternetWarningView.isHidden = false
+            noInternetViewHeight.constant = UserWarningView.height
+        case false:
+            noInternetWarningView.isHidden = true
+            noInternetViewHeight.constant = CGFloat(0)
+        }
     }
     
     private func styleNavgiationBar() {
