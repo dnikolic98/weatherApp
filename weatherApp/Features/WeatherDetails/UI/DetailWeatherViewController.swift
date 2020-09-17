@@ -20,10 +20,8 @@ class DetailWeatherViewController: UIViewController {
     private var fiveDaysDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>!
     private var conditionListDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfConditionInformation>!
     private var dataDisposeBag: DisposeBag = DisposeBag()
-    private var timerDisposeBag: DisposeBag = DisposeBag()
-    private var refreshDisposeBag: DisposeBag = DisposeBag()
-    private var reachableDisposeBag: DisposeBag = DisposeBag()
     private let warningAnimationTime: TimeInterval = 0.25
+    private var viewControllerDisposeBag: DisposeBag = DisposeBag()
     private let detailsNumOfColumns = 2
     private let numberOfDays = 5
     private let padding: CGFloat = 10
@@ -47,16 +45,13 @@ class DetailWeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let currentWeather = detailWeatherPresenter.currentWeather.value {
-            setWeatherInformation(currentWeather: currentWeather)
-        }
+        configurePullToRefresh()
+        setWeatherInformation(currentWeather: detailWeatherPresenter.currentWeather)
         setupFiveDaysDataSource()
         setupConditionListDataSource()
         setupCollectionViews()
         bindViewModel()
         startTimer()
-        configurePullToRefresh()
-        setupRefreshData()
         bindReachable()
         setupHero()
     }
@@ -72,9 +67,7 @@ class DetailWeatherViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        if let currentWeather = detailWeatherPresenter.currentWeather.value {
-            setGradientBackground(currentWeather: currentWeather)
-        }
+        setGradientBackground(currentWeather: detailWeatherPresenter.currentWeather)
     }
     
     //MARK: - Data
@@ -82,11 +75,20 @@ class DetailWeatherViewController: UIViewController {
     @objc private func bindViewModel() {
         dataDisposeBag = DisposeBag()
         
-        detailWeatherPresenter.bindCurrentWeather()
-            .subscribe()
+        detailWeatherPresenter.fetchCurrentWeather()
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] currentWeather in
+                guard
+                    let self = self,
+                    let currentWeather = currentWeather
+                else {
+                    return
+                }
+                self.refreshUI(currentWeather: currentWeather)
+            })
             .disposed(by: dataDisposeBag)
         
-        detailWeatherPresenter.bindFiveDaysList()
+        detailWeatherPresenter.fetchFiveDaysList()
             .bind(to: daysCollectionView.rx.items(dataSource: fiveDaysDataSource))
             .disposed(by: dataDisposeBag)
         
@@ -96,15 +98,12 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func startTimer() {
-        timerDisposeBag = DisposeBag()
-        
         Observable<Int>
             .timer(.seconds(0), period: .seconds(dataRefreshPeriod), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.bindViewModel()
+                self?.bindViewModel()
             })
-            .disposed(by: timerDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
     }
     
     private func setupFiveDaysDataSource() {
@@ -125,29 +124,15 @@ class DetailWeatherViewController: UIViewController {
         })
     }
     
-    private func setupRefreshData() {
-        detailWeatherPresenter.weatherData
-            .subscribe(onNext: { [weak self] currentWeather, _ in
-            guard
-                let self = self,
-                let currentWeather = currentWeather
-            else {
-                return
-            }
-                self.refreshUI(currentWeather: currentWeather)
-            })
-            .disposed(by: refreshDisposeBag)
-    }
     
     private func setupHero() {
-        guard let currentWeather = detailWeatherPresenter.currentWeather.value else { return }
+        let currentWeather = detailWeatherPresenter.currentWeather
         mainInformationView.setupHero(currentWeather: currentWeather)
     }
     
     //MARK: - UI elements setup
     
     private func setWeatherInformation(currentWeather: CurrentWeatherViewModel) {
-        guard let currentWeather = detailWeatherPresenter.currentWeather.value else { return }
         mainInformationView.set(currentWeather: currentWeather)
     }
     
@@ -157,36 +142,24 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func bindReachable() {
-        detailWeatherPresenter.isReachable()
+        detailWeatherPresenter
+            .isReachable
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] reachable in
-                guard let self = self else { return }
-                guard reachable else {
-                    self.showInternetWarning()
-                    return
-                }
-                self.hideInternetWarning()
+                self?.showInternetWarning(!reachable)
             })
-            .disposed(by: reachableDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
     }
     
-    private func showInternetWarning() {
-        DispatchQueue.main.async {
-            self.noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
-            self.noInternetWarningView.isHidden = false
-            UIView.animate(withDuration: self.warningAnimationTime, animations: {
-                self.noInternetWarningHeight.constant = UserWarningView.height
-                self.noInternetWarningView.layoutIfNeeded()
-            })
-        }
-    }
-    
-    private func hideInternetWarning() {
-        DispatchQueue.main.async {
-            self.noInternetWarningView.isHidden = true
-            UIView.animate(withDuration: self.warningAnimationTime, animations: {
-                self.noInternetWarningHeight.constant = CGFloat(0)
-                self.noInternetWarningView.layoutIfNeeded()
-            })
+    private func showInternetWarning(_ showWarning: Bool) {
+        switch showWarning {
+        case true:
+            noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
+            noInternetWarningView.isHidden = false
+            noInternetWarningHeight.constant = UserWarningView.height
+        case false:
+            noInternetWarningView.isHidden = true
+            noInternetWarningHeight.constant = CGFloat(0)
         }
     }
     
@@ -230,12 +203,9 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func refreshUI(currentWeather: CurrentWeatherViewModel) {
-        DispatchQueue.main.async {
-            self.setWeatherInformation(currentWeather: currentWeather)
-            self.setGradientBackground(currentWeather: currentWeather)
-            self.daysCollectionView.reloadData()
-            self.refreshControl.endRefreshing()
-        }
+        self.setWeatherInformation(currentWeather: currentWeather)
+        self.setGradientBackground(currentWeather: currentWeather)
+        self.refreshControl.endRefreshing()
     }
     
     private func setGradientBackground(currentWeather: CurrentWeatherViewModel) {

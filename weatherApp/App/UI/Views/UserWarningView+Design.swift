@@ -27,8 +27,10 @@ extension UserWarningView: DesignProtocol {
     }
     
     func defineLayoutForViews() {
-        warningInfo.autoPinEdge(.leading, to: .leading, of: self, withOffset: 15)
-        warningInfo.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -15)
+        let offset: CGFloat = 15
+        
+        warningInfo.autoPinEdge(.leading, to: .leading, of: self, withOffset: offset)
+        warningInfo.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -offset)
         warningInfo.autoPinEdge(.bottom, to: .bottom, of: self)
         warningInfo.autoPinEdge(.top, to: .top, of: self)
     }

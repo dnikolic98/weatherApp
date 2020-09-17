@@ -80,8 +80,8 @@
         <element name="DailyWeatherCoreData" positionX="160" positionY="192" width="128" height="193"/>
         <element name="ForecastCoreData" positionX="160" positionY="192" width="128" height="148"/>
         <element name="ForecastedWeatherCoreData" positionX="160" positionY="192" width="128" height="88"/>
+        <element name="SelectedLocationCoreData" positionX="-27" positionY="288" width="128" height="58"/>
         <element name="WeatherCoreData" positionX="160" positionY="192" width="128" height="118"/>
         <element name="WindCoreData" positionX="160" positionY="192" width="128" height="88"/>
-        <element name="SelectedLocationCoreData" positionX="-27" positionY="288" width="128" height="58"/>
     </elements>
 </model>

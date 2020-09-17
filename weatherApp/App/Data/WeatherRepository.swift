@@ -14,20 +14,21 @@ import RxReachability
 
 class WeatherRepository {
     
-    var reachabilityDisposeBag: DisposeBag = DisposeBag()
+    let repositoryDisposeBag: DisposeBag = DisposeBag()
     let weatherService: WeatherServiceProtocol
     let coreDataService: CoreDataServiceProtocol
     var reachability: Reachability
-    var isReachable: BehaviorRelay<Bool>
+    var isReachable: BehaviorSubject<Bool>
     
     init(weatherService: WeatherServiceProtocol, coreDataService: CoreDataServiceProtocol, reachability: Reachability) {
         self.weatherService = weatherService
         self.reachability = reachability
         self.coreDataService = coreDataService
-        self.isReachable = BehaviorRelay<Bool>(value: false)
+        
+        isReachable = BehaviorSubject<Bool>(value: false)
+        bindIsReachable()
         
         startReachability()
-        bindReachability()
     }
     
     func fetchSeveralCurrentWeather(id: [Int]) -> Observable<[CurrentWeatherCoreData]> {
@@ -142,11 +143,12 @@ class WeatherRepository {
         }
     }
     
-    private func bindReachability() {
-        Reachability.rx
+    private func bindIsReachable() {
+        Reachability
+            .rx
             .isReachable
             .bind(to: isReachable)
-            .disposed(by: reachabilityDisposeBag)
+            .disposed(by: repositoryDisposeBag)
     }
     
 }

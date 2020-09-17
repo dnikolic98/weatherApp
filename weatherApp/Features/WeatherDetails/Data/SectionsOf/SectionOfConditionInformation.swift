@@ -10,17 +10,17 @@ import RxDataSources
 
 struct SectionOfConditionInformation {
     
-  var items: [Item]
+    var items: [Item]
     
 }
 
 extension SectionOfConditionInformation: SectionModelType {
     
-  typealias Item = ConditionInformationViewModel
-
-   init(original: SectionOfConditionInformation, items: [Item]) {
-    self = original
-    self.items = items
-  }
+    typealias Item = ConditionInformationViewModel
+    
+    init(original: SectionOfConditionInformation, items: [Item]) {
+        self = original
+        self.items = items
+    }
     
 }
