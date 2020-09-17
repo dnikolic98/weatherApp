@@ -34,7 +34,7 @@ class CoreDataService: CoreDataServiceProtocol {
         
         return mainContext.rx_entities(request as! NSFetchRequest<NSFetchRequestResult>)
             .flatMap { fetchedManagedObject -> Observable<[CurrentWeatherCoreData]> in
-                let fetchedCurrentWeather = fetchedManagedObject as! [CurrentWeatherCoreData]
+                guard let fetchedCurrentWeather = fetchedManagedObject as? [CurrentWeatherCoreData] else { return .just([]) }
                 return .just(fetchedCurrentWeather)
         }
     }
@@ -46,7 +46,7 @@ class CoreDataService: CoreDataServiceProtocol {
         
         return mainContext.rx_entities(request as! NSFetchRequest<NSFetchRequestResult>)
             .flatMap { fetchedManagedObject -> Observable<CurrentWeatherCoreData?> in
-                let fetchedCurrentWeather = fetchedManagedObject.first as! CurrentWeatherCoreData
+                guard let fetchedCurrentWeather = fetchedManagedObject.first as? CurrentWeatherCoreData else { return .just(nil) }
                 return .just(fetchedCurrentWeather)
         }
     }
@@ -58,7 +58,7 @@ class CoreDataService: CoreDataServiceProtocol {
         
         return mainContext.rx_entities(request as! NSFetchRequest<NSFetchRequestResult>)
             .flatMap { fetchedManagedObject -> Observable<ForecastedWeatherCoreData?> in
-                let fetchedForecastWeather = fetchedManagedObject.first as! ForecastedWeatherCoreData
+                guard let fetchedForecastWeather = fetchedManagedObject.first as? ForecastedWeatherCoreData else { return .just(nil) }
                 return .just(fetchedForecastWeather)
         }
     }
@@ -70,7 +70,7 @@ class CoreDataService: CoreDataServiceProtocol {
         
         return mainContext.rx_entities(request as! NSFetchRequest<NSFetchRequestResult>)
             .flatMap { fetchedManagedObject -> Observable<[CityCoreData]> in
-                let fetchedCity = fetchedManagedObject as! [CityCoreData]
+                guard let fetchedCity = fetchedManagedObject as? [CityCoreData] else { return .just([]) }
                 return .just(fetchedCity)
         }
     }
@@ -81,7 +81,7 @@ class CoreDataService: CoreDataServiceProtocol {
         
         return mainContext.rx_entities(request as! NSFetchRequest<NSFetchRequestResult>)
             .flatMap { fetchedManagedObject -> Observable<[SelectedLocationCoreData]> in
-                let fetchedSelectedLocation = fetchedManagedObject as! [SelectedLocationCoreData]
+                guard let fetchedSelectedLocation = fetchedManagedObject as? [SelectedLocationCoreData] else { return .just([]) }
                 return .just(fetchedSelectedLocation)
         }
     }
