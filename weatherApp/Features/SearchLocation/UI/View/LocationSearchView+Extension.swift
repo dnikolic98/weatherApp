@@ -42,27 +42,30 @@ extension LocationSearchView: DesignProtocol {
     }
     
     func defineLayoutForViews() {
-        searchContainer.autoSetDimension(.height, toSize: 50)
+        let offset: CGFloat = 5
+        let defaultSize: CGFloat = 50
+        
+        searchContainer.autoSetDimension(.height, toSize: defaultSize)
         searchContainer.autoPinEdge(toSuperviewSafeArea: .leading)
         searchContainer.autoPinEdge(toSuperviewSafeArea: .trailing)
         searchContainer.autoPinEdge(toSuperviewSafeArea: .top)
         
-        backButton.autoPinEdge(.leading, to: .leading, of: searchContainer, withOffset: 5)
-        backButton.autoPinEdge(.top, to: .top, of: searchContainer, withOffset: 5)
-        backButton.autoPinEdge(.bottom, to: .bottom, of: searchContainer, withOffset: -5)
+        backButton.autoPinEdge(.leading, to: .leading, of: searchContainer, withOffset: offset)
+        backButton.autoPinEdge(.top, to: .top, of: searchContainer, withOffset: offset)
+        backButton.autoPinEdge(.bottom, to: .bottom, of: searchContainer, withOffset: -offset)
         
-        searchBar.autoPinEdge(.trailing, to: .trailing, of: searchContainer, withOffset: -5)
+        searchBar.autoPinEdge(.trailing, to: .trailing, of: searchContainer, withOffset: -offset)
         searchBar.autoPinEdge(.leading, to: .trailing, of: backButton)
-        searchBar.autoPinEdge(.top, to: .top, of: searchContainer, withOffset: 5)
-        searchBar.autoPinEdge(.bottom, to: .bottom, of: searchContainer, withOffset: -5)
+        searchBar.autoPinEdge(.top, to: .top, of: searchContainer, withOffset: offset)
+        searchBar.autoPinEdge(.bottom, to: .bottom, of: searchContainer, withOffset: -offset)
         
-        resultsTableView.autoPinEdge(.top, to: .bottom, of: searchContainer, withOffset: 5)
+        resultsTableView.autoPinEdge(.top, to: .bottom, of: searchContainer, withOffset: offset)
         resultsTableView.autoPinEdge(toSuperviewSafeArea: .leading)
         resultsTableView.autoPinEdge(toSuperviewSafeArea: .trailing)
         resultsTableView.autoPinEdge(toSuperviewSafeArea: .bottom)
         
-        loadingIndicator.autoSetDimension(.height, toSize: 50)
-        loadingIndicator.autoSetDimension(.width, toSize: 50)
+        loadingIndicator.autoSetDimension(.height, toSize: defaultSize)
+        loadingIndicator.autoSetDimension(.width, toSize: defaultSize)
         loadingIndicator.autoCenterInSuperview()
     }
     

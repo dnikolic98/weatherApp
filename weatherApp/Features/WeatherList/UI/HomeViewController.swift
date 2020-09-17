@@ -16,9 +16,7 @@ class HomeViewController: UIViewController {
     private var refreshControl: UIRefreshControl!
     private var currentWeatherListPresenter: CurrentWeatherListPresenter!
     private var dataDisposeBag: DisposeBag = DisposeBag()
-    private var timerDisposeBag: DisposeBag = DisposeBag()
-    private var reachableDisposeBag: DisposeBag = DisposeBag()
-    private var locationsDisposeBag: DisposeBag = DisposeBag()
+    private var viewControllerDisposeBag: DisposeBag = DisposeBag()
     private let dataRefreshPeriod: Int = 60 * 2
     private let warningAnimationTime: TimeInterval = 0.25
     
@@ -47,10 +45,10 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configurePullToRefresh()
         styleNavgiationBar()
         setupTableView()
         bindViewModel()
-        configurePullToRefresh()
         startTimer()
         bindReachable()
         bindLocationsEnabled()
@@ -84,7 +82,9 @@ class HomeViewController: UIViewController {
     @objc private func bindViewModel() {
         dataDisposeBag = DisposeBag()
         
-        currentWeatherListPresenter.currentWeatherData
+        currentWeatherListPresenter
+            .currentWeatherData
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] currentWeatherList, currentLocation in
                 guard
                     let self = self,
@@ -99,90 +99,66 @@ class HomeViewController: UIViewController {
     }
     
     private func startTimer() {
-        timerDisposeBag = DisposeBag()
+        viewControllerDisposeBag = DisposeBag()
         
         Observable<Int>
             .timer(.seconds(0), period: .seconds(dataRefreshPeriod), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.bindViewModel()
+                self?.bindViewModel()
             })
-            .disposed(by: timerDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
     }
     
     //MARK: - UI elements setup
     
     private func bindLocationsEnabled() {
-        currentWeatherListPresenter.areLocationsEnabled()
+        currentWeatherListPresenter
+            .areLocationsEnabled
             .subscribe(onNext: { [weak self] enabled in
                 guard let self = self else { return }
                 guard enabled else {
-                    self.showLocationsWarning(warning: LocalizedStrings.disabledLocationsWarning)
+                    self.showLocationsWarning(!enabled, warning: LocalizedStrings.disabledLocationsWarning)
                     return
                 }
                 
-                guard self.currentWeatherListPresenter.checkLocationsAllowed() else {
-                    self.showLocationsWarning(warning: LocalizedStrings.authLocationsWarning)
-                    return
-                }
-                
-                self.hideLocationsWarning()
+                let allowed = self.currentWeatherListPresenter.areLocationsAllowed
+                self.showLocationsWarning(!allowed, warning: LocalizedStrings.authLocationsWarning)
             })
-            .disposed(by: locationsDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
     }
     
-    private func showLocationsWarning(warning: String) {
-        DispatchQueue.main.async {
-            self.noLocationWarningView.setWarning(warningText: warning)
-            self.noLocationWarningView.isHidden = false
-            UIView.animate(withDuration: self.warningAnimationTime, animations: {
-                self.noLocationViewHeight.constant = UserWarningView.height
-                self.noLocationWarningView.layoutIfNeeded()
-            })
-        }
-    }
-    
-    private func hideLocationsWarning() {
-        DispatchQueue.main.async {
-            self.noLocationWarningView.isHidden = true
-            UIView.animate(withDuration: self.warningAnimationTime, animations: {
-                self.noLocationViewHeight.constant = CGFloat(0)
-                self.noLocationWarningView.layoutIfNeeded()
-            })
+    private func showLocationsWarning(_ showWarning: Bool, warning: String) {
+        switch showWarning {
+        case true:
+            noLocationWarningView.setWarning(warningText: warning)
+            noLocationWarningView.isHidden = false
+            noLocationViewHeight.constant = UserWarningView.height
+        case false:
+            noInternetWarningView.isHidden = true
+            noLocationWarningView.isHidden = true
+            noLocationViewHeight.constant = CGFloat(0)
         }
     }
     
     private func bindReachable() {
-        currentWeatherListPresenter.isReachable()
+        currentWeatherListPresenter
+            .isReachable
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] reachable in
-                guard let self = self else { return }
-                guard reachable else {
-                    self.showInternetWarning()
-                    return
-                }
-                self.hideInternetWarning()
+                self?.showInternetWarning(!reachable)
             })
-            .disposed(by: reachableDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
     }
     
-    private func showInternetWarning() {
-        DispatchQueue.main.async {
-            self.noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
-            self.noInternetWarningView.isHidden = false
-            UIView.animate(withDuration: self.warningAnimationTime, animations: {
-                self.noInternetViewHeight.constant = UserWarningView.height
-                self.noInternetWarningView.layoutIfNeeded()
-            })
-        }
-    }
-    
-    private func hideInternetWarning() {
-        DispatchQueue.main.async {
-            self.noInternetWarningView.isHidden = true
-            UIView.animate(withDuration: self.warningAnimationTime, animations: {
-                self.noInternetViewHeight.constant = CGFloat(0)
-                self.noInternetWarningView.layoutIfNeeded()
-            })
+    private func showInternetWarning(_ showWarning: Bool) {
+        switch showWarning {
+        case true:
+            noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
+            noInternetWarningView.isHidden = false
+            noInternetViewHeight.constant = UserWarningView.height
+        case false:
+            noInternetWarningView.isHidden = true
+            noInternetViewHeight.constant = CGFloat(0)
         }
     }
     
@@ -220,18 +196,15 @@ class HomeViewController: UIViewController {
     }
     
     private func refreshUI(currentLocation: CurrentWeatherViewModel) {
-        DispatchQueue.main.async {
-            self.currentLocationView.set(currentWeather: currentLocation)
-            self.setGradientBackground()
-        }
+        self.currentLocationView.set(currentWeather: currentLocation)
+        self.setGradientBackground()
+        
         refreshTableView()
     }
     
     private func refreshTableView() {
-        DispatchQueue.main.async {
-            self.refreshTableViewHeight()
-            self.refreshControl.endRefreshing()
-        }
+        refreshTableViewHeight()
+        refreshControl.endRefreshing()
     }
     
     private func refreshTableViewHeight() {

@@ -15,9 +15,11 @@ extension UIView {
         let newColors: [CGColor] = [startColor.cgColor, endColor.cgColor]
         var oldColors: [CGColor]? = nil
         
-        if let oldLayer = layer.sublayers?.filter({ $0.name == gradientLayerName }).first as? CAGradientLayer, let colors = oldLayer.colors as? [CGColor] {
-            oldLayer.removeFromSuperlayer()
-            oldColors = colors
+        if
+            let oldLayer = layer.sublayers?.filter({ $0.name == gradientLayerName }).first as? CAGradientLayer,
+            let colors = oldLayer.colors as? [CGColor] {
+                oldLayer.removeFromSuperlayer()
+                oldColors = colors
         }
         
         let gradientLayer = CAGradientLayer()

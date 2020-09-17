@@ -75,6 +75,7 @@ extension MainInformationView: DesignProtocol {
         
         weatherDescriptionLabel.autoAlignAxis(.horizontal, toSameAxisOf: weatherIcon)
         weatherDescriptionLabel.autoPinEdge(.leading, to: .trailing, of: weatherIcon, withOffset: 15)
+        weatherDescriptionLabel.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -15)
         
         currentTempLabel.autoPinEdge(.top, to: .bottom, of: weatherDescriptionLabel)
         currentTempLabel.autoPinEdge(.leading, to: .leading, of: self, withOffset: 30, relation: .greaterThanOrEqual)

@@ -15,29 +15,24 @@ class LocationSearchViewController: UIViewController {
     
     private var throttleTime: RxTimeInterval = .milliseconds(500)
     private let citiesDisposeBage: DisposeBag = DisposeBag()
-    private let searchBarDisposeBag: DisposeBag = DisposeBag()
-    private let tableViewDisposeBag: DisposeBag = DisposeBag()
-    private let presenter: LocationSearchPresenter!
+    private let viewControllerDisposeBag: DisposeBag = DisposeBag()
+    private var presenter: LocationSearchPresenter!
     private var dataSource: RxTableViewSectionedReloadDataSource<SectionOfCityViewModels>!
-    private var locationSearchView: LocationSearchView {
-        view as! LocationSearchView
-    }
     private var tableView: UITableView {
         locationSearchView.resultsTableView
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    var locationSearchView: LocationSearchView!
     
-    init(with presenter: LocationSearchPresenter) {
+    convenience init(with presenter: LocationSearchPresenter) {
+        self.init()
         self.presenter = presenter
-        super.init(nibName: nil, bundle: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        buildViews()
         setupDataSource()
         configureTableView()
         setupSearchBar()
@@ -48,10 +43,6 @@ class LocationSearchViewController: UIViewController {
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         tableView.reloadData()
-    }
-    
-    override func loadView() {
-        self.view = LocationSearchView(frame: UIScreen.main.bounds)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -76,14 +67,14 @@ class LocationSearchViewController: UIViewController {
             .subscribe({ [weak self] _ in
                 self?.locationSearchView.searchBar.setShowsCancelButton(true, animated: true)
             })
-            .disposed(by: searchBarDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
         
         locationSearchView.searchBar.rx
             .textDidEndEditing
             .subscribe({ [weak self] _ in
                 self?.locationSearchView.searchBar.setShowsCancelButton(false, animated: true)
             })
-            .disposed(by: searchBarDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
     }
     
     private func setupSearchButtonInteractions() {
@@ -93,7 +84,7 @@ class LocationSearchViewController: UIViewController {
             .subscribe({ [weak self] _ in
                 self?.endEditingSearchBar()
             })
-            .disposed(by: searchBarDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
     }
     
     @objc private func endEditingSearchBar() {
@@ -120,17 +111,19 @@ class LocationSearchViewController: UIViewController {
     }
     
     private func configureTableView() {
-        tableView.rx.setDelegate(self).disposed(by: tableViewDisposeBag)
+        tableView.rx.setDelegate(self).disposed(by: viewControllerDisposeBag)
         tableView.register(LocationNameTableViewCell.self, forCellReuseIdentifier: LocationNameTableViewCell.typeName)
         
-        tableView.rx.itemSelected
-            .subscribe(onNext: { [weak self] indexPath in
+        Observable.zip(
+            tableView.rx.itemSelected,
+            tableView.rx.modelSelected(CityViewModel.self))
+            .subscribe(onNext: { [weak self] indexPath, location in
                 guard let self = self else { return }
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 
-                self.presenter.handleCellTap(index: indexPath.row)
+                self.presenter.handleCellTap(city: location)
             })
-            .disposed(by: tableViewDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
     }
     
     private func bindTableViewData() {
@@ -151,7 +144,7 @@ class LocationSearchViewController: UIViewController {
                 self?.locationSearchView.stopLoadingIndicator()
             })
             .bind(to: tableView.rx.items(dataSource: dataSource))
-            .disposed(by: citiesDisposeBage)
+            .disposed(by: viewControllerDisposeBag)
     }
     
 }
