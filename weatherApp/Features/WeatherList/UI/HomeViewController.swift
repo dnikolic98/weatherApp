@@ -109,7 +109,7 @@ class HomeViewController: UIViewController {
     //MARK: - UI elements setup
     
     private func bindLocationsEnabled() {
-        currentWeatherListPresenter.areLocationsEnabled()
+        currentWeatherListPresenter.areLocationsEnabled
             .subscribe(onNext: { [weak self] enabled in
                 guard let self = self else { return }
                 guard enabled else {
@@ -117,7 +117,7 @@ class HomeViewController: UIViewController {
                     return
                 }
                 
-                guard self.currentWeatherListPresenter.checkLocationsAllowed() else {
+                guard self.currentWeatherListPresenter.areLocationsAllowed else {
                     self.showLocationsWarning(warning: LocalizedStrings.authLocationsWarning)
                     return
                 }
@@ -143,7 +143,7 @@ class HomeViewController: UIViewController {
     }
     
     private func bindReachable() {
-        currentWeatherListPresenter.isReachable()
+        currentWeatherListPresenter.isReachable
             .subscribe(onNext: { [weak self] reachable in
                 guard let self = self else { return }
                 guard reachable else {

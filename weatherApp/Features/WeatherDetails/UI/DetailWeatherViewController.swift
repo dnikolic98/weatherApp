@@ -44,13 +44,13 @@ class DetailWeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configurePullToRefresh()
         setWeatherInformation(currentWeather: detailWeatherPresenter.currentWeather)
         setupFiveDaysDataSource()
         setupConditionListDataSource()
         setupCollectionViews()
         bindViewModel()
         startTimer()
-        configurePullToRefresh()
         bindReachable()
     }
     
@@ -126,7 +126,7 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func bindReachable() {
-        detailWeatherPresenter.isReachable()
+        detailWeatherPresenter.isReachable
             .subscribe(onNext: { [weak self] reachable in
                 guard let self = self else { return }
                 guard reachable else {

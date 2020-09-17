@@ -16,6 +16,9 @@ class DetailWeatherPresenter {
     
     var currentWeather: CurrentWeatherViewModel
     var weatherConditionList: BehaviorRelay<[SectionOfConditionInformation]>
+    var isReachable: Observable<Bool> {
+        weatherRepository.isReachable
+    }
     var weatherData: Observable<(CurrentWeatherViewModel?, [SectionOfSingleWeatherInformation])> {
         Observable.combineLatest(
             fetchCurrentWeather(),
@@ -28,10 +31,6 @@ class DetailWeatherPresenter {
         
         weatherConditionList = BehaviorRelay<[SectionOfConditionInformation]>(value: [])
         setConditionList(currentWeather: currentWeather)
-    }
-    
-    func isReachable() -> Observable<Bool> {
-        weatherRepository.isReachable
     }
     
     func fetchCurrentWeather() -> Observable<CurrentWeatherViewModel?> {
