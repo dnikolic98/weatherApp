@@ -82,7 +82,9 @@ class HomeViewController: UIViewController {
     @objc private func bindViewModel() {
         dataDisposeBag = DisposeBag()
         
-        currentWeatherListPresenter.currentWeatherData
+        currentWeatherListPresenter
+            .currentWeatherData
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] currentWeatherList, currentLocation in
                 guard
                     let self = self,
@@ -194,19 +196,16 @@ class HomeViewController: UIViewController {
     }
     
     private func refreshUI(currentLocation: CurrentWeatherViewModel) {
-        DispatchQueue.main.async {
-            self.currentLocationView.set(currentWeather: currentLocation)
-            self.setGradientBackground()
-        }
+        self.currentLocationView.set(currentWeather: currentLocation)
+        self.setGradientBackground()
+        
         refreshTableView()
     }
     
     private func refreshTableView() {
-        DispatchQueue.main.async {
-            self.refreshTableViewHeight()
-            self.tableView.reloadData()
-            self.refreshControl.endRefreshing()
-        }
+        self.refreshTableViewHeight()
+        self.tableView.reloadData()
+        self.refreshControl.endRefreshing()
     }
     
     private func refreshTableViewHeight() {
