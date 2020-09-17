@@ -109,7 +109,9 @@ class HomeViewController: UIViewController {
     //MARK: - UI elements setup
     
     private func bindLocationsEnabled() {
-        currentWeatherListPresenter.areLocationsEnabled
+        currentWeatherListPresenter
+            .areLocationsEnabled
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] enabled in
                 guard let self = self else { return }
                 guard enabled else {
@@ -128,22 +130,21 @@ class HomeViewController: UIViewController {
     }
     
     private func showLocationsWarning(warning: String) {
-        DispatchQueue.main.async {
-            self.noLocationsWarningLabel.setWarning(warningText: warning)
-            self.noLocationsWarningLabel.isHidden = false
-            self.noLocationViewHeight.constant = UserWarningView.height
-        }
+        self.noLocationsWarningLabel.setWarning(warningText: warning)
+        self.noLocationsWarningLabel.isHidden = false
+        self.noLocationViewHeight.constant = UserWarningView.height
+        
     }
     
     private func hideLocationsWarning() {
-        DispatchQueue.main.async {
-            self.noLocationsWarningLabel.isHidden = true
-            self.noLocationViewHeight.constant = CGFloat(0)
-        }
+        self.noLocationsWarningLabel.isHidden = true
+        self.noLocationViewHeight.constant = CGFloat(0)
     }
     
     private func bindReachable() {
-        currentWeatherListPresenter.isReachable
+        currentWeatherListPresenter
+            .isReachable
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] reachable in
                 guard let self = self else { return }
                 guard reachable else {
@@ -156,18 +157,14 @@ class HomeViewController: UIViewController {
     }
     
     private func showInternetWarning() {
-        DispatchQueue.main.async {
-            self.noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
-            self.noInternetWarningView.isHidden = false
-            self.noInternetViewHeight.constant = UserWarningView.height
-        }
+        self.noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
+        self.noInternetWarningView.isHidden = false
+        self.noInternetViewHeight.constant = UserWarningView.height
     }
     
     private func hideInternetWarning() {
-        DispatchQueue.main.async {
-            self.noInternetWarningView.isHidden = true
-            self.noInternetViewHeight.constant = CGFloat(0)
-        }
+        self.noInternetWarningView.isHidden = true
+        self.noInternetViewHeight.constant = CGFloat(0)
     }
     
     private func styleNavgiationBar() {

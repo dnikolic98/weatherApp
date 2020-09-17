@@ -20,7 +20,7 @@ class CurrentWeatherListPresenter {
     
     var currentLocationWeather: CurrentWeatherViewModel?
     var isReachable: Observable<Bool> {
-        weatherRepository.isReachable
+        weatherRepository.isReachable.skip(1)
     }
     var areLocationsAllowed: Bool {
         locationService.checkLocationServicesAuthorization()

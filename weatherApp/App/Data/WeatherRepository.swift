@@ -14,17 +14,19 @@ import RxReachability
 
 class WeatherRepository {
     
+    let repositoryDisposeBag: DisposeBag = DisposeBag()
     let weatherService: WeatherServiceProtocol
     let coreDataService: CoreDataServiceProtocol
     var reachability: Reachability
-    var isReachable: Observable<Bool> {
-       return Reachability.rx.isReachable
-    }
+    var isReachable: BehaviorSubject<Bool>
     
     init(weatherService: WeatherServiceProtocol, coreDataService: CoreDataServiceProtocol, reachability: Reachability) {
         self.weatherService = weatherService
         self.reachability = reachability
         self.coreDataService = coreDataService
+        
+        isReachable = BehaviorSubject<Bool>(value: false)
+        bindIsReachable()
         
         startReachability()
     }
@@ -139,6 +141,14 @@ class WeatherRepository {
         } catch {
             print("Unable to start notifier")
         }
+    }
+    
+    private func bindIsReachable() {
+        Reachability
+            .rx
+            .isReachable
+            .bind(to: isReachable)
+            .disposed(by: repositoryDisposeBag)
     }
     
 }

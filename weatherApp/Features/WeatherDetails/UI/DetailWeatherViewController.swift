@@ -126,7 +126,9 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func bindReachable() {
-        detailWeatherPresenter.isReachable
+        detailWeatherPresenter
+            .isReachable
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] reachable in
                 guard let self = self else { return }
                 guard reachable else {
@@ -139,18 +141,16 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func showInternetWarning() {
-        DispatchQueue.main.async {
-            self.noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
-            self.noInternetWarningView.isHidden = false
-            self.noInternetWarningHeight.constant = UserWarningView.height
-        }
+        self.noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
+        self.noInternetWarningView.isHidden = false
+        self.noInternetWarningHeight.constant = UserWarningView.height
+        
     }
     
     private func hideInternetWarning() {
-        DispatchQueue.main.async {
-            self.noInternetWarningView.isHidden = true
-            self.noInternetWarningHeight.constant = CGFloat(0)
-        }
+        self.noInternetWarningView.isHidden = true
+        self.noInternetWarningHeight.constant = CGFloat(0)
+        
     }
     
     private func setupDetailsCollectionView() {
