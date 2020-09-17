@@ -11,36 +11,23 @@ import RxCocoa
 
 class DetailWeatherPresenter {
     
-    private var currentWeatherDisposeBag: DisposeBag = DisposeBag()
-    private var fiveDaysDisposeBag: DisposeBag = DisposeBag()
-    private var conditionListDisposeBag = DisposeBag()
+    private let presenterDisposeBag: DisposeBag = DisposeBag()
     private let weatherRepository: WeatherRepository
     
-    var currentWeather: BehaviorRelay<CurrentWeatherViewModel?>
-    var fiveDaysList: BehaviorRelay<[SectionOfSingleWeatherInformation]>
+    var currentWeather: CurrentWeatherViewModel
     var weatherConditionList: BehaviorRelay<[SectionOfConditionInformation]>
     var weatherData: Observable<(CurrentWeatherViewModel?, [SectionOfSingleWeatherInformation])> {
-        Observable.combineLatest(currentWeather.asObservable(),
-                           fiveDaysList.asObservable())
+        Observable.combineLatest(
+            fetchCurrentWeather(),
+            fetchFiveDaysList())
     }
 
     init(currentWeather: CurrentWeatherViewModel, weatherRepository: WeatherRepository) {
-        self.currentWeather = BehaviorRelay<CurrentWeatherViewModel?>(value: currentWeather)
-        self.fiveDaysList = BehaviorRelay<[SectionOfSingleWeatherInformation]>(value: [])
-        self.weatherConditionList = BehaviorRelay<[SectionOfConditionInformation]>(value: [])
+        self.currentWeather = currentWeather
         self.weatherRepository = weatherRepository
-
-        bindConditionList()
-    }
-    
-    func bindCurrentWeather() -> BehaviorRelay<CurrentWeatherViewModel?> {
-        fetchCurrentWeather()
-        return currentWeather
-    }
-    
-    func bindFiveDaysList() -> BehaviorRelay<[SectionOfSingleWeatherInformation]>{
-        fetchFiveDaysList()
-        return fiveDaysList
+        
+        weatherConditionList = BehaviorRelay<[SectionOfConditionInformation]>(value: [])
+        setConditionList(currentWeather: currentWeather)
     }
     
     func isReachable() -> Observable<Bool> {
@@ -49,23 +36,26 @@ class DetailWeatherPresenter {
             .asObservable()
     }
     
-    private func fetchCurrentWeather() {
-        currentWeatherDisposeBag = DisposeBag()
-        guard let coord = currentWeather.value?.coord else { return }
-        
+    func fetchCurrentWeather() -> Observable<CurrentWeatherViewModel?> {
         return weatherRepository
-            .fetchCurrentWeather(coord: coord)
+            .fetchCurrentWeather(coord: currentWeather.coord)
             .flatMap { currentWeather -> Observable<CurrentWeatherViewModel?> in
                 guard let currentWeather = currentWeather else { return .just(nil) }
                 return .just(CurrentWeatherViewModel(currentWeather: currentWeather))
             }
-            .bind(to: currentWeather)
-            .disposed(by: currentWeatherDisposeBag)
+            .do(onNext: { [weak self] currentWeather in
+                guard
+                    let self = self,
+                    let currentWeather = currentWeather
+                else {
+                    return
+                }
+                self.currentWeather = currentWeather
+                self.setConditionList(currentWeather: currentWeather)
+            })
     }
     
-    private func fetchFiveDaysList() {
-        fiveDaysDisposeBag = DisposeBag()
-        
+    func fetchFiveDaysList() -> Observable<[SectionOfSingleWeatherInformation]> {
         fetchDailyForecast()
             .flatMap { sevenDayForecast -> Observable<[SingleWeatherInformationViewModel]> in
                 guard sevenDayForecast.count >= 6 else { return .just([]) }
@@ -82,50 +72,43 @@ class DetailWeatherPresenter {
                 
                 return .just(fiveDaysList)
             }
-            .map { singleWeatherInformationViewModels in
-                [SectionOfSingleWeatherInformation(items: singleWeatherInformationViewModels)]
+            .flatMap { singleWeatherInformationViewModels -> Observable<[SectionOfSingleWeatherInformation]> in
+                .just([SectionOfSingleWeatherInformation(items: singleWeatherInformationViewModels)])
             }
-            .bind(to: fiveDaysList)
-            .disposed(by: fiveDaysDisposeBag)
     }
     
     private func fetchDailyForecast() -> Observable<[DailyForecastViewModel]> {
-        guard let current = currentWeather.value else { return .just([]) }
-        
         return weatherRepository
-            .fetchForcastWeather(coord: current.coord)
-            .flatMap { forecastedWeather -> Observable<[DailyForecastViewModel]> in
-                guard let forecastedWeather = forecastedWeather else { return .just([]) }
-                var sevenDayForecast: [DailyForecastViewModel]
-                
-                do {
-                    sevenDayForecast = try forecastedWeather.forecastedWeather
-                        .map { dailyWeather in
-                            guard let dailyWeather = dailyWeather as? DailyWeatherCoreData else { throw CoreDataErrors.incompatibleCast }
-                            return DailyForecastViewModel(currentWeather: current, dailyWeather: dailyWeather)
-                        }
-                        .sorted { $0.forecastTime < $1.forecastTime }
-                } catch {
-                    sevenDayForecast = []
+            .fetchForcastWeather(coord: currentWeather.coord)
+            .flatMap { [weak self] forecastedWeather -> Observable<[DailyForecastViewModel]> in
+                guard
+                    let self = self,
+                    let forecastedWeather = forecastedWeather
+                else {
+                    return .just([])
                 }
+                let sevenDayForecast = self.createSevenDayForecastViewModels(forecastedWeather: forecastedWeather)
                 return .just(sevenDayForecast)
             }
     }
     
-    private func bindConditionList() {
-        currentWeather.subscribe(onNext: { [weak self] currentWeather in
-            guard
-                let self = self,
-                let currentWeather = currentWeather
-            else {
-                return
-            }
-            let conditionInformation = self.createWeatherConditionList(currentWeather: currentWeather)
-            self.weatherConditionList.accept([SectionOfConditionInformation(items: conditionInformation)])
-        })
-        .disposed(by: conditionListDisposeBag)
+    private func setConditionList(currentWeather: CurrentWeatherViewModel) {
+        let conditionInformation = self.createWeatherConditionList(currentWeather: currentWeather)
+        self.weatherConditionList.accept([SectionOfConditionInformation(items: conditionInformation)])
     }
     
+    private func createSevenDayForecastViewModels(forecastedWeather: ForecastedWeatherCoreData) -> [DailyForecastViewModel] {
+        do {
+            return try forecastedWeather.forecastedWeather
+                .map { dailyWeather in
+                    guard let dailyWeather = dailyWeather as? DailyWeatherCoreData else { throw CoreDataErrors.incompatibleCast }
+                    return DailyForecastViewModel(currentWeather: self.currentWeather, dailyWeather: dailyWeather)
+                }
+                .sorted { $0.forecastTime < $1.forecastTime }
+        } catch {
+            return []
+        }
+    }
     
     private func createWeatherConditionList(currentWeather: CurrentWeatherViewModel?) -> [ConditionInformationViewModel] {
         guard let current = currentWeather else { return [] }

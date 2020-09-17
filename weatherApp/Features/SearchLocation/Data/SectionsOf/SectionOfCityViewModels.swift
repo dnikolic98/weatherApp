@@ -10,17 +10,17 @@ import RxDataSources
 
 struct SectionOfCityViewModels {
     
-  var items: [Item]
+    var items: [Item]
     
 }
 
 extension SectionOfCityViewModels: SectionModelType {
     
-  typealias Item = CityViewModel
-
-   init(original: SectionOfCityViewModels, items: [Item]) {
-    self = original
-    self.items = items
-  }
+    typealias Item = CityViewModel
+    
+    init(original: SectionOfCityViewModels, items: [Item]) {
+        self = original
+        self.items = items
+    }
     
 }

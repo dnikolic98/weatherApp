@@ -10,17 +10,17 @@ import RxDataSources
 
 struct SectionOfSingleWeatherInformation {
     
-  var items: [Item]
+    var items: [Item]
     
 }
 
 extension SectionOfSingleWeatherInformation: SectionModelType {
     
-  typealias Item = SingleWeatherInformationViewModel
-
-   init(original: SectionOfSingleWeatherInformation, items: [Item]) {
-    self = original
-    self.items = items
-  }
+    typealias Item = SingleWeatherInformationViewModel
+    
+    init(original: SectionOfSingleWeatherInformation, items: [Item]) {
+        self = original
+        self.items = items
+    }
     
 }
