@@ -8,6 +8,10 @@
 
 import Foundation
 
+/// Manages adding premade persistence store to the apps persistence store.
+///
+/// Used for checking if persistence store already exists in apps documents folder.
+/// If persistence store does not exist, premade persistence store is copied to the apps doucements folder.
 class PresavedSQLiteManager {
     
     private lazy var applicationDocumentsDirectory: URL = {
