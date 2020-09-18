@@ -42,7 +42,6 @@ class PresavedSQLiteManager {
                 print("Couldnt copy presaved database")
             }
         }
-        
     }
     
 }

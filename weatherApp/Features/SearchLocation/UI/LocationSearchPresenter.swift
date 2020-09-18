@@ -16,7 +16,6 @@ class LocationSearchPresenter {
     private let weatherRepository: WeatherRepository
     private let navigationService: NavigationService
     private var selectedLocationIds: [Int] = []
-    private var dataSourceData: [CityViewModel] = []
     
     //MARK: - Initialization
     
@@ -48,9 +47,6 @@ class LocationSearchPresenter {
                 
                 return .just(cityViewModels)
             }
-            .do(onNext: { [weak self] cityViewModels in
-                self?.dataSourceData = cityViewModels
-            })
             .map { [SectionOfCityViewModels(items: $0)] }
     }
     
@@ -62,8 +58,7 @@ class LocationSearchPresenter {
     
     //MARK: - Cell select action
     
-    func handleCellTap(index: Int) {
-        guard let city = dataSourceData.at(index) else { return }
+    func handleCellTap(city: CityViewModel) {
         weatherRepository.selectLocation(id: city.id)
         navigationService.goBack()
     }

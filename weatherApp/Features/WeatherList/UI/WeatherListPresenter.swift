@@ -21,6 +21,15 @@ class WeatherListPresenter {
     private var locationDisposeBag: DisposeBag = DisposeBag()
     
     var currentLocationWeather: CurrentWeatherViewModel?
+    var isReachable: Observable<Bool> {
+        weatherRepository.isReachable.skip(1)
+    }
+    var areLocationsAllowed: Bool {
+        locationService.checkLocationServicesAuthorization()
+    }
+    var areLocationsEnabled: Observable<Bool> {
+        locationService.isEnabled
+    }
     var currentWeatherData: Observable<([CurrentWeatherViewModel], CurrentWeatherViewModel?)> {
         Observable.combineLatest(
             fetchCurrentWeatherList(),
@@ -45,25 +54,6 @@ class WeatherListPresenter {
     
     func currentWeather(atIndex index: Int) -> CurrentWeatherViewModel? {
         return currentWeatherList.at(index)
-    }
-    
-    //MARK: - Reachability check observable
-    
-    func isReachable() -> Observable<Bool> {
-        weatherRepository
-            .isReachable
-            .skip(1)
-            .asObservable()
-    }
-    
-    //MARK: - Location status check
-    
-    func checkLocationsAllowed() -> Bool {
-        locationService.checkLocationServicesAuthorization()
-    }
-    
-    func areLocationsEnabled() -> Observable<Bool> {
-        locationService.isEnabled
     }
     
     //MARK: - Handle cell selection action
