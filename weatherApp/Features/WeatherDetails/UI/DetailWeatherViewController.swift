@@ -164,10 +164,16 @@ class DetailWeatherViewController: UIViewController {
         case true:
             noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
             noInternetWarningView.isHidden = false
-            noInternetWarningHeight.constant = UserWarningView.height
+            UIView.animate(withDuration: warningAnimationTime, animations: {
+                self.noInternetWarningHeight.constant = UserWarningView.height
+                self.noInternetWarningView.layoutIfNeeded()
+            })
         case false:
             noInternetWarningView.isHidden = true
-            noInternetWarningHeight.constant = CGFloat(0)
+            UIView.animate(withDuration: warningAnimationTime, animations: {
+                self.noInternetWarningHeight.constant = CGFloat(0)
+                self.noInternetWarningView.layoutIfNeeded()
+            })
         }
     }
     
