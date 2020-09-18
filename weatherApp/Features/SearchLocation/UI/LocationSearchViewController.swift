@@ -16,7 +16,6 @@ class LocationSearchViewController: UIViewController {
     //MARK: - Properties
     
     private var throttleTime: RxTimeInterval = .milliseconds(500)
-    private let citiesDisposeBage: DisposeBag = DisposeBag()
     private let viewControllerDisposeBag: DisposeBag = DisposeBag()
     private var presenter: LocationSearchPresenter!
     private var dataSource: RxTableViewSectionedReloadDataSource<SectionOfCityViewModels>!

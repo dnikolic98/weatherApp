@@ -14,18 +14,12 @@ class DetailWeatherPresenter {
 
     //MARK: - Properties
     
-    private let presenterDisposeBag: DisposeBag = DisposeBag()
     private let weatherRepository: WeatherRepository
     
     var currentWeather: CurrentWeatherViewModel
     var weatherConditionList: BehaviorRelay<[SectionOfConditionInformation]>
     var isReachable: Observable<Bool> {
         weatherRepository.isReachable
-    }
-    var weatherData: Observable<(CurrentWeatherViewModel?, [SectionOfSingleWeatherInformation])> {
-        Observable.combineLatest(
-            fetchCurrentWeather(),
-            fetchFiveDaysList())
     }
     
     //MARK: - Initialization
