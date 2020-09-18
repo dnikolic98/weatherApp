@@ -32,6 +32,8 @@ class DetailWeatherPresenter {
         setConditionList(currentWeather: currentWeather)
     }
     
+    //MARK: - Data fetching
+    
     func fetchCurrentWeather() -> Observable<CurrentWeatherViewModel?> {
         return weatherRepository
             .fetchCurrentWeather(coord: currentWeather.coord)
@@ -88,12 +90,12 @@ class DetailWeatherPresenter {
             }
     }
     
+    //MARK: - Helpers
+    
     private func setConditionList(currentWeather: CurrentWeatherViewModel) {
         let conditionInformation = self.createWeatherConditionList(currentWeather: currentWeather)
         self.weatherConditionList.accept([SectionOfConditionInformation(items: conditionInformation)])
     }
-    
-    //MARK: - Helpers
     
     private func createSevenDayForecastViewModels(forecastedWeather: ForecastedWeatherCoreData) -> [DailyForecastViewModel] {
         do {
