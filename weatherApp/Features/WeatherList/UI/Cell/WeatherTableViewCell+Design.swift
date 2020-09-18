@@ -48,6 +48,9 @@ extension WeatherTableViewCell: DesignProtocol {
     }
     
     func defineLayoutForViews() {
+        let offset: CGFloat = 5
+        let defaultSize: CGFloat = 50
+        
         customContentView.translatesAutoresizingMaskIntoConstraints = false
         weatherIcon.translatesAutoresizingMaskIntoConstraints = false
         locationNameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -56,32 +59,32 @@ extension WeatherTableViewCell: DesignProtocol {
         
         heightAnchor.constraint(equalToConstant: WeatherTableViewCell.height).isActive = true
         
-        customContentView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5).isActive = true
-        customContentView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5).isActive = true
-        customContentView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
-        customContentView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
+        customContentView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: offset).isActive = true
+        customContentView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -offset).isActive = true
+        customContentView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: offset * 2).isActive = true
+        customContentView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -offset * 2).isActive = true
         
-        weatherIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        weatherIcon.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        weatherIcon.topAnchor.constraint(equalTo: customContentView.topAnchor, constant: 20).isActive = true
-        weatherIcon.bottomAnchor.constraint(equalTo: customContentView.bottomAnchor, constant: -20).isActive = true
-        weatherIcon.leadingAnchor.constraint(equalTo: customContentView.leadingAnchor, constant: 15).isActive = true
+        weatherIcon.heightAnchor.constraint(equalToConstant: defaultSize).isActive = true
+        weatherIcon.widthAnchor.constraint(equalToConstant: defaultSize).isActive = true
+        weatherIcon.topAnchor.constraint(equalTo: customContentView.topAnchor, constant: offset * 4).isActive = true
+        weatherIcon.bottomAnchor.constraint(equalTo: customContentView.bottomAnchor, constant: -offset * 4).isActive = true
+        weatherIcon.leadingAnchor.constraint(equalTo: customContentView.leadingAnchor, constant: offset * 3).isActive = true
         
-        locationNameLabel.topAnchor.constraint(equalTo: customContentView.topAnchor, constant: 25).isActive = true
-        locationNameLabel.leadingAnchor.constraint(equalTo: weatherIcon.trailingAnchor, constant: 10).isActive = true
+        locationNameLabel.topAnchor.constraint(equalTo: customContentView.topAnchor, constant: offset * 5).isActive = true
+        locationNameLabel.leadingAnchor.constraint(equalTo: weatherIcon.trailingAnchor, constant: offset * 2).isActive = true
         
-        weatherDescriptionLabel.topAnchor.constraint(equalTo: locationNameLabel.bottomAnchor, constant: 10).isActive = true
-        weatherDescriptionLabel.leadingAnchor.constraint(equalTo: weatherIcon.trailingAnchor, constant: 10).isActive = true
-        weatherDescriptionLabel.bottomAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: -25).isActive = true
+        weatherDescriptionLabel.topAnchor.constraint(equalTo: locationNameLabel.bottomAnchor, constant: offset * 2).isActive = true
+        weatherDescriptionLabel.leadingAnchor.constraint(equalTo: weatherIcon.trailingAnchor, constant: offset * 2).isActive = true
+        weatherDescriptionLabel.bottomAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: -offset * 5).isActive = true
         
-        currentTempLabel.leadingAnchor.constraint(greaterThanOrEqualTo: locationNameLabel.trailingAnchor, constant: 20).isActive = true
-        currentTempLabel.topAnchor.constraint(equalTo: customContentView.topAnchor, constant: 25).isActive = true
+        currentTempLabel.leadingAnchor.constraint(greaterThanOrEqualTo: locationNameLabel.trailingAnchor, constant: offset * 4).isActive = true
+        currentTempLabel.topAnchor.constraint(equalTo: customContentView.topAnchor, constant: offset * 5).isActive = true
         currentTempLabel.centerXAnchor.constraint(equalTo: minMaxTempLabel.centerXAnchor).isActive = true
         
-        minMaxTempLabel.leadingAnchor.constraint(greaterThanOrEqualTo: weatherDescriptionLabel.trailingAnchor, constant: 20).isActive = true
-        minMaxTempLabel.topAnchor.constraint(equalTo: currentTempLabel.bottomAnchor, constant: 10).isActive = true
-        minMaxTempLabel.trailingAnchor.constraint(equalTo: customContentView.trailingAnchor, constant: -25).isActive = true
-        minMaxTempLabel.bottomAnchor.constraint(greaterThanOrEqualTo: customContentView.topAnchor, constant: -25).isActive = true
+        minMaxTempLabel.leadingAnchor.constraint(greaterThanOrEqualTo: weatherDescriptionLabel.trailingAnchor, constant: offset * 4).isActive = true
+        minMaxTempLabel.topAnchor.constraint(equalTo: currentTempLabel.bottomAnchor, constant: offset * 2).isActive = true
+        minMaxTempLabel.trailingAnchor.constraint(equalTo: customContentView.trailingAnchor, constant: -offset * 5).isActive = true
+        minMaxTempLabel.bottomAnchor.constraint(greaterThanOrEqualTo: customContentView.topAnchor, constant: -offset * 5).isActive = true
     }
     
     //MARK: - Styling UI Elements
