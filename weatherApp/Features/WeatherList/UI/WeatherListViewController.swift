@@ -153,15 +153,14 @@ class WeatherListViewController: UIViewController {
     }
     
     private func showLocationsWarning(_ showWarning: Bool, warning: String) {
-        switch showWarning {
-        case true:
+        if showWarning {
             noLocationWarningView.setWarning(warningText: warning)
             noLocationWarningView.isHidden = false
             UIView.animate(withDuration: warningAnimationTime, animations: {
                 self.noLocationViewHeight.constant = UserWarningView.height
                 self.noLocationWarningView.layoutIfNeeded()
             })
-        case false:
+        } else {
             noLocationWarningView.isHidden = true
             UIView.animate(withDuration: warningAnimationTime, animations: {
                 self.noLocationViewHeight.constant = CGFloat(0)
@@ -181,15 +180,14 @@ class WeatherListViewController: UIViewController {
     }
     
     private func showInternetWarning(_ showWarning: Bool) {
-        switch showWarning {
-        case true:
+        if showWarning {
             noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
             noInternetWarningView.isHidden = false
             UIView.animate(withDuration: warningAnimationTime, animations: {
                 self.noInternetViewHeight.constant = UserWarningView.height
                 self.noInternetWarningView.layoutIfNeeded()
             })
-        case false:
+        } else {
             noInternetWarningView.isHidden = true
             noInternetWarningView.isHidden = true
             UIView.animate(withDuration: warningAnimationTime, animations: {
