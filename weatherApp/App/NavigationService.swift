@@ -34,5 +34,16 @@ class NavigationService {
         navigationController?.pushViewController(DetailWeatherViewController(detailWeatherPresenter: presenter), animated: true)
     }
     
+    func goToSearchLocation(delegate: LocationSearchDelegate) {
+        let presenter = LocationSearchPresenter(weatherRepository: appDependencies.weatherRepository, navigationService: self)
+        let viewController = LocationSearchViewController(with: presenter)
+        viewController.setupDelegate(delegate)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func goBack() {
+        navigationController?.popViewController(animated: true)
+    }
+
 }
 

@@ -39,9 +39,13 @@ class CurrentWeatherListPresenter {
     }
     
     func fetchCurrentWeatherList() -> Observable<[CurrentWeatherViewModel]> {
-        let locationIds = Cities.allCases.map { $0.rawValue }
-        
-        return weatherRepository.fetchSeveralCurrentWeather(id: locationIds)
+        weatherRepository
+            .fetchSelectedLocations()
+            .flatMap { [weak self] selectedLocation -> Observable<[CurrentWeatherCoreData]> in
+                guard let self = self else { return .just([]) }
+                let locationIds = selectedLocation.map { Int($0.id) }
+                return self.weatherRepository.fetchSeveralCurrentWeather(id: locationIds)
+            }
             .flatMap { currentWeatherCoreData -> Observable<[CurrentWeatherViewModel]> in
                 let currentWeatherViewModels = currentWeatherCoreData.map { CurrentWeatherViewModel(currentWeather: $0) }
                 return .just(currentWeatherViewModels)
@@ -75,6 +79,15 @@ class CurrentWeatherListPresenter {
     
     func handleSelectedLocation(currentWeather: CurrentWeatherViewModel) {
         navigationService.goToDetailWeather(currentWeather: currentWeather)
+    }
+    
+    func handleAddLocation(assignDelegate: LocationSearchDelegate) {
+        navigationService.goToSearchLocation(delegate: assignDelegate)
+    }
+    
+    func handleRemoveLocation(id: Int, index: Int) {
+        currentWeatherList.remove(at: index)
+        weatherRepository.deselectLocation(id: id)
     }
     
     private func bindCurrentLocation() {

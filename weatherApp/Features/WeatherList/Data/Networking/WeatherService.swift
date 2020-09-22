@@ -23,6 +23,10 @@ class WeatherService: WeatherServiceProtocol {
     }
     
     func fetchSeveralCurrentWeather(id: [Int]) -> Observable<MultipleCurrentWeather> {
+        if id.isEmpty {
+            return .just(MultipleCurrentWeather(list: []))
+        }
+        
         let severalIds = id.map { String($0) }.joined(separator:",")
         let resourceStringUrl = "\(baseUrlString)group?id=\(severalIds)&units=\(LocalizedStrings.units)&APPID=\(apiKey)"
         

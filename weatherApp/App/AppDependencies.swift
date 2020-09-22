@@ -33,5 +33,5 @@ class AppDependencies {
     lazy var weatherRepository: WeatherRepository = {
         WeatherRepository(weatherService: weatherService, coreDataService: coreDataService, reachability: reachability)
     }()
-
+    
 }

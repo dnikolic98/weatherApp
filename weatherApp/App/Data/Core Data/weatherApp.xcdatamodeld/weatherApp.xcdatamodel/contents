@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19G73" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CityCoreData" representedClassName="CityCoreData" syncable="YES">
+        <attribute name="country" attributeType="String"/>
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+    </entity>
     <entity name="CoordinatesCoreData" representedClassName="CoordinatesCoreData" syncable="YES">
         <attribute name="latitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="longitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -52,6 +57,9 @@
         <attribute name="longitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="forecastedWeather" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DailyWeatherCoreData" inverseName="forecastedWeather" inverseEntity="DailyWeatherCoreData"/>
     </entity>
+    <entity name="SelectedLocationCoreData" representedClassName="SelectedLocationCoreData" syncable="YES">
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
     <entity name="WeatherCoreData" representedClassName="WeatherCoreData" syncable="YES">
         <attribute name="icon" attributeType="String"/>
         <attribute name="iconsUrlString" attributeType="String"/>
@@ -65,12 +73,14 @@
         <relationship name="currentWeather" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentWeatherCoreData" inverseName="wind" inverseEntity="CurrentWeatherCoreData"/>
     </entity>
     <elements>
+        <element name="CityCoreData" positionX="-9" positionY="306" width="128" height="88"/>
         <element name="CoordinatesCoreData" positionX="160" positionY="192" width="128" height="88"/>
         <element name="CurrentWeatherCoreData" positionX="-229.42578125" positionY="214.34765625" width="128" height="28"/>
         <element name="DailyTemperatureCoreData" positionX="160" positionY="192" width="128" height="148"/>
         <element name="DailyWeatherCoreData" positionX="160" positionY="192" width="128" height="193"/>
         <element name="ForecastCoreData" positionX="160" positionY="192" width="128" height="148"/>
         <element name="ForecastedWeatherCoreData" positionX="160" positionY="192" width="128" height="88"/>
+        <element name="SelectedLocationCoreData" positionX="-27" positionY="288" width="128" height="58"/>
         <element name="WeatherCoreData" positionX="160" positionY="192" width="128" height="118"/>
         <element name="WindCoreData" positionX="160" positionY="192" width="128" height="88"/>
     </elements>

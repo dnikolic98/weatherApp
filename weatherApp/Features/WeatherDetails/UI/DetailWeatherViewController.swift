@@ -16,7 +16,6 @@ class DetailWeatherViewController: UIViewController {
     private let detailsCollectioViewRowHeight = WeatherConditionDetailCollectionViewCell.height
     private let daysCollectioViewRowHeight = SingleWeatherInformationCollectionViewCell.height
     private var refreshControl: UIRefreshControl!
-    private var currentWeatherListPresenter: CurrentWeatherListPresenter!
     private var dataDisposeBag: DisposeBag = DisposeBag()
     private var timerDisposeBag: DisposeBag = DisposeBag()
     private let detailsNumOfColumns = 2
@@ -43,6 +42,7 @@ class DetailWeatherViewController: UIViewController {
         setWeatherInformation()
         setupCollectionViews()
         bindViewModel()
+        startTimer()
         configurePullToRefresh()
     }
     

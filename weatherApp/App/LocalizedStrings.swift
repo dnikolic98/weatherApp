@@ -28,4 +28,6 @@ class LocalizedStrings {
     
     static let units = "metric"
     
+    static let searchLocations = "Search locations"
+    
 }

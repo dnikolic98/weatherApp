@@ -10,11 +10,15 @@ protocol CoreDataServiceProtocol {
     
     //MARK: - Fetches
     
-    func fetchCurrentWeather() -> [CurrentWeatherCoreData]
+    func fetchCurrentWeather(id: [Int]) -> [CurrentWeatherCoreData]
     
     func fetchForecastWeather(coord: Coordinates) -> ForecastedWeatherCoreData?
     
     func fetchCurrentWeather(coord: Coordinates) -> CurrentWeatherCoreData?
+    
+    func fetchCityList(query: String) -> [CityCoreData]
+    
+    func fetchSelectedLocations() -> [SelectedLocationCoreData]
     
     //MARK: - Create CoreData Models
     
@@ -44,6 +48,13 @@ protocol CoreDataServiceProtocol {
     
     @discardableResult
     func createForecastedWeatherFrom(forecastedWeather: ForecastedWeather) -> ForecastedWeatherCoreData?
+    
+    @discardableResult
+    func createSelectedLocationFrom(id: Int) -> SelectedLocationCoreData?
+    
+    //MARK: - Remove core data models
+    
+    func removeSelectedLocation(id: Int)
     
     //MARK: - Save Changes
     

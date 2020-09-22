@@ -23,6 +23,11 @@ class HomeViewController: UIViewController {
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var currentLocationView: MainInformationView!
+    @IBOutlet weak var addLocationButton: UIButton!
+    
+    @IBAction func addLocationButtonTapped(_ sender: Any) {
+        currentWeatherListPresenter.handleAddLocation(assignDelegate: self)
+    }
     
     convenience init(currentWeatherListPresenter: CurrentWeatherListPresenter) {
         self.init()
@@ -152,15 +157,17 @@ class HomeViewController: UIViewController {
         let rows = currentWeatherListPresenter.numberOfCurrentWeather
         
         tableViewHeightConstraint.constant = CGFloat(rows) * rowHeight
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
     }
     
     private func setGradientBackground() {
-        guard let currentWeather = currentWeatherListPresenter.currentLocationWeather else {
-            return
-        }
+        guard let currentWeather = currentWeatherListPresenter.currentLocationWeather else { return }
         
         view.setAutomaticGradient(currentWeather: currentWeather)
     }
+    
 }
 
 //MARK: - TableView DataSource
@@ -197,6 +204,28 @@ extension HomeViewController: UITableViewDelegate {
         guard let currentWeather = currentWeatherListPresenter.currentWeather(atIndex: indexPath.row) else { return }
         
         currentWeatherListPresenter.handleSelectedLocation(currentWeather: currentWeather)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            guard let currentWeather = currentWeatherListPresenter.currentWeather(atIndex: indexPath.row) else { return }
+            currentWeatherListPresenter.handleRemoveLocation(id: currentWeather.id, index: indexPath.row)
+            
+            CATransaction.begin()
+            CATransaction.setCompletionBlock {
+                self.refreshTableView()
+            }
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            CATransaction.commit()
+        }
+    }
+    
+}
+
+extension HomeViewController: LocationSearchDelegate {
+    
+    func didTapNewLocation() {
+        bindViewModel()
     }
     
 }

@@ -26,8 +26,9 @@ class CoreDataService: CoreDataServiceProtocol {
     
     //MARK: - Fetches
     
-    func fetchCurrentWeather() -> [CurrentWeatherCoreData] {
+    func fetchCurrentWeather(id: [Int]) -> [CurrentWeatherCoreData] {
         let request: NSFetchRequest<CurrentWeatherCoreData> = CurrentWeatherCoreData.fetchRequest()
+        request.predicate = Predicates.severalIdPredicate(id)
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         
         guard let currentWeatherList = try? mainContext.fetch(request) else {
@@ -53,6 +54,36 @@ class CoreDataService: CoreDataServiceProtocol {
         return forecastedWeatherCoreData?.first
     }
     
+    func fetchCityList(query: String) -> [CityCoreData] {
+        let request: NSFetchRequest<CityCoreData> = CityCoreData.fetchRequest()
+        request.predicate = Predicates.beginsWithNamePredicate(query)
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        
+        guard let cityList = try? mainContext.fetch(request) else {
+            return []
+        }
+        
+        return cityList
+    }
+    
+    func fetchSelectedLocations() -> [SelectedLocationCoreData] {
+        let request: NSFetchRequest<SelectedLocationCoreData> = SelectedLocationCoreData.fetchRequest()
+        
+        guard let cityList = try? mainContext.fetch(request) else {
+            return []
+        }
+        
+        return cityList
+    }
+    
+    
+    func fetchSelectedLocations(id: Int) -> SelectedLocationCoreData? {
+        let request: NSFetchRequest<SelectedLocationCoreData> = SelectedLocationCoreData.fetchRequest()
+        request.predicate = Predicates.idPredicate(id)
+        
+        let location = try? mainContext.fetch(request)
+        return location?.first
+    }
     
     //MARK: - Create CoreData Models
     
@@ -139,6 +170,21 @@ class CoreDataService: CoreDataServiceProtocol {
         }
         forecastedWeatherCoreData.populate(forecastedWeather: forecastedWeather, dailyWeathers: dailyWeathers)
         return forecastedWeatherCoreData
+    }
+    
+    @discardableResult
+    func createSelectedLocationFrom(id: Int) -> SelectedLocationCoreData? {
+        guard let selectedLocation = SelectedLocationCoreData.firstOrCreate(withId: id, context: privateContext) else { return nil }
+        selectedLocation.populate(id: id)
+        return selectedLocation
+    }
+    
+    //MARK - Remove Core data models
+    
+    func removeSelectedLocation(id: Int) {
+        guard let location = fetchSelectedLocations(id: id) else { return }
+        mainContext.delete(location)
+        saveChanges()
     }
     
     //MARK: - Save Changes

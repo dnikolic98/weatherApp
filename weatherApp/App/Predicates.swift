@@ -40,4 +40,12 @@ class Predicates {
         return NSPredicate(format: "forecastedWeather = %@", forecastedWeather)
     }
     
+    class func severalIdPredicate(_ ids: [Int]) -> NSPredicate {
+        return NSPredicate(format: "id IN %@", ids)
+    }
+    
+    class func beginsWithNamePredicate(_ name: String) -> NSPredicate {
+        return NSPredicate(format: "name BEGINSWITH[cd] %@", name)
+    }
+    
 }

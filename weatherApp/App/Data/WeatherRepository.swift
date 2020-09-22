@@ -27,7 +27,7 @@ class WeatherRepository {
     func fetchSeveralCurrentWeather(id: [Int]) -> Observable<[CurrentWeatherCoreData]> {
         switch reachability.connection {
         case .unavailable:
-            let currentWeatherListCoreData = coreDataService.fetchCurrentWeather()
+            let currentWeatherListCoreData = coreDataService.fetchCurrentWeather(id: id)
             return .just(currentWeatherListCoreData)
             
         default:
@@ -37,7 +37,7 @@ class WeatherRepository {
                     self.createAndSaveCurrentWeather(from: multipleCurrentWeather)
                 })
                 .flatMap { multipleCurrentWeather -> Observable<[CurrentWeatherCoreData]> in
-                    let currentWeatherListCoreData = self.coreDataService.fetchCurrentWeather()
+                    let currentWeatherListCoreData = self.coreDataService.fetchCurrentWeather(id: id)
                     return .just(currentWeatherListCoreData)
                 }
         }
@@ -107,6 +107,25 @@ class WeatherRepository {
             self.coreDataService.createCurrentWeatherFrom(currentWeather: currentWeather)
         }
         self.coreDataService.saveChanges()
+    }
+    
+    func fetchCityLists(query: String) -> Observable<[CityCoreData]> {
+        let cityList = coreDataService.fetchCityList(query: query)
+        return .just(cityList)
+    }
+    
+    func fetchSelectedLocations() -> Observable<[SelectedLocationCoreData]> {
+        let selectedLocations = coreDataService.fetchSelectedLocations()
+        return .just(selectedLocations)
+    }
+    
+    func selectLocation(id: Int) {
+        coreDataService.createSelectedLocationFrom(id: id)
+        coreDataService.saveChanges()
+    }
+    
+    func deselectLocation(id: Int) {
+        coreDataService.removeSelectedLocation(id: id)
     }
     
     private func startReachability() {
