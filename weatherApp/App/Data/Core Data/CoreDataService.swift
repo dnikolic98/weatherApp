@@ -7,6 +7,7 @@
 //
 
 import CoreData
+import RxSwift
 
 class CoreDataService: CoreDataServiceProtocol {
     
@@ -26,63 +27,63 @@ class CoreDataService: CoreDataServiceProtocol {
     
     //MARK: - Fetches
     
-    func fetchCurrentWeather(id: [Int]) -> [CurrentWeatherCoreData] {
+    func fetchCurrentWeather(id: [Int]) -> Observable<[CurrentWeatherCoreData]> {
         let request: NSFetchRequest<CurrentWeatherCoreData> = CurrentWeatherCoreData.fetchRequest()
         request.predicate = Predicates.severalIdPredicate(id)
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         
-        guard let currentWeatherList = try? mainContext.fetch(request) else {
-            return []
+        return mainContext.rx_entities(request as! NSFetchRequest<NSFetchRequestResult>)
+            .flatMap { fetchedManagedObject -> Observable<[CurrentWeatherCoreData]> in
+                guard let fetchedCurrentWeather = fetchedManagedObject as? [CurrentWeatherCoreData] else { return .just([]) }
+                return .just(fetchedCurrentWeather)
         }
-        
-        return currentWeatherList
     }
     
-    func fetchCurrentWeather(coord: Coordinates) -> CurrentWeatherCoreData? {
+    func fetchCurrentWeather(coord: Coordinates) -> Observable<CurrentWeatherCoreData?> {
         let request: NSFetchRequest<CurrentWeatherCoreData> = CurrentWeatherCoreData.fetchRequest()
         request.predicate = Predicates.coordinatesPredicate(coord, epsilon: 0.01, keyPath: "coord")
+        request.sortDescriptors = []
         
-        let currentWeatherCoreData = try? mainContext.fetch(request)
-        return currentWeatherCoreData?.first
+        return mainContext.rx_entities(request as! NSFetchRequest<NSFetchRequestResult>)
+            .flatMap { fetchedManagedObject -> Observable<CurrentWeatherCoreData?> in
+                guard let fetchedCurrentWeather = fetchedManagedObject.first as? CurrentWeatherCoreData else { return .just(nil) }
+                return .just(fetchedCurrentWeather)
+        }
     }
     
-    func fetchForecastWeather(coord: Coordinates) -> ForecastedWeatherCoreData? {
+    func fetchForecastWeather(coord: Coordinates) -> Observable<ForecastedWeatherCoreData?> {
         let request: NSFetchRequest<ForecastedWeatherCoreData> = ForecastedWeatherCoreData.fetchRequest()
         request.predicate = Predicates.coordinatesPredicate(coord)
+        request.sortDescriptors = []
         
-        let forecastedWeatherCoreData = try? mainContext.fetch(request)
-        return forecastedWeatherCoreData?.first
+        return mainContext.rx_entities(request as! NSFetchRequest<NSFetchRequestResult>)
+            .flatMap { fetchedManagedObject -> Observable<ForecastedWeatherCoreData?> in
+                guard let fetchedForecastWeather = fetchedManagedObject.first as? ForecastedWeatherCoreData else { return .just(nil) }
+                return .just(fetchedForecastWeather)
+        }
     }
     
-    func fetchCityList(query: String) -> [CityCoreData] {
+    func fetchCityList(query: String) -> Observable<[CityCoreData]> {
         let request: NSFetchRequest<CityCoreData> = CityCoreData.fetchRequest()
         request.predicate = Predicates.beginsWithNamePredicate(query)
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         
-        guard let cityList = try? mainContext.fetch(request) else {
-            return []
+        return mainContext.rx_entities(request as! NSFetchRequest<NSFetchRequestResult>)
+            .flatMap { fetchedManagedObject -> Observable<[CityCoreData]> in
+                guard let fetchedCity = fetchedManagedObject as? [CityCoreData] else { return .just([]) }
+                return .just(fetchedCity)
         }
-        
-        return cityList
     }
     
-    func fetchSelectedLocations() -> [SelectedLocationCoreData] {
+    func fetchSelectedLocations() -> Observable<[SelectedLocationCoreData]> {
         let request: NSFetchRequest<SelectedLocationCoreData> = SelectedLocationCoreData.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
         
-        guard let cityList = try? mainContext.fetch(request) else {
-            return []
+        return mainContext.rx_entities(request as! NSFetchRequest<NSFetchRequestResult>)
+            .flatMap { fetchedManagedObject -> Observable<[SelectedLocationCoreData]> in
+                guard let fetchedSelectedLocation = fetchedManagedObject as? [SelectedLocationCoreData] else { return .just([]) }
+                return .just(fetchedSelectedLocation)
         }
-        
-        return cityList
-    }
-    
-    
-    func fetchSelectedLocations(id: Int) -> SelectedLocationCoreData? {
-        let request: NSFetchRequest<SelectedLocationCoreData> = SelectedLocationCoreData.fetchRequest()
-        request.predicate = Predicates.idPredicate(id)
-        
-        let location = try? mainContext.fetch(request)
-        return location?.first
     }
     
     //MARK: - Create CoreData Models
@@ -192,6 +193,14 @@ class CoreDataService: CoreDataServiceProtocol {
     func saveChanges() {
         coreDataStack.saveChangesSync(context: privateContext)
         coreDataStack.saveChangesToDisk()
+    }
+    
+    private func fetchSelectedLocations(id: Int) -> SelectedLocationCoreData? {
+        let request: NSFetchRequest<SelectedLocationCoreData> = SelectedLocationCoreData.fetchRequest()
+        request.predicate = Predicates.idPredicate(id)
+        
+        let location = try? mainContext.fetch(request)
+        return location?.first
     }
     
 }

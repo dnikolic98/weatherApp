@@ -31,7 +31,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var addLocationButton: UIButton!
     
     @IBAction func addLocationButtonTapped(_ sender: Any) {
-        currentWeatherListPresenter.handleAddLocation(assignDelegate: self)
+        currentWeatherListPresenter.handleAddLocation()
     }
     
     convenience init(currentWeatherListPresenter: CurrentWeatherListPresenter) {
@@ -45,10 +45,10 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configurePullToRefresh()
         styleNavgiationBar()
         setupTableView()
         bindViewModel()
-        configurePullToRefresh()
         startTimer()
         bindReachable()
         bindLocationsEnabled()
@@ -57,7 +57,7 @@ class HomeViewController: UIViewController {
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        refreshTableView()
+        tableView.reloadData()
     }
     
     override func viewWillLayoutSubviews() {
@@ -69,7 +69,7 @@ class HomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
-        refreshTableView()
+        tableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -201,18 +201,22 @@ class HomeViewController: UIViewController {
     }
     
     private func refreshTableView() {
-        self.refreshTableViewHeight()
-        self.tableView.reloadData()
-        self.refreshControl.endRefreshing()
+        refreshTableViewHeight()
+        refreshControl.endRefreshing()
     }
     
     private func refreshTableViewHeight() {
         let rows = currentWeatherListPresenter.numberOfCurrentWeather
-        
+
         tableViewHeightConstraint.constant = CGFloat(rows) * rowHeight
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.5) {
+            self.tableView.reloadData()
             self.view.layoutIfNeeded()
         }
+    }
+    
+    private func refreshTableView(completion: @escaping (() -> Void)) {
+        refreshTableView()
     }
     
     private func setGradientBackground() {
@@ -262,23 +266,9 @@ extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             guard let currentWeather = currentWeatherListPresenter.currentWeather(atIndex: indexPath.row) else { return }
-            currentWeatherListPresenter.handleRemoveLocation(id: currentWeather.id, index: indexPath.row)
             
-            CATransaction.begin()
-            CATransaction.setCompletionBlock {
-                self.refreshTableView()
-            }
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            CATransaction.commit()
+            currentWeatherListPresenter.handleRemoveLocation(id: currentWeather.id)
         }
-    }
-    
-}
-
-extension HomeViewController: LocationSearchDelegate {
-    
-    func didTapNewLocation() {
-        bindViewModel()
     }
     
 }

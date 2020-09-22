@@ -34,9 +34,7 @@ class WeatherRepository {
     func fetchSeveralCurrentWeather(id: [Int]) -> Observable<[CurrentWeatherCoreData]> {
         switch reachability.connection {
         case .none:
-            let currentWeatherListCoreData = coreDataService.fetchCurrentWeather(id: id)
-            return .just(currentWeatherListCoreData)
-            
+            return coreDataService.fetchCurrentWeather(id: id)
         default:
             return weatherService.fetchSeveralCurrentWeather(id: id)
                 .do(onNext: { [weak self] multipleCurrentWeather in
@@ -44,8 +42,7 @@ class WeatherRepository {
                     self.createAndSaveCurrentWeather(from: multipleCurrentWeather)
                 })
                 .flatMap { multipleCurrentWeather -> Observable<[CurrentWeatherCoreData]> in
-                    let currentWeatherListCoreData = self.coreDataService.fetchCurrentWeather(id: id)
-                    return .just(currentWeatherListCoreData)
+                    return self.coreDataService.fetchCurrentWeather(id: id)
                 }
         }
     }
@@ -53,10 +50,7 @@ class WeatherRepository {
     func fetchForcastWeather(coord: Coordinates) -> Observable<ForecastedWeatherCoreData?> {
         switch reachability.connection {
         case .none:
-            guard let forecastedWeather = coreDataService.fetchForecastWeather(coord: coord) else {
-                return .just(nil)
-            }
-            return .just(forecastedWeather)
+            return coreDataService.fetchForecastWeather(coord: coord)
             
         default:
             return weatherService.fetchForecastWeather(coord: coord)
@@ -67,14 +61,7 @@ class WeatherRepository {
                     self.coreDataService.saveChanges()
                 })
                 .flatMap { [weak self] forecastedWeather -> Observable<ForecastedWeatherCoreData?> in
-                    guard
-                        let self = self,
-                        let forecastedWeather = self.coreDataService.fetchForecastWeather(coord: coord)
-                    else {
-                        return .just(nil)
-                    }
-                    
-                    return .just(forecastedWeather)
+                    return self?.coreDataService.fetchForecastWeather(coord: coord) ?? .just(nil)
                 }
         }
     }
@@ -82,10 +69,7 @@ class WeatherRepository {
     func fetchCurrentWeather(coord: Coordinates) -> Observable<CurrentWeatherCoreData?> {
         switch reachability.connection {
         case .none:
-            guard let currentWeather = coreDataService.fetchCurrentWeather(coord: coord) else {
-                return .just(nil)
-            }
-            return .just(currentWeather)
+            return coreDataService.fetchCurrentWeather(coord: coord)
             
         default:
             return weatherService.fetchCurrentWeather(coord: coord)
@@ -96,14 +80,7 @@ class WeatherRepository {
                     self.coreDataService.saveChanges()
                 })
                 .flatMap { [weak self] currentWeather -> Observable<CurrentWeatherCoreData?> in
-                    guard
-                        let self = self,
-                        let currentWeather = self.coreDataService.fetchCurrentWeather(coord: coord)
-                    else {
-                        return .just(nil)
-                    }
-                    
-                    return .just(currentWeather)
+                    return self?.coreDataService.fetchCurrentWeather(coord: coord) ?? .just(nil)
                 }
         }
     }
@@ -117,13 +94,11 @@ class WeatherRepository {
     }
     
     func fetchCityLists(query: String) -> Observable<[CityCoreData]> {
-        let cityList = coreDataService.fetchCityList(query: query)
-        return .just(cityList)
+        return coreDataService.fetchCityList(query: query)
     }
     
     func fetchSelectedLocations() -> Observable<[SelectedLocationCoreData]> {
-        let selectedLocations = coreDataService.fetchSelectedLocations()
-        return .just(selectedLocations)
+        return coreDataService.fetchSelectedLocations()
     }
     
     func selectLocation(id: Int) {
