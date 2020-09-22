@@ -8,4 +8,5 @@ target 'weatherApp' do
   pod 'RxSwift', '~> 5'
   pod 'RxCocoa', '~> 5'
   pod 'RxCoreLocation', '~> 1.4'
+  pod 'RxDataSources', '~> 4.0'
 end

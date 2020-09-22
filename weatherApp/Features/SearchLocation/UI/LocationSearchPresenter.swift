@@ -24,7 +24,7 @@ class LocationSearchPresenter {
         navigationService.goBack()
     }
     
-    func fetchCityList(query: String) -> Observable<[CityViewModel]> {
+    func fetchCityList(query: String) -> Observable<[SectionOfCityViewModels]> {
         weatherRepository
             .fetchSelectedLocations()
             .observeOn(MainScheduler.instance)
@@ -45,6 +45,7 @@ class LocationSearchPresenter {
                 
                 return .just(cityViewModels)
             }
+            .map { [SectionOfCityViewModels(items: $0)] }
     }
     
     func handleCellTap(city: CityViewModel) {

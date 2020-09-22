@@ -16,7 +16,7 @@ class HomeViewController: UIViewController {
     private var refreshControl: UIRefreshControl!
     private var currentWeatherListPresenter: CurrentWeatherListPresenter!
     private var dataDisposeBag: DisposeBag = DisposeBag()
-    private var timerDisposeBag: DisposeBag = DisposeBag()
+    private var viewControllerDisposeBag: DisposeBag = DisposeBag()
     private let dataRefreshPeriod: Int = 60 * 2
     
     @IBOutlet private weak var scrollView: UIScrollView!
@@ -90,15 +90,14 @@ class HomeViewController: UIViewController {
     }
     
     private func startTimer() {
-        timerDisposeBag = DisposeBag()
+        viewControllerDisposeBag = DisposeBag()
         
         Observable<Int>
             .timer(.seconds(0), period: .seconds(dataRefreshPeriod), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
-                guard let self = self else { return }
-                self.bindViewModel()
+                self?.bindViewModel()
             })
-            .disposed(by: timerDisposeBag)
+            .disposed(by: viewControllerDisposeBag)
     }
     
     //MARK: - UI elements setup
@@ -127,7 +126,6 @@ class HomeViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.isScrollEnabled = false
         
-        tableViewHeightConstraint.constant = CGFloat(0)
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.typeName)
     }
     

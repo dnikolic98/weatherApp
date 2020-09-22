@@ -7,70 +7,36 @@
 //
 
 import RxSwift
+import RxCocoa
 
 class DetailWeatherPresenter {
     
+    private let presenterDisposeBag: DisposeBag = DisposeBag()
     private let weatherRepository: WeatherRepository
-    private var sevenDayForecast: [DailyForecastViewModel] = []
-    private var weatherConditionList: [ConditionInformationViewModel] = []
-    private var fiveDaysList: [SingleWeatherInformationViewModel] = []
     
     var currentWeather: CurrentWeatherViewModel
-    var numberOfConditions: Int {
-        weatherConditionList.count
+    var weatherConditionList: BehaviorRelay<[SectionOfConditionInformation]>
+    var weatherData: Observable<(CurrentWeatherViewModel?, [SectionOfSingleWeatherInformation])> {
+        Observable.combineLatest(
+            fetchCurrentWeather(),
+            fetchFiveDaysList())
     }
-    var numberOfConditionRows: Int {
-        numberOfConditions / 2 + numberOfConditions % 2
-    }
-    var numberOfDays: Int {
-        fiveDaysList.count
-    }
-    
+
     init(currentWeather: CurrentWeatherViewModel, weatherRepository: WeatherRepository) {
         self.currentWeather = currentWeather
         self.weatherRepository = weatherRepository
-
-        setWeatherConditionList()
-    }
-    
-    func weatherCondition(atIndex index: Int) -> ConditionInformationViewModel? {
-        return weatherConditionList.at(index)
-    }
-
-    func fiveDays(atIndex index: Int) -> SingleWeatherInformationViewModel? {
-        return fiveDaysList.at(index)
-    }
-    
-    func fetchFiveDaysList() -> Observable<ForecastedWeatherCoreData?> {
-        return weatherRepository
-            .fetchForcastWeather(coord: currentWeather.coord)
-            .do(onNext: { [weak self] forecastedWeather in
-                guard
-                    let self = self,
-                    let forecastedWeather = forecastedWeather
-                else {
-                    return
-                }
-                
-                do {
-                    self.sevenDayForecast = try forecastedWeather.forecastedWeather
-                        .map { dailyWeather in
-                            guard let dailyWeather = dailyWeather as? DailyWeatherCoreData else { throw CoreDataErrors.incompatibleCast }
-                            return DailyForecastViewModel(currentWeather: self.currentWeather, dailyWeather: dailyWeather)
-                        }
-                        .sorted { $0.forecastTime < $1.forecastTime }
-                } catch {
-                    self.sevenDayForecast = []
-                }
-                self.setFiveDayList()
-            })
-    }
-    
-    func fetchCurrentWeather() -> Observable<CurrentWeatherCoreData?> {
-        let coord = currentWeather.coord
         
+        weatherConditionList = BehaviorRelay<[SectionOfConditionInformation]>(value: [])
+        setConditionList(currentWeather: currentWeather)
+    }
+    
+    func fetchCurrentWeather() -> Observable<CurrentWeatherViewModel?> {
         return weatherRepository
-            .fetchCurrentWeather(coord: coord)
+            .fetchCurrentWeather(coord: currentWeather.coord)
+            .flatMap { currentWeather -> Observable<CurrentWeatherViewModel?> in
+                guard let currentWeather = currentWeather else { return .just(nil) }
+                return .just(CurrentWeatherViewModel(currentWeather: currentWeather))
+            }
             .do(onNext: { [weak self] currentWeather in
                 guard
                     let self = self,
@@ -78,15 +44,75 @@ class DetailWeatherPresenter {
                 else {
                     return
                 }
-                self.currentWeather = CurrentWeatherViewModel(currentWeather: currentWeather)
+                self.currentWeather = currentWeather
+                self.setConditionList(currentWeather: currentWeather)
             })
     }
     
-    private func setWeatherConditionList() {
-        let feelsLikeTemperatureValue = String(format: LocalizedStrings.temperatureValueFormat, currentWeather.feelsLikeTemperature)
-        let humidityValue = String(format: LocalizedStrings.percentageValueFormat, currentWeather.humidity)
-        let pressureValue = String(format: LocalizedStrings.pressureValueFormat, currentWeather.pressure)
-        let windSpeedValue = String(format: LocalizedStrings.speedValueFormat, currentWeather.windSpeed)
+    func fetchFiveDaysList() -> Observable<[SectionOfSingleWeatherInformation]> {
+        fetchDailyForecast()
+            .flatMap { sevenDayForecast -> Observable<[SingleWeatherInformationViewModel]> in
+                guard sevenDayForecast.count >= 6 else { return .just([]) }
+                var fiveDaysList: [SingleWeatherInformationViewModel] = []
+                
+                for forecast in sevenDayForecast[1...5] {
+                    let minTempValue = String(format: LocalizedStrings.degreeValueFormat, forecast.minTemperature)
+                    let maxTempValue = String(format: LocalizedStrings.degreeValueFormat, forecast.maxTemperature)
+                    let temperature = "\(maxTempValue)\n\(minTempValue)"
+                    let day = forecast.forecastTime.dayOfWeek().uppercased()
+                    
+                    fiveDaysList.append(SingleWeatherInformationViewModel(header: day, body: temperature, iconUrlString: forecast.weatherIconUrlString))
+                }
+                
+                return .just(fiveDaysList)
+            }
+            .flatMap { singleWeatherInformationViewModels -> Observable<[SectionOfSingleWeatherInformation]> in
+                .just([SectionOfSingleWeatherInformation(items: singleWeatherInformationViewModels)])
+            }
+    }
+    
+    private func fetchDailyForecast() -> Observable<[DailyForecastViewModel]> {
+        return weatherRepository
+            .fetchForcastWeather(coord: currentWeather.coord)
+            .flatMap { [weak self] forecastedWeather -> Observable<[DailyForecastViewModel]> in
+                guard
+                    let self = self,
+                    let forecastedWeather = forecastedWeather
+                else {
+                    return .just([])
+                }
+                let sevenDayForecast = self.createSevenDayForecastViewModels(forecastedWeather: forecastedWeather)
+                return .just(sevenDayForecast)
+            }
+    }
+    
+    private func setConditionList(currentWeather: CurrentWeatherViewModel) {
+        let conditionInformation = self.createWeatherConditionList(currentWeather: currentWeather)
+        self.weatherConditionList.accept([SectionOfConditionInformation(items: conditionInformation)])
+    }
+    
+    private func createSevenDayForecastViewModels(forecastedWeather: ForecastedWeatherCoreData) -> [DailyForecastViewModel] {
+        do {
+            return try forecastedWeather.forecastedWeather
+                .map { dailyWeather in
+                    guard let dailyWeather = dailyWeather as? DailyWeatherCoreData else { throw CoreDataErrors.incompatibleCast }
+                    return DailyForecastViewModel(currentWeather: self.currentWeather, dailyWeather: dailyWeather)
+                }
+                .sorted { $0.forecastTime < $1.forecastTime }
+        } catch {
+            return []
+        }
+    }
+    
+    private func createWeatherConditionList(currentWeather: CurrentWeatherViewModel?) -> [ConditionInformationViewModel] {
+        guard let current = currentWeather else { return [] }
+        
+        var weatherConditionList: [ConditionInformationViewModel] = []
+        
+        let feelsLikeTemperatureValue = String(format: LocalizedStrings.temperatureValueFormat, current.feelsLikeTemperature)
+        let humidityValue = String(format: LocalizedStrings.percentageValueFormat, current.humidity)
+        let pressureValue = String(format: LocalizedStrings.pressureValueFormat, current.pressure)
+        let windSpeedValue = String(format: LocalizedStrings.speedValueFormat, current.windSpeed)
 
         let feelsLikeTemperature = ConditionInformationViewModel(title: LocalizedStrings.feelsLike, value: feelsLikeTemperatureValue)
         let humidity =  ConditionInformationViewModel(title: LocalizedStrings.humidity, value: humidityValue)
@@ -97,19 +123,8 @@ class DetailWeatherPresenter {
         weatherConditionList.append(humidity)
         weatherConditionList.append(pressure)
         weatherConditionList.append(windSpeed)
-    }
-    
-    private func setFiveDayList() {
-        guard sevenDayForecast.count >= 7 else { return }
         
-        for forecast in sevenDayForecast[1...5] {
-            let minTempValue = String(format: LocalizedStrings.degreeValueFormat, forecast.minTemperature)
-            let maxTempValue = String(format: LocalizedStrings.degreeValueFormat, forecast.maxTemperature)
-            let temperature = "\(maxTempValue)\n\(minTempValue)"
-            let day = forecast.forecastTime.dayOfWeek().uppercased()
-            
-            fiveDaysList.append(SingleWeatherInformationViewModel(header: day, body: temperature, iconUrlString: forecast.weatherIconUrlString))
-        }
+        return weatherConditionList
     }
     
 }
