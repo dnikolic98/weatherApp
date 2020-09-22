@@ -16,6 +16,9 @@ class DetailWeatherPresenter {
     
     var currentWeather: CurrentWeatherViewModel
     var weatherConditionList: BehaviorRelay<[SectionOfConditionInformation]>
+    var isReachable: Observable<Bool> {
+        weatherRepository.isReachable
+    }
     var weatherData: Observable<(CurrentWeatherViewModel?, [SectionOfSingleWeatherInformation])> {
         Observable.combineLatest(
             fetchCurrentWeather(),

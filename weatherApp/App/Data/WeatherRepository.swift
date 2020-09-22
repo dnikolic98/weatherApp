@@ -9,24 +9,31 @@
 import CoreData
 import Reachability
 import RxSwift
+import RxCocoa
+import RxReachability
 
 class WeatherRepository {
     
+    let repositoryDisposeBag: DisposeBag = DisposeBag()
     let weatherService: WeatherServiceProtocol
     let coreDataService: CoreDataServiceProtocol
     var reachability: Reachability
+    var isReachable: BehaviorSubject<Bool>
     
     init(weatherService: WeatherServiceProtocol, coreDataService: CoreDataServiceProtocol, reachability: Reachability) {
         self.weatherService = weatherService
         self.reachability = reachability
         self.coreDataService = coreDataService
         
+        isReachable = BehaviorSubject<Bool>(value: false)
+        bindIsReachable()
+        
         startReachability()
     }
     
     func fetchSeveralCurrentWeather(id: [Int]) -> Observable<[CurrentWeatherCoreData]> {
         switch reachability.connection {
-        case .unavailable:
+        case .none:
             let currentWeatherListCoreData = coreDataService.fetchCurrentWeather(id: id)
             return .just(currentWeatherListCoreData)
             
@@ -45,7 +52,7 @@ class WeatherRepository {
     
     func fetchForcastWeather(coord: Coordinates) -> Observable<ForecastedWeatherCoreData?> {
         switch reachability.connection {
-        case .unavailable:
+        case .none:
             guard let forecastedWeather = coreDataService.fetchForecastWeather(coord: coord) else {
                 return .just(nil)
             }
@@ -74,7 +81,7 @@ class WeatherRepository {
     
     func fetchCurrentWeather(coord: Coordinates) -> Observable<CurrentWeatherCoreData?> {
         switch reachability.connection {
-        case .unavailable:
+        case .none:
             guard let currentWeather = coreDataService.fetchCurrentWeather(coord: coord) else {
                 return .just(nil)
             }
@@ -134,6 +141,14 @@ class WeatherRepository {
         } catch {
             print("Unable to start notifier")
         }
+    }
+    
+    private func bindIsReachable() {
+        Reachability
+            .rx
+            .isReachable
+            .bind(to: isReachable)
+            .disposed(by: repositoryDisposeBag)
     }
     
 }

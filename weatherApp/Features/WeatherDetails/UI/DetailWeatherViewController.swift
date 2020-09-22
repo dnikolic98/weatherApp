@@ -26,6 +26,8 @@ class DetailWeatherViewController: UIViewController {
     private let padding: CGFloat = 10
     private let dataRefreshPeriod: Int = 60 * 2
     
+    @IBOutlet weak var noInternetWarningHeight: NSLayoutConstraint!
+    @IBOutlet weak var noInternetWarningView: UserWarningView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var mainInformationView: MainInformationView!
     @IBOutlet private weak var detailsCollectionView: UICollectionView!
@@ -42,13 +44,14 @@ class DetailWeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configurePullToRefresh()
         setWeatherInformation(currentWeather: detailWeatherPresenter.currentWeather)
         setupFiveDaysDataSource()
         setupConditionListDataSource()
         setupCollectionViews()
         bindViewModel()
         startTimer()
-        configurePullToRefresh()
+        bindReachable()
     }
     
     override func viewWillLayoutSubviews() {
@@ -122,6 +125,27 @@ class DetailWeatherViewController: UIViewController {
         setupDaysCollectionView()
     }
     
+    private func bindReachable() {
+        detailWeatherPresenter
+            .isReachable
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] reachable in
+                self?.showInternetWarning(!reachable)
+            })
+            .disposed(by: viewControllerDisposeBag)
+    }
+    
+    private func showInternetWarning(_ showWarning: Bool) {
+        if showWarning {
+            noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
+            noInternetWarningView.isHidden = false
+            noInternetWarningHeight.constant = UserWarningView.height
+        } else {
+            noInternetWarningView.isHidden = true
+            noInternetWarningHeight.constant = CGFloat(0)
+        }
+    }
+    
     private func setupDetailsCollectionView() {
         let numOfRows = 2
         
@@ -156,9 +180,9 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func configurePullToRefresh() {
-       refreshControl = UIRefreshControl()
-       refreshControl.addTarget(self, action: #selector(bindViewModel), for: UIControl.Event.valueChanged)
-       scrollView.refreshControl = refreshControl
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(bindViewModel), for: UIControl.Event.valueChanged)
+        scrollView.refreshControl = refreshControl
     }
     
     private func refreshUI(currentWeather: CurrentWeatherViewModel) {

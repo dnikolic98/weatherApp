@@ -19,6 +19,15 @@ class CurrentWeatherListPresenter {
     private var locationDisposeBag: DisposeBag = DisposeBag()
     
     var currentLocationWeather: CurrentWeatherViewModel?
+    var isReachable: Observable<Bool> {
+        weatherRepository.isReachable.skip(1)
+    }
+    var areLocationsAllowed: Bool {
+        locationService.checkLocationServicesAuthorization()
+    }
+    var areLocationsEnabled: Observable<Bool> {
+        locationService.isEnabled
+    }
     var currentWeatherData: Observable<([CurrentWeatherViewModel], CurrentWeatherViewModel?)> {
        Observable.combineLatest(
           fetchCurrentWeatherList(),

@@ -19,6 +19,10 @@ class HomeViewController: UIViewController {
     private var viewControllerDisposeBag: DisposeBag = DisposeBag()
     private let dataRefreshPeriod: Int = 60 * 2
     
+    @IBOutlet weak var noInternetViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var noLocationViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var noLocationsWarningLabel: UserWarningView!
+    @IBOutlet weak var noInternetWarningView: UserWarningView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
@@ -45,6 +49,8 @@ class HomeViewController: UIViewController {
         bindViewModel()
         configurePullToRefresh()
         startTimer()
+        bindReachable()
+        bindLocationsEnabled()
         
         view.setDefaultGradient()
     }
@@ -101,6 +107,55 @@ class HomeViewController: UIViewController {
     }
     
     //MARK: - UI elements setup
+    
+    private func bindLocationsEnabled() {
+        currentWeatherListPresenter
+            .areLocationsEnabled
+            .subscribe(onNext: { [weak self] enabled in
+                guard let self = self else { return }
+                guard enabled else {
+                    self.showLocationsWarning(!enabled, warning: LocalizedStrings.disabledLocationsWarning)
+                    return
+                }
+                
+                let allowed = self.currentWeatherListPresenter.areLocationsAllowed
+                self.showLocationsWarning(!allowed, warning: LocalizedStrings.authLocationsWarning)
+            })
+            .disposed(by: viewControllerDisposeBag)
+    }
+    
+    private func showLocationsWarning(_ showWarning: Bool, warning: String) {
+        if showWarning {
+            noLocationsWarningLabel.setWarning(warningText: warning)
+            noLocationsWarningLabel.isHidden = false
+            noLocationViewHeight.constant = UserWarningView.height
+        } else {
+            noInternetWarningView.isHidden = true
+            noLocationsWarningLabel.isHidden = true
+            noLocationViewHeight.constant = CGFloat(0)
+        }
+    }
+    
+    private func bindReachable() {
+        currentWeatherListPresenter
+            .isReachable
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] reachable in
+                self?.showInternetWarning(!reachable)
+            })
+            .disposed(by: viewControllerDisposeBag)
+    }
+    
+    private func showInternetWarning(_ showWarning: Bool) {
+        if showWarning {
+            noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
+            noInternetWarningView.isHidden = false
+            noInternetViewHeight.constant = UserWarningView.height
+        } else {
+            noInternetWarningView.isHidden = true
+            noInternetViewHeight.constant = CGFloat(0)
+        }
+    }
     
     private func styleNavgiationBar() {
         // set navigationBar title and back button color, title font size and back button text
