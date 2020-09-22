@@ -10,34 +10,40 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class HomeViewController: UIViewController {
+class WeatherListViewController: UIViewController {
     
-    private let rowHeight = WeatherTableViewCell.height
-    private var refreshControl: UIRefreshControl!
-    private var currentWeatherListPresenter: CurrentWeatherListPresenter!
-    private var dataDisposeBag: DisposeBag = DisposeBag()
-    private var viewControllerDisposeBag: DisposeBag = DisposeBag()
+    //MARK: - Properties
+    
     private let dataRefreshPeriod: Int = 60 * 2
     private let warningAnimationTime: TimeInterval = 0.25
+    private let rowHeight = WeatherTableViewCell.height
+    private var dataDisposeBag: DisposeBag = DisposeBag()
+    private var viewControllerDisposeBag: DisposeBag = DisposeBag()
+    private var refreshControl: UIRefreshControl!
+    private var currentWeatherListPresenter: WeatherListPresenter!
     
-    @IBOutlet weak var noInternetViewHeight: NSLayoutConstraint!
-    @IBOutlet weak var noLocationViewHeight: NSLayoutConstraint!
-    @IBOutlet weak var noLocationWarningView: UserWarningView!
-    @IBOutlet weak var noInternetWarningView: UserWarningView!
+    @IBOutlet private weak var noInternetViewHeight: NSLayoutConstraint!
+    @IBOutlet private weak var noLocationViewHeight: NSLayoutConstraint!
+    @IBOutlet private weak var noLocationWarningView: UserWarningView!
+    @IBOutlet private weak var noInternetWarningView: UserWarningView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var currentLocationView: MainInformationView!
-    @IBOutlet weak var addLocationButton: UIButton!
+    @IBOutlet private weak var addLocationButton: UIButton!
+    
+    //MARK: - IBActions
     
     @IBAction func addLocationButtonTapped(_ sender: Any) {
         currentWeatherListPresenter.handleAddLocation()
     }
     
-    convenience init(currentWeatherListPresenter: CurrentWeatherListPresenter) {
+    //MARK: - Initialization
+    
+    convenience init(with presenter: WeatherListPresenter) {
         self.init()
 
-        self.currentWeatherListPresenter = currentWeatherListPresenter
+        self.currentWeatherListPresenter = presenter
     }
     
     //MARK: - Overrides
@@ -77,7 +83,7 @@ class HomeViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
-    //MARK: - TableView Data
+    //MARK: - Data binding and timer
     
     @objc private func bindViewModel() {
         dataDisposeBag = DisposeBag()
@@ -109,7 +115,26 @@ class HomeViewController: UIViewController {
             .disposed(by: viewControllerDisposeBag)
     }
     
-    //MARK: - UI elements setup
+    //MARK: - TableView setup
+    
+    private func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        tableView.separatorStyle = .none
+        tableView.isScrollEnabled = false
+        
+        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.typeName)
+    }
+    
+    //MARK: - Gradient Setup
+    
+    private func setGradientBackground() {
+        guard let currentWeather = currentWeatherListPresenter.currentLocationWeather else { return }
+        view.setAutomaticGradient(currentWeather: currentWeather)
+    }
+    
+    //MARK: - Warning setup
     
     private func bindLocationsEnabled() {
         currentWeatherListPresenter
@@ -131,11 +156,16 @@ class HomeViewController: UIViewController {
         if showWarning {
             noLocationWarningView.setWarning(warningText: warning)
             noLocationWarningView.isHidden = false
-            noLocationViewHeight.constant = UserWarningView.height
+            UIView.animate(withDuration: warningAnimationTime, animations: {
+                self.noLocationViewHeight.constant = UserWarningView.height
+                self.noLocationWarningView.layoutIfNeeded()
+            })
         } else {
-            noInternetWarningView.isHidden = true
             noLocationWarningView.isHidden = true
-            noLocationViewHeight.constant = CGFloat(0)
+            UIView.animate(withDuration: warningAnimationTime, animations: {
+                self.noLocationViewHeight.constant = CGFloat(0)
+                self.noLocationWarningView.layoutIfNeeded()
+            })
         }
     }
     
@@ -153,39 +183,21 @@ class HomeViewController: UIViewController {
         if showWarning {
             noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
             noInternetWarningView.isHidden = false
-            noInternetViewHeight.constant = UserWarningView.height
+            UIView.animate(withDuration: warningAnimationTime, animations: {
+                self.noInternetViewHeight.constant = UserWarningView.height
+                self.noInternetWarningView.layoutIfNeeded()
+            })
         } else {
             noInternetWarningView.isHidden = true
-            noInternetViewHeight.constant = CGFloat(0)
+            noInternetWarningView.isHidden = true
+            UIView.animate(withDuration: warningAnimationTime, animations: {
+                self.noInternetViewHeight.constant = CGFloat(0)
+                self.noInternetWarningView.layoutIfNeeded()
+            })
         }
     }
     
-    private func styleNavgiationBar() {
-        // set navigationBar title and back button color, title font size and back button text
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24.0)]
-        if var textAttributes = navigationController?.navigationBar.titleTextAttributes {
-            textAttributes[NSAttributedString.Key.foregroundColor] = UIColor.white
-            navigationController?.navigationBar.titleTextAttributes = textAttributes
-            navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-            navigationController?.navigationBar.tintColor = .white;
-        }
-        
-        // remove navigationBar background
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.isTranslucent = true
-        navigationController?.view.backgroundColor = .clear
-    }
-    
-    private func setupTableView() {
-        tableView.delegate = self
-        tableView.dataSource = self
-        
-        tableView.separatorStyle = .none
-        tableView.isScrollEnabled = false
-        
-        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.typeName)
-    }
+    //MARK: - Refresh setup
     
     private func configurePullToRefresh() {
        refreshControl = UIRefreshControl()
@@ -215,21 +227,30 @@ class HomeViewController: UIViewController {
         }
     }
     
-    private func refreshTableView(completion: @escaping (() -> Void)) {
-        refreshTableView()
-    }
+    //MARK: - Navigation Bar styling
     
-    private func setGradientBackground() {
-        guard let currentWeather = currentWeatherListPresenter.currentLocationWeather else { return }
+    private func styleNavgiationBar() {
+        // set navigationBar title and back button color, title font size and back button text
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24.0)]
+        if var textAttributes = navigationController?.navigationBar.titleTextAttributes {
+            textAttributes[NSAttributedString.Key.foregroundColor] = UIColor.white
+            navigationController?.navigationBar.titleTextAttributes = textAttributes
+            navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.navigationBar.tintColor = .white;
+        }
         
-        view.setAutomaticGradient(currentWeather: currentWeather)
+        // remove navigationBar background
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.view.backgroundColor = .clear
     }
     
 }
 
 //MARK: - TableView DataSource
 
-extension HomeViewController: UITableViewDataSource {
+extension WeatherListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return currentWeatherListPresenter.numberOfCurrentWeather
@@ -249,7 +270,7 @@ extension HomeViewController: UITableViewDataSource {
 
 //MARK: - TableView Delegate
 
-extension HomeViewController: UITableViewDelegate {
+extension WeatherListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return rowHeight

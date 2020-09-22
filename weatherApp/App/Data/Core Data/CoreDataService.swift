@@ -195,6 +195,8 @@ class CoreDataService: CoreDataServiceProtocol {
         coreDataStack.saveChangesToDisk()
     }
     
+    //MARK: - Helpers
+    
     private func fetchSelectedLocations(id: Int) -> SelectedLocationCoreData? {
         let request: NSFetchRequest<SelectedLocationCoreData> = SelectedLocationCoreData.fetchRequest()
         request.predicate = Predicates.idPredicate(id)

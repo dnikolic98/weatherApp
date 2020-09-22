@@ -12,10 +12,14 @@ import RxCoreLocation
 
 class LocationService: LocationServiceProtocol {
     
+    //MARK: - Properties
+    
     private (set) var isEnabled: Observable<Bool>
     private (set) var location: Observable<Coordinates>
 
     private let locationManager = CLLocationManager()
+    
+    //MARK: - Initialization
     
     init() {
         locationManager.distanceFilter = kCLDistanceFilterNone;
@@ -40,6 +44,8 @@ class LocationService: LocationServiceProtocol {
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
     }
+    
+    //MARK: - Authorization status
 
     func checkLocationServicesAuthorization() -> Bool {
         if CLLocationManager.locationServicesEnabled() {

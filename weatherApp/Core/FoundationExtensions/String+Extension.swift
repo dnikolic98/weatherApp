@@ -6,7 +6,6 @@
 //  Copyright © 2020 Dario Nikolic. All rights reserved.
 //
 
-
 extension String {
     
     var firstCapitalized: String {

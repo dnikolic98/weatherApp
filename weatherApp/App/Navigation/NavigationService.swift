@@ -10,8 +10,12 @@ import UIKit
 
 class NavigationService {
     
+    //MARK: - Properties
+    
     private let appDependencies: AppDependencies
     private weak var navigationController: UINavigationController?
+    
+    //MARK: - Initalization
     
     init(navigationController: UINavigationController, appDependencies: AppDependencies) {
         self.navigationController = navigationController
@@ -24,15 +28,19 @@ class NavigationService {
         goToHome()
     }
     
+    //MARK: - Public navigation methods
+    
     func goToHome() {
-        let presenter = CurrentWeatherListPresenter(weatherRepository: appDependencies.weatherRepository, locationService: appDependencies.locationService, navigationService: self)
-        navigationController?.pushViewController(HomeViewController(currentWeatherListPresenter: presenter), animated: true)
+        let presenter = WeatherListPresenter(weatherRepository: appDependencies.weatherRepository, locationService: appDependencies.locationService, navigationService: self)
+        let viewController = WeatherListViewController(with: presenter)
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     func goToDetailWeather(currentWeather: CurrentWeatherViewModel) {
         let presenter = DetailWeatherPresenter(currentWeather: currentWeather, weatherRepository: appDependencies.weatherRepository)
+        let viewController = DetailWeatherViewController(with: presenter)
         navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
-        navigationController?.pushViewController(DetailWeatherViewController(detailWeatherPresenter: presenter), animated: true)
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     func goToSearchLocation() {
@@ -46,6 +54,6 @@ class NavigationService {
         navigationController?.heroNavigationAnimationType = .fade
         navigationController?.popViewController(animated: true)
     }
-
+    
 }
 

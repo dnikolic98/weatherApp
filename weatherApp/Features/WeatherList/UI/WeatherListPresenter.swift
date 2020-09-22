@@ -9,7 +9,9 @@
 import RxSwift
 import RxCocoa
 
-class CurrentWeatherListPresenter {
+class WeatherListPresenter {
+    
+    //MARK: - Properties
     
     private var currentWeatherList: [CurrentWeatherViewModel] = []
     private let weatherRepository: WeatherRepository
@@ -29,10 +31,15 @@ class CurrentWeatherListPresenter {
         locationService.isEnabled
     }
     var currentWeatherData: Observable<([CurrentWeatherViewModel], CurrentWeatherViewModel?)> {
-       Observable.combineLatest(
-          fetchCurrentWeatherList(),
-          fetchCurrenLocationtWeather())
+        Observable.combineLatest(
+            fetchCurrentWeatherList(),
+            fetchCurrenLocationtWeather())
     }
+    var numberOfCurrentWeather: Int {
+        currentWeatherList.count
+    }
+    
+    //MARK: - Initialization
     
     init(weatherRepository: WeatherRepository, locationService: LocationServiceProtocol, navigationService: NavigationService) {
         self.weatherRepository = weatherRepository
@@ -43,11 +50,50 @@ class CurrentWeatherListPresenter {
         bindCurrentLocation()
     }
     
-    var numberOfCurrentWeather: Int {
-        currentWeatherList.count
+    //MARK: - Retrieve currentWeather at index
+    
+    func currentWeather(atIndex index: Int) -> CurrentWeatherViewModel? {
+        return currentWeatherList.at(index)
     }
     
-    func fetchCurrentWeatherList() -> Observable<[CurrentWeatherViewModel]> {
+    //MARK: - Handle cell selection action
+    
+    func handleSelectedLocation(currentWeather: CurrentWeatherViewModel) {
+        navigationService.goToDetailWeather(currentWeather: currentWeather)
+    }
+    
+    //MARK: - Handle add location button action
+    
+    func handleAddLocation() {
+        navigationService.goToSearchLocation()
+    }
+    
+    //MARK: - Handle cell remove action
+    
+    func handleRemoveLocation(id: Int) {
+        weatherRepository.deselectLocation(id: id)
+    }
+    
+    //MARK: - ViewModel fetching
+    
+    private func fetchCurrenLocationtWeather() -> Observable<CurrentWeatherViewModel?> {
+        return currentLocation
+            .asObservable()
+            .flatMap { [weak self] coord -> Observable<CurrentWeatherCoreData?> in
+                guard let self = self else { return .empty() }
+                return self.weatherRepository.fetchCurrentWeather(coord: coord)
+            }
+            .flatMap { currentWeather -> Observable<CurrentWeatherViewModel?> in
+                guard let currentWeather = currentWeather else { return .just(nil) }
+                let currentWeatherViewModel = CurrentWeatherViewModel(currentWeather: currentWeather)
+                return .just(currentWeatherViewModel)
+            }
+            .do(onNext: { [weak self] currentWeather in
+                self?.currentLocationWeather = currentWeather
+            })
+    }
+    
+    private func fetchCurrentWeatherList() -> Observable<[CurrentWeatherViewModel]> {
         weatherRepository
             .fetchSelectedLocations()
             .flatMap { [weak self] selectedLocation -> Observable<[CurrentWeatherCoreData]> in
@@ -67,42 +113,7 @@ class CurrentWeatherListPresenter {
             })
     }
     
-    func fetchCurrenLocationtWeather() -> Observable<CurrentWeatherViewModel?> {
-        return currentLocation
-            .asObservable()
-            .flatMap { [weak self] coord -> Observable<CurrentWeatherCoreData?> in
-                guard let self = self else { return .empty() }
-                return self.weatherRepository.fetchCurrentWeather(coord: coord)
-            }
-            .flatMap { currentWeather -> Observable<CurrentWeatherViewModel?> in
-                guard let currentWeather = currentWeather else { return .just(nil) }
-                let currentWeatherViewModel = CurrentWeatherViewModel(currentWeather: currentWeather)
-                return .just(currentWeatherViewModel)
-            }
-            .do(onNext: { [weak self] currentWeather in
-                self?.currentLocationWeather = currentWeather
-            })
-    }
-    
-    func currentWeather(atIndex index: Int) -> CurrentWeatherViewModel? {
-        return currentWeatherList.at(index)
-    }
-    
-    func handleSelectedLocation(currentWeather: CurrentWeatherViewModel) {
-        navigationService.goToDetailWeather(currentWeather: currentWeather)
-    }
-    
-    func handleAddLocation() {
-        navigationService.goToSearchLocation()
-    }
-    
-    func handleRemoveLocation(id: Int) {
-        weatherRepository.deselectLocation(id: id)
-    }
-    
-    func currentWeatherRemoveItem(atIndex: Int) {
-        currentWeatherList.remove(at: atIndex)
-    }
+    //MARK: - Bind current location to behavior relay
     
     private func bindCurrentLocation() {
         locationService

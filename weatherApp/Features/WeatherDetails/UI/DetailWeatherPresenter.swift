@@ -11,7 +11,9 @@ import RxCocoa
 
 class DetailWeatherPresenter {
     
-    private let presenterDisposeBag: DisposeBag = DisposeBag()
+
+    //MARK: - Properties
+    
     private let weatherRepository: WeatherRepository
     
     var currentWeather: CurrentWeatherViewModel
@@ -19,11 +21,8 @@ class DetailWeatherPresenter {
     var isReachable: Observable<Bool> {
         weatherRepository.isReachable
     }
-    var weatherData: Observable<(CurrentWeatherViewModel?, [SectionOfSingleWeatherInformation])> {
-        Observable.combineLatest(
-            fetchCurrentWeather(),
-            fetchFiveDaysList())
-    }
+    
+    //MARK: - Initialization
 
     init(currentWeather: CurrentWeatherViewModel, weatherRepository: WeatherRepository) {
         self.currentWeather = currentWeather
@@ -32,6 +31,8 @@ class DetailWeatherPresenter {
         weatherConditionList = BehaviorRelay<[SectionOfConditionInformation]>(value: [])
         setConditionList(currentWeather: currentWeather)
     }
+    
+    //MARK: - Data fetching
     
     func fetchCurrentWeather() -> Observable<CurrentWeatherViewModel?> {
         return weatherRepository
@@ -88,6 +89,8 @@ class DetailWeatherPresenter {
                 return .just(sevenDayForecast)
             }
     }
+    
+    //MARK: - Helpers
     
     private func setConditionList(currentWeather: CurrentWeatherViewModel) {
         let conditionInformation = self.createWeatherConditionList(currentWeather: currentWeather)

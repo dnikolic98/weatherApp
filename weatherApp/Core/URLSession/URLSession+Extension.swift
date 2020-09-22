@@ -9,9 +9,9 @@
 import Foundation
 
 extension URLSession {
-
+    
     typealias DataTaskCompletion = (Result<(HTTPURLResponse, Data), Error>) -> Void
-
+    
     func dataTask(with request: URLRequest, completion: @escaping DataTaskCompletion) -> URLSessionDataTask {
         return self.dataTask(with: request) { (data, response, error) in
             if let error = error {
@@ -38,4 +38,5 @@ extension URLSession {
             completion(Result.success((response, data)))
         }
     }
+    
 }

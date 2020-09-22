@@ -10,11 +10,15 @@ import UIKit
 
 class LocationSearchView: UIView {
     
+    //MARK: - Properties
+    
     var searchContainer: UIView!
     var searchBar: UISearchBar!
     var resultsTableView: UITableView!
     var backButton: UIButton!
     var loadingIndicator: UIActivityIndicatorView!
+    
+    //MARK: - Initialization
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,6 +34,8 @@ class LocationSearchView: UIView {
         super .layoutSubviews()
         setDefaultGradient()
     }
+    
+    //MARK: - Public methods
     
     func startLoadingIndicator() {
         loadingIndicator.startAnimating()

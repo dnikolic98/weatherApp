@@ -13,8 +13,9 @@ import RxDataSources
 
 class LocationSearchViewController: UIViewController {
     
+    //MARK: - Properties
+    
     private var throttleTime: RxTimeInterval = .milliseconds(500)
-    private let citiesDisposeBage: DisposeBag = DisposeBag()
     private let viewControllerDisposeBag: DisposeBag = DisposeBag()
     private var presenter: LocationSearchPresenter!
     private var dataSource: RxTableViewSectionedReloadDataSource<SectionOfCityViewModels>!
@@ -23,6 +24,8 @@ class LocationSearchViewController: UIViewController {
     }
     
     var locationSearchView: LocationSearchView!
+    
+    //MARK: - Initialization
     
     convenience init(with presenter: LocationSearchPresenter) {
         self.init()
@@ -54,6 +57,8 @@ class LocationSearchViewController: UIViewController {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
+    
+    //MARK: - SearchBar Setup
     
     private func setupSearchBar() {
         setupSearchBarAnimation()
@@ -91,24 +96,21 @@ class LocationSearchViewController: UIViewController {
         locationSearchView.searchBar.endEditing(true)
     }
     
+    //MARK: - Keyboard dismiss setup
+    
     private func setupKeyboardDismissGestureRecognizer() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(endEditingSearchBar))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
     
+    //MARK: - Back button setup
+    
     private func setupBackButton() {
         locationSearchView.backButton.addTarget(presenter, action: #selector(presenter.handleBackButtonTapped), for: .touchUpInside)
     }
     
-    private func setupDataSource() {
-        dataSource = RxTableViewSectionedReloadDataSource<SectionOfCityViewModels>(
-            configureCell: { dataSource, tableView, indexPath, item in
-                let cell = tableView.dequeueReusableCell(withIdentifier: LocationNameTableViewCell.typeName, for: indexPath) as! LocationNameTableViewCell
-                cell.set(with: item)
-                return cell
-        })
-    }
+    //MARK: - TableView setup
     
     private func configureTableView() {
         tableView.rx.setDelegate(self).disposed(by: viewControllerDisposeBag)
@@ -124,6 +126,15 @@ class LocationSearchViewController: UIViewController {
                 self.presenter.handleCellTap(city: location)
             })
             .disposed(by: viewControllerDisposeBag)
+    }
+    
+    private func setupDataSource() {
+        dataSource = RxTableViewSectionedReloadDataSource<SectionOfCityViewModels>(
+            configureCell: { dataSource, tableView, indexPath, item in
+                let cell = tableView.dequeueReusableCell(withIdentifier: LocationNameTableViewCell.typeName, for: indexPath) as! LocationNameTableViewCell
+                cell.set(with: item)
+                return cell
+        })
     }
     
     private func bindTableViewData() {
@@ -148,6 +159,8 @@ class LocationSearchViewController: UIViewController {
     }
     
 }
+
+//MARK: - TableViewDelegate
 
 extension LocationSearchViewController: UITableViewDelegate {
 

@@ -14,7 +14,7 @@ class WeatherService: WeatherServiceProtocol {
     private let apiKey = "bfac26f5e35c596e0656c5847c49d349"
     private let baseUrlString = "https://api.openweathermap.org/data/2.5/"
     
-    //MARK: - Fetching
+    //MARK: - Public fetching calls
     
     func fetchForecastWeather(coord: Coordinates) -> Observable<ForecastedWeather> {
         let resourceStringUrl = "\(baseUrlString)onecall?exclude=current,minutely&lat=\(coord.latitude)&lon=\(coord.longitude)&units=\(LocalizedStrings.units)&appid=\(apiKey)"
@@ -38,6 +38,8 @@ class WeatherService: WeatherServiceProtocol {
         
         return fetchData(resourceUrlString: resourceStringUrl)
     }
+    
+    //MARK: - Helper methods
     
     private func fetchData<T: Decodable>(resourceUrlString: String) -> Observable<T> {
         return Observable<T>.create { [weak self] observer in
