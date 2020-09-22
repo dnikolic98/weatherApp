@@ -125,12 +125,11 @@ class HomeViewController: UIViewController {
     }
     
     private func showLocationsWarning(_ showWarning: Bool, warning: String) {
-        switch showWarning {
-        case true:
+        if showWarning {
             noLocationsWarningLabel.setWarning(warningText: warning)
             noLocationsWarningLabel.isHidden = false
             noLocationViewHeight.constant = UserWarningView.height
-        case false:
+        } else {
             noInternetWarningView.isHidden = true
             noLocationsWarningLabel.isHidden = true
             noLocationViewHeight.constant = CGFloat(0)
@@ -148,12 +147,11 @@ class HomeViewController: UIViewController {
     }
     
     private func showInternetWarning(_ showWarning: Bool) {
-        switch showWarning {
-        case true:
+        if showWarning {
             noInternetWarningView.setWarning(warningText: LocalizedStrings.noInternetWarning)
             noInternetWarningView.isHidden = false
             noInternetViewHeight.constant = UserWarningView.height
-        case false:
+        } else {
             noInternetWarningView.isHidden = true
             noInternetViewHeight.constant = CGFloat(0)
         }
