@@ -9,4 +9,5 @@ target 'weatherApp' do
   pod 'RxCoreLocation', '~> 1.4'
   pod 'RxDataSources', '~> 4.0'
   pod 'RxReachability'
+  pod 'Hero'
 end

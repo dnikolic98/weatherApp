@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Hero
 
 class MainInformationView: UIView {
     
@@ -43,5 +44,13 @@ class MainInformationView: UIView {
             weatherIcon.kf.setImage(with: url)
         }
     }
+    
+    func setupHero(currentWeather: CurrentWeatherViewModel) {
+           hero.id = "\(currentWeather.id)"
+           locationNameLabel.hero.modifiers = [.fade]
+           weatherIcon.hero.modifiers = [.fade]
+           currentTempLabel.hero.modifiers = [.fade]
+           weatherDescriptionLabel.hero.modifiers = [.fade]
+       }
     
 }

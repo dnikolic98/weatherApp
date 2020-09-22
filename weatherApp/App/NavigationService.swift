@@ -31,6 +31,7 @@ class NavigationService {
     
     func goToDetailWeather(currentWeather: CurrentWeatherViewModel) {
         let presenter = DetailWeatherPresenter(currentWeather: currentWeather, weatherRepository: appDependencies.weatherRepository)
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
         navigationController?.pushViewController(DetailWeatherViewController(detailWeatherPresenter: presenter), animated: true)
     }
     
@@ -38,10 +39,12 @@ class NavigationService {
         let presenter = LocationSearchPresenter(weatherRepository: appDependencies.weatherRepository, navigationService: self)
         let viewController = LocationSearchViewController(with: presenter)
         viewController.setupDelegate(delegate)
+        navigationController?.heroNavigationAnimationType = .cover(direction: .up)
         navigationController?.pushViewController(viewController, animated: true)
     }
     
     func goBack() {
+        navigationController?.heroNavigationAnimationType = .fade
         navigationController?.popViewController(animated: true)
     }
 

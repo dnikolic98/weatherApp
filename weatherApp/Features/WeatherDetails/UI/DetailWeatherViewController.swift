@@ -20,6 +20,7 @@ class DetailWeatherViewController: UIViewController {
     private var fiveDaysDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>!
     private var conditionListDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfConditionInformation>!
     private var dataDisposeBag: DisposeBag = DisposeBag()
+    private let warningAnimationTime: TimeInterval = 0.25
     private var viewControllerDisposeBag: DisposeBag = DisposeBag()
     private let detailsNumOfColumns = 2
     private let numberOfDays = 5
@@ -52,6 +53,15 @@ class DetailWeatherViewController: UIViewController {
         bindViewModel()
         startTimer()
         bindReachable()
+        setupHero()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        mainInformationView.temperatureStackView.isHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        mainInformationView.temperatureStackView.isHidden = true
     }
     
     override func viewWillLayoutSubviews() {
@@ -112,6 +122,12 @@ class DetailWeatherViewController: UIViewController {
                 cell.set(conditionViewModel: item)
                 return cell
         })
+    }
+    
+    
+    private func setupHero() {
+        let currentWeather = detailWeatherPresenter.currentWeather
+        mainInformationView.setupHero(currentWeather: currentWeather)
     }
     
     //MARK: - UI elements setup

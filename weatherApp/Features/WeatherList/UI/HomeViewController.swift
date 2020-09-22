@@ -18,10 +18,11 @@ class HomeViewController: UIViewController {
     private var dataDisposeBag: DisposeBag = DisposeBag()
     private var viewControllerDisposeBag: DisposeBag = DisposeBag()
     private let dataRefreshPeriod: Int = 60 * 2
+    private let warningAnimationTime: TimeInterval = 0.25
     
     @IBOutlet weak var noInternetViewHeight: NSLayoutConstraint!
     @IBOutlet weak var noLocationViewHeight: NSLayoutConstraint!
-    @IBOutlet weak var noLocationsWarningLabel: UserWarningView!
+    @IBOutlet weak var noLocationWarningView: UserWarningView!
     @IBOutlet weak var noInternetWarningView: UserWarningView!
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var tableView: UITableView!
@@ -81,7 +82,9 @@ class HomeViewController: UIViewController {
     @objc private func bindViewModel() {
         dataDisposeBag = DisposeBag()
         
-        currentWeatherListPresenter.currentWeatherData
+        currentWeatherListPresenter
+            .currentWeatherData
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] currentWeatherList, currentLocation in
                 guard
                     let self = self,
@@ -126,12 +129,12 @@ class HomeViewController: UIViewController {
     
     private func showLocationsWarning(_ showWarning: Bool, warning: String) {
         if showWarning {
-            noLocationsWarningLabel.setWarning(warningText: warning)
-            noLocationsWarningLabel.isHidden = false
+            noLocationWarningView.setWarning(warningText: warning)
+            noLocationWarningView.isHidden = false
             noLocationViewHeight.constant = UserWarningView.height
         } else {
             noInternetWarningView.isHidden = true
-            noLocationsWarningLabel.isHidden = true
+            noLocationWarningView.isHidden = true
             noLocationViewHeight.constant = CGFloat(0)
         }
     }
@@ -191,19 +194,16 @@ class HomeViewController: UIViewController {
     }
     
     private func refreshUI(currentLocation: CurrentWeatherViewModel) {
-        DispatchQueue.main.async {
-            self.currentLocationView.set(currentWeather: currentLocation)
-            self.setGradientBackground()
-        }
+        self.currentLocationView.set(currentWeather: currentLocation)
+        self.setGradientBackground()
+        
         refreshTableView()
     }
     
     private func refreshTableView() {
-        DispatchQueue.main.async {
-            self.refreshTableViewHeight()
-            self.tableView.reloadData()
-            self.refreshControl.endRefreshing()
-        }
+        self.refreshTableViewHeight()
+        self.tableView.reloadData()
+        self.refreshControl.endRefreshing()
     }
     
     private func refreshTableViewHeight() {
