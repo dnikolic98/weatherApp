@@ -819,7 +819,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#exit 0\n\nfile=\"unused.rb\"\nif [ -f \"$file\" ]\nthen\necho \"$file found.\"\nruby unused.rb xcode\nelse\necho \"unused.rb doesn't exist\"\nfi\n";
+			shellScript = "exit 0\n\nfile=\"unused.rb\"\nif [ -f \"$file\" ]\nthen\necho \"$file found.\"\nruby unused.rb xcode\nelse\necho \"unused.rb doesn't exist\"\nfi\n";
 		};
 		B2DB343E32C4D805B4E96918 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
