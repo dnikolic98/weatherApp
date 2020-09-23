@@ -35,6 +35,7 @@ class DetailWeatherViewController: UIViewController {
     @IBOutlet private weak var detailsCollectionView: UICollectionView!
     @IBOutlet private weak var detailsCollectionViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var daysCollectionView: UICollectionView!
+    @IBOutlet weak var hoursCollectionView: UICollectionView!
     
     //MARK: - Initialization
     
@@ -181,6 +182,7 @@ class DetailWeatherViewController: UIViewController {
     private func setupCollectionViews() {
         setupDetailsCollectionView()
         setupDaysCollectionView()
+        setupHoursCollectionView()
     }
     
     private func setupDetailsCollectionView() {
@@ -197,6 +199,12 @@ class DetailWeatherViewController: UIViewController {
         daysCollectionView.collectionViewLayout = UICollectionViewLayout.createStaticWidthDistributionLayout(columns: numberOfDays, padding: padding, rowHeight: daysCollectioViewRowHeight)
         daysCollectionView.layer.cornerRadius = 15
         daysCollectionView.register(SingleWeatherInformationCollectionViewCell.self, forCellWithReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName)
+    }
+    
+    private func setupHoursCollectionView() {
+        hoursCollectionView.collectionViewLayout = UICollectionViewLayout.createStaticWidthDistributionLayout(columns: numberOfDays, padding: padding, rowHeight: daysCollectioViewRowHeight)
+        hoursCollectionView.layer.cornerRadius = 15
+        hoursCollectionView.register(SingleWeatherInformationCollectionViewCell.self, forCellWithReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName)
     }
     
     //MARK: - Gradient setup
