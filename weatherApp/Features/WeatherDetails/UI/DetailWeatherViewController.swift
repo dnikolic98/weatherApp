@@ -17,6 +17,7 @@ class DetailWeatherViewController: UIViewController {
     private let warningAnimationTime: TimeInterval = 0.25
     private let detailsNumOfColumns = 2
     private let numberOfDays = 5
+    private let numberOfHours = 24
     private let padding: CGFloat = 10
     private let dataRefreshPeriod: Int = 60 * 2
     private let detailsCollectioViewRowHeight = WeatherConditionDetailCollectionViewCell.height
@@ -217,7 +218,13 @@ class DetailWeatherViewController: UIViewController {
     }
     
     private func setupHoursCollectionView() {
-        hoursCollectionView.collectionViewLayout = UICollectionViewLayout.createStaticWidthDistributionLayout(columns: numberOfDays, padding: padding, rowHeight: daysCollectioViewRowHeight)
+        hoursCollectionView.collectionViewLayout = UICollectionViewLayout
+            .createScrollingFixedWidthLayout(itemsAtOnce: numberOfDays,
+                                             numOfItems: numberOfHours,
+                                             padding: padding,
+                                             rowWidth: hoursCollectionView.frame.width,
+                                             rowHeight: daysCollectioViewRowHeight)
+        hoursCollectionView.contentInset.right = 2 * padding
         hoursCollectionView.layer.cornerRadius = 15
         hoursCollectionView.register(SingleWeatherInformationCollectionViewCell.self, forCellWithReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName)
     }

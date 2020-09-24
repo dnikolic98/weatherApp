@@ -72,7 +72,7 @@ class DetailWeatherPresenter {
                 var hoursList: [SingleWeatherInformationViewModel] = []
                 let calendar = Calendar.current
                 
-                for forecast in sevenDayForecast[1...25] {
+                for forecast in sevenDayForecast[1...24] {
                     let temperature = String(format: LocalizedStrings.degreeValueFormat, forecast.temperature)
                     let hour = calendar.component(.hour, from: forecast.forecastTime)
                     let hourText = String(format: LocalizedStrings.hourFormat, hour)
