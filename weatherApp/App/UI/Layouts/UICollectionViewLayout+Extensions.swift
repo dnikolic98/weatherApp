@@ -26,8 +26,7 @@ extension UICollectionViewLayout {
         
         return UICollectionViewCompositionalLayout(section: section)
     }
-    
-    
+
     class func createScrollingFixedWidthLayout(itemsAtOnce: Int, numOfItems: Int, padding: CGFloat, rowWidth: CGFloat, rowHeight: CGFloat) -> UICollectionViewCompositionalLayout {
         let estimatedItemWidth = rowWidth / CGFloat(itemsAtOnce)
         let scrollingWidth = (estimatedItemWidth - padding) * CGFloat(numOfItems) + 2 * padding
