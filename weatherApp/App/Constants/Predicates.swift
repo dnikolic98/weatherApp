@@ -36,6 +36,10 @@ class Predicates {
         return NSPredicate(format: "dailyWeather = %@", dailyWeather)
     }
     
+    class func hourlyWeatherPredicate(_ hourlyWeather: HourlyWeatherCoreData)  -> NSPredicate {
+        return NSPredicate(format: "hourlyWeather = %@", hourlyWeather)
+    }
+    
     class func forecastedWeatherPredicate(_ forecastedWeather: ForecastedWeatherCoreData) -> NSPredicate {
         return NSPredicate(format: "forecastedWeather = %@", forecastedWeather)
     }

@@ -21,5 +21,6 @@ extension WeatherCoreData {
     @NSManaged public var overview: String
     @NSManaged public var currentWeather: CurrentWeatherCoreData?
     @NSManaged public var dailyWeather: DailyWeatherCoreData?
+    @NSManaged public var hourlyWeather: HourlyWeatherCoreData?
 
 }

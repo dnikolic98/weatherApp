@@ -26,6 +26,7 @@ class DetailWeatherViewController: UIViewController {
     private var detailWeatherPresenter: DetailWeatherPresenter!
     private var refreshControl: UIRefreshControl!
     private var fiveDaysDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>!
+    private var hoursDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>!
     private var conditionListDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfConditionInformation>!
     
     @IBOutlet private weak var noInternetWarningHeight: NSLayoutConstraint!
@@ -52,6 +53,7 @@ class DetailWeatherViewController: UIViewController {
         configurePullToRefresh()
         setWeatherInformation(currentWeather: detailWeatherPresenter.currentWeather)
         setupFiveDaysDataSource()
+        setupHoursDataSource()
         setupConditionListDataSource()
         setupCollectionViews()
         bindViewModel()
@@ -95,6 +97,10 @@ class DetailWeatherViewController: UIViewController {
             .bind(to: daysCollectionView.rx.items(dataSource: fiveDaysDataSource))
             .disposed(by: dataDisposeBag)
         
+        detailWeatherPresenter.fetchHourlyWeather()
+            .bind(to: hoursCollectionView.rx.items(dataSource: hoursDataSource))
+            .disposed(by: dataDisposeBag)
+        
         detailWeatherPresenter.weatherConditionList
             .bind(to: detailsCollectionView.rx.items(dataSource: conditionListDataSource))
             .disposed(by: dataDisposeBag)
@@ -118,6 +124,15 @@ class DetailWeatherViewController: UIViewController {
     
     private func setupFiveDaysDataSource() {
         fiveDaysDataSource = RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>(
+            configureCell: { _, collectionView, indexPath, item in
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName, for: indexPath) as! SingleWeatherInformationCollectionViewCell
+                cell.set(weatherInfo: item)
+                return cell
+        })
+    }
+    
+    private func setupHoursDataSource() {
+        hoursDataSource = RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>(
             configureCell: { _, collectionView, indexPath, item in
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName, for: indexPath) as! SingleWeatherInformationCollectionViewCell
                 cell.set(weatherInfo: item)

@@ -103,6 +103,13 @@ class CoreDataService: CoreDataServiceProtocol {
     }
     
     @discardableResult
+    func createWeatherFrom(weather: Weather, hourlyWeather: HourlyWeatherCoreData) -> WeatherCoreData? {
+        guard let weatherCoreData = WeatherCoreData.firstOrCreate(withHourlyWeather: hourlyWeather, context: privateContext) else { return nil }
+        weatherCoreData.populate(weather: weather, hourlyWeather: hourlyWeather)
+        return weatherCoreData
+    }
+    
+    @discardableResult
     func createWindFrom(wind: Wind, currentWeather: CurrentWeatherCoreData) -> WindCoreData? {
         guard let windCoreData = WindCoreData.firstOrCreate(withCurrentWeather: currentWeather, context: privateContext) else { return nil }
         windCoreData.populate(wind: wind, currentWeather: currentWeather)
@@ -160,6 +167,20 @@ class CoreDataService: CoreDataServiceProtocol {
         return dailyWeatherCoreData
     }
     
+    
+    @discardableResult
+    func createHourlyWeatherFrom(hourlyWeather: HourlyWeather, indexId: Int, forecastedWeather: ForecastedWeatherCoreData) -> HourlyWeatherCoreData? {
+        guard
+            let hourlyWeatherCoreData = HourlyWeatherCoreData.firstOrCreate(withForecastedWeather: forecastedWeather, withId: indexId, context: privateContext),
+            let weather = hourlyWeather.weather.at(0),
+            let weatherCoreData = createWeatherFrom(weather: weather, hourlyWeather: hourlyWeatherCoreData)
+        else {
+            return nil
+        }
+        hourlyWeatherCoreData.populate(hourlyWeather: hourlyWeather, indexId: indexId, forecastedWeather: forecastedWeather, weather: weatherCoreData)
+        return hourlyWeatherCoreData
+    }
+    
     @discardableResult
     func createForecastedWeatherFrom(forecastedWeather: ForecastedWeather) -> ForecastedWeatherCoreData? {
         guard let forecastedWeatherCoreData = ForecastedWeatherCoreData.firstOrCreate(withLongitude: forecastedWeather.longitude, withLatitude: forecastedWeather.latitude, context: privateContext) else { return nil }
@@ -169,7 +190,13 @@ class CoreDataService: CoreDataServiceProtocol {
                 dailyWeathers.append(dailyWeatherCoreData)
             }
         }
-        forecastedWeatherCoreData.populate(forecastedWeather: forecastedWeather, dailyWeathers: dailyWeathers)
+        var hourlyWeathers: [HourlyWeatherCoreData] = []
+        for (index, hourlyWeather) in forecastedWeather.hourlyForecast.enumerated() {
+            if let hourlyWeatherCoreData = createHourlyWeatherFrom(hourlyWeather: hourlyWeather, indexId: index, forecastedWeather: forecastedWeatherCoreData) {
+                hourlyWeathers.append(hourlyWeatherCoreData)
+            }
+        }
+        forecastedWeatherCoreData.populate(forecastedWeather: forecastedWeather, dailyWeathers: dailyWeathers, hourlyWeathers: hourlyWeathers)
         return forecastedWeatherCoreData
     }
     

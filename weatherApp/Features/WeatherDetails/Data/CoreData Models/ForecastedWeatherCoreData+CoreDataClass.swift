@@ -17,11 +17,14 @@ public class ForecastedWeatherCoreData: NSManagedObject {
         return firstOrCreate(withPredicate: predicate, context: context)
     }
     
-    func populate(forecastedWeather: ForecastedWeather, dailyWeathers: [DailyWeatherCoreData]) {
+    func populate(forecastedWeather: ForecastedWeather, dailyWeathers: [DailyWeatherCoreData], hourlyWeathers: [HourlyWeatherCoreData]) {
         self.longitude = forecastedWeather.longitude
         self.latitude = forecastedWeather.latitude
         for dailyWeather in dailyWeathers {
             self.addToForecastedWeather(dailyWeather)
+        }
+        for hourlyWeather in hourlyWeathers {
+            self.addToHourlyWeather(hourlyWeather)
         }
     }
     

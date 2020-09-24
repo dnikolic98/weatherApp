@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19G73" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G73" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CityCoreData" representedClassName="CityCoreData" syncable="YES">
         <attribute name="country" attributeType="String"/>
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -56,6 +56,17 @@
         <attribute name="latitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="longitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="forecastedWeather" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DailyWeatherCoreData" inverseName="forecastedWeather" inverseEntity="DailyWeatherCoreData"/>
+        <relationship name="hourlyWeather" toMany="YES" deletionRule="Nullify" destinationEntity="HourlyWeatherCoreData" inverseName="forecastedWeather" inverseEntity="HourlyWeatherCoreData"/>
+    </entity>
+    <entity name="HourlyWeatherCoreData" representedClassName="HourlyWeatherCoreData" syncable="YES">
+        <attribute name="forecastTime" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="humidity" attributeType="Integer 64" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pressure" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="temperature" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="updatedTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="forecastedWeather" maxCount="1" deletionRule="Nullify" destinationEntity="ForecastedWeatherCoreData" inverseName="hourlyWeather" inverseEntity="ForecastedWeatherCoreData"/>
+        <relationship name="weather" maxCount="1" deletionRule="Nullify" destinationEntity="WeatherCoreData" inverseName="hourlyWeather" inverseEntity="WeatherCoreData"/>
     </entity>
     <entity name="SelectedLocationCoreData" representedClassName="SelectedLocationCoreData" syncable="YES">
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -66,6 +77,7 @@
         <attribute name="overview" attributeType="String"/>
         <relationship name="currentWeather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentWeatherCoreData" inverseName="weather" inverseEntity="CurrentWeatherCoreData"/>
         <relationship name="dailyWeather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DailyWeatherCoreData" inverseName="weather" inverseEntity="DailyWeatherCoreData"/>
+        <relationship name="hourlyWeather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HourlyWeatherCoreData" inverseName="weather" inverseEntity="HourlyWeatherCoreData"/>
     </entity>
     <entity name="WindCoreData" representedClassName="WindCoreData" syncable="YES">
         <attribute name="directionDegree" attributeType="Integer 64" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -79,9 +91,10 @@
         <element name="DailyTemperatureCoreData" positionX="160" positionY="192" width="128" height="148"/>
         <element name="DailyWeatherCoreData" positionX="160" positionY="192" width="128" height="193"/>
         <element name="ForecastCoreData" positionX="160" positionY="192" width="128" height="148"/>
-        <element name="ForecastedWeatherCoreData" positionX="160" positionY="192" width="128" height="88"/>
+        <element name="ForecastedWeatherCoreData" positionX="160" positionY="192" width="128" height="28"/>
         <element name="SelectedLocationCoreData" positionX="-27" positionY="288" width="128" height="58"/>
-        <element name="WeatherCoreData" positionX="160" positionY="192" width="128" height="118"/>
+        <element name="WeatherCoreData" positionX="160" positionY="192" width="128" height="28"/>
         <element name="WindCoreData" positionX="160" positionY="192" width="128" height="88"/>
+        <element name="HourlyWeatherCoreData" positionX="-18" positionY="297" width="128" height="163"/>
     </elements>
 </model>

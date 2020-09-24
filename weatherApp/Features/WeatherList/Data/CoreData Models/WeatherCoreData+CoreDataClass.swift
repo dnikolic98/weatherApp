@@ -36,6 +36,18 @@ public class WeatherCoreData: NSManagedObject {
         self.populate(weather: weather)
     }
     
+    //MARK: - HourlyWeather
+    
+    class func firstOrCreate(withHourlyWeather hourlyWeather: HourlyWeatherCoreData, context: NSManagedObjectContext) -> WeatherCoreData? {
+        let predicate = Predicates.hourlyWeatherPredicate(hourlyWeather)
+        return firstOrCreate(withPredicate: predicate, context: context)
+    }
+    
+    func populate(weather: Weather, hourlyWeather: HourlyWeatherCoreData) {
+        self.hourlyWeather = hourlyWeather
+        self.populate(weather: weather)
+    }
+    
     //MARK: - Common
     
     private func populate(weather: Weather) {

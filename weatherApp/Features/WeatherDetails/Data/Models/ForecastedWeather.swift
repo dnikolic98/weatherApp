@@ -9,11 +9,13 @@
 struct ForecastedWeather: Codable {
     
     let forecastedWeather: [DailyWeather]
+    let hourlyForecast: [HourlyWeather]
     let latitude: Double
     let longitude: Double
     
     private enum CodingKeys : String, CodingKey {
         case forecastedWeather = "daily"
+        case hourlyForecast = "hourly"
         case latitude = "lat"
         case longitude = "lon"
     }
