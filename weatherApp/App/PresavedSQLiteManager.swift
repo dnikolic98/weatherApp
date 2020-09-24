@@ -23,7 +23,7 @@ class PresavedSQLiteManager {
     
     func checkIfDatabaseExists() {
         // Check if database exist
-        guard !FileManager.default.fileExists(atPath: url) else { return print(url)}
+        guard !FileManager.default.fileExists(atPath: url) else { return }
         
         let sourceSqliteURLs = [
             Bundle.main.url(forResource: "weatherApp", withExtension: "sqlite")!,
