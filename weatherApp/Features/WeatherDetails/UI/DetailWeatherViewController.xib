@@ -31,30 +31,30 @@
                     <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yCo-WS-cmQ" userLabel="ContentView">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="1135.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="1130.5"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sQY-21-BWp" userLabel="main information" customClass="MainInformationView" customModule="weatherApp" customModuleProvider="target">
-                                    <rect key="frame" x="10" y="20" width="394" height="300"/>
+                                    <rect key="frame" x="10" y="15" width="394" height="300"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="300" id="5DV-V4-gnu"/>
                                     </constraints>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DETAILS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HTd-ew-teA">
-                                    <rect key="frame" x="20" y="754" width="54.5" height="17"/>
+                                    <rect key="frame" x="20" y="749" width="54.5" height="17"/>
                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KWO-Cw-HBc" userLabel="line">
-                                    <rect key="frame" x="84.5" y="762" width="309.5" height="1"/>
+                                    <rect key="frame" x="84.5" y="757" width="309.5" height="1"/>
                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.30454995600000001" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="u38-JH-OQw"/>
                                     </constraints>
                                 </view>
                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" scrollEnabled="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="b3T-kv-4cc">
-                                    <rect key="frame" x="10" y="781" width="394" height="344.5"/>
+                                    <rect key="frame" x="10" y="776" width="394" height="344.5"/>
                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.1490702025" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="344.5" id="N8g-Fi-v6y"/>
@@ -67,7 +67,7 @@
                                     </collectionViewFlowLayout>
                                 </collectionView>
                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" scrollEnabled="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="1mJ-k9-tv1">
-                                    <rect key="frame" x="10" y="574" width="394" height="160"/>
+                                    <rect key="frame" x="10" y="569" width="394" height="160"/>
                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.15061069539999999" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="160" id="i22-B6-DVG"/>
@@ -80,27 +80,27 @@
                                     </collectionViewFlowLayout>
                                 </collectionView>
                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jcE-M6-D4P" customClass="UserWarningView" customModule="weatherApp" customModuleProvider="target">
-                                    <rect key="frame" x="10" y="10" width="394" height="0.0"/>
+                                    <rect key="frame" x="10" y="5" width="394" height="0.0"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <constraints>
                                         <constraint firstAttribute="height" id="rN0-KZ-e44"/>
                                     </constraints>
                                 </view>
-                                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PXJ-YF-5zG" userLabel="line">
-                                    <rect key="frame" x="134" y="575" width="257.5" height="1"/>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PXJ-YF-5zG" userLabel="line">
+                                    <rect key="frame" x="136.5" y="550" width="257.5" height="1"/>
                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.30454995600000001" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="dfo-eW-tkb"/>
                                     </constraints>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NEXT 24 HOURS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9UX-3p-NgT">
-                                    <rect key="frame" x="20" y="340" width="108" height="17"/>
+                                    <rect key="frame" x="20" y="335" width="108" height="17"/>
                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="oZT-GB-0Xk">
-                                    <rect key="frame" x="10" y="367" width="394" height="160"/>
+                                    <rect key="frame" x="10" y="362" width="394" height="160"/>
                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.15061069539999999" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="160" id="xLh-BR-szf"/>
@@ -113,14 +113,14 @@
                                     </collectionViewFlowLayout>
                                 </collectionView>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jbF-1R-Nhm" userLabel="line">
-                                    <rect key="frame" x="138" y="348" width="266" height="1"/>
+                                    <rect key="frame" x="138" y="343" width="266" height="1"/>
                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.30454995600000001" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="G0v-MU-ogb"/>
                                     </constraints>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NEXT FIVE DAYS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gbP-F8-XFh">
-                                    <rect key="frame" x="20" y="547" width="106.5" height="17"/>
+                                    <rect key="frame" x="20" y="542" width="106.5" height="17"/>
                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
@@ -141,7 +141,7 @@
                                 <constraint firstAttribute="trailing" secondItem="1mJ-k9-tv1" secondAttribute="trailing" constant="10" id="OpV-rn-XJC"/>
                                 <constraint firstItem="HTd-ew-teA" firstAttribute="top" secondItem="1mJ-k9-tv1" secondAttribute="bottom" constant="20" id="QRc-uF-wiD"/>
                                 <constraint firstItem="KWO-Cw-HBc" firstAttribute="leading" secondItem="HTd-ew-teA" secondAttribute="trailing" constant="10" id="QuA-Pw-weJ"/>
-                                <constraint firstItem="jcE-M6-D4P" firstAttribute="top" secondItem="yCo-WS-cmQ" secondAttribute="top" constant="10" id="RWZ-Yd-gBn"/>
+                                <constraint firstItem="jcE-M6-D4P" firstAttribute="top" secondItem="yCo-WS-cmQ" secondAttribute="top" constant="5" id="RWZ-Yd-gBn"/>
                                 <constraint firstItem="9UX-3p-NgT" firstAttribute="leading" secondItem="yCo-WS-cmQ" secondAttribute="leading" constant="20" id="U1b-Oc-yHC"/>
                                 <constraint firstAttribute="trailing" secondItem="jbF-1R-Nhm" secondAttribute="trailing" constant="10" id="VP6-BA-FF5"/>
                                 <constraint firstItem="b3T-kv-4cc" firstAttribute="top" secondItem="HTd-ew-teA" secondAttribute="bottom" constant="10" id="VpG-hN-URx"/>

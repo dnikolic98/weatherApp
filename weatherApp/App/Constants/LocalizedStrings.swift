@@ -38,4 +38,12 @@ class LocalizedStrings {
     
     static let authLocationsWarning = "Please allow location services"
     
+    static let cancel = "Cancel"
+    
+    static let confirm = "Ok"
+    
+    static let locationDeletionWarning = "Are you sure you want to delete this location?"
+    
+    static let removeLocation = "Remove location"
+    
 }
