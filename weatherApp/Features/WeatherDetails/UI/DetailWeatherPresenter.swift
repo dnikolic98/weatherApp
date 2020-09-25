@@ -11,7 +11,6 @@ import RxCocoa
 
 class DetailWeatherPresenter {
     
-
     //MARK: - Properties
     
     private let weatherRepository: WeatherRepository
@@ -57,7 +56,7 @@ class DetailWeatherPresenter {
     }
     
     func fetchHourlyWeather() -> Observable<[SectionOfSingleWeatherInformation]> {
-        weatherRepository.fetchForcastWeather(coord: currentWeather.coord)
+        forecastWeather
             .flatMap { [weak self] forecastedWeather -> Observable<[HourlyWeatherViewModel]> in
                 guard
                     let self = self,
