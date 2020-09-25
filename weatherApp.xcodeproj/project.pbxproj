@@ -49,6 +49,10 @@
 		A37C883124D9773E007764FA /* DetailWeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37C882F24D9773E007764FA /* DetailWeatherViewController.swift */; };
 		A37C883224D9773E007764FA /* DetailWeatherViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A37C883024D9773E007764FA /* DetailWeatherViewController.xib */; };
 		A37C883424D99934007764FA /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37C883324D99934007764FA /* String+Extension.swift */; };
+		A38B495D251C99270026C622 /* HourlyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38B495C251C99270026C622 /* HourlyWeather.swift */; };
+		A38B4963251C9ECE0026C622 /* HourlyWeatherCoreData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38B4960251C9ECE0026C622 /* HourlyWeatherCoreData+CoreDataProperties.swift */; };
+		A38B4964251C9ECE0026C622 /* HourlyWeatherCoreData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38B4962251C9ECE0026C622 /* HourlyWeatherCoreData+CoreDataClass.swift */; };
+		A38B496A251CB41B0026C622 /* HourlyWeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38B4969251CB41B0026C622 /* HourlyWeatherViewModel.swift */; };
 		A391440924F80D3F00509A81 /* Predicates.swift in Sources */ = {isa = PBXBuildFile; fileRef = A391440824F80D3F00509A81 /* Predicates.swift */; };
 		A391440B24F811BE00509A81 /* NSPredicate+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A391440A24F811BE00509A81 /* NSPredicate+Extensions.swift */; };
 		A393604F25080ED500C2508E /* CoreDataErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A393604E25080ED500C2508E /* CoreDataErrors.swift */; };
@@ -153,6 +157,10 @@
 		A37C882F24D9773E007764FA /* DetailWeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailWeatherViewController.swift; sourceTree = "<group>"; };
 		A37C883024D9773E007764FA /* DetailWeatherViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailWeatherViewController.xib; sourceTree = "<group>"; };
 		A37C883324D99934007764FA /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		A38B495C251C99270026C622 /* HourlyWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeather.swift; sourceTree = "<group>"; };
+		A38B4960251C9ECE0026C622 /* HourlyWeatherCoreData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HourlyWeatherCoreData+CoreDataProperties.swift"; path = "/Users/dario/Documents/projects/weatherApp/weatherApp/Features/WeatherDetails/Data/CoreData Models/HourlyWeatherCoreData+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
+		A38B4962251C9ECE0026C622 /* HourlyWeatherCoreData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HourlyWeatherCoreData+CoreDataClass.swift"; path = "/Users/dario/Documents/projects/weatherApp/weatherApp/Features/WeatherDetails/Data/CoreData Models/HourlyWeatherCoreData+CoreDataClass.swift"; sourceTree = "<absolute>"; };
+		A38B4969251CB41B0026C622 /* HourlyWeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherViewModel.swift; sourceTree = "<group>"; };
 		A391440824F80D3F00509A81 /* Predicates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Predicates.swift; sourceTree = "<group>"; };
 		A391440A24F811BE00509A81 /* NSPredicate+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSPredicate+Extensions.swift"; sourceTree = "<group>"; };
 		A393604E25080ED500C2508E /* CoreDataErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataErrors.swift; sourceTree = "<group>"; };
@@ -448,6 +456,7 @@
 				A39D474824E52DE100C1C6A3 /* DailyWeather.swift */,
 				A39D474A24E5309A00C1C6A3 /* DailyTemperature.swift */,
 				A39D474E24E5332B00C1C6A3 /* ForecastedWeather.swift */,
+				A38B495C251C99270026C622 /* HourlyWeather.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -635,6 +644,7 @@
 				A3BD78F424E2DD9B003723DE /* ConditionInformationViewModel.swift */,
 				A3D3FB9824E4316D00E70AE8 /* SingleWeatherInformation.swift */,
 				A39D475224E5484E00C1C6A3 /* DailyForecastViewModel.swift */,
+				A38B4969251CB41B0026C622 /* HourlyWeatherViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -665,6 +675,8 @@
 				A3BE172024ED2E39001D9F82 /* DailyWeatherCoreData+CoreDataProperties.swift */,
 				A3BE172324ED2E39001D9F82 /* ForecastedWeatherCoreData+CoreDataClass.swift */,
 				A3BE171E24ED2E39001D9F82 /* ForecastedWeatherCoreData+CoreDataProperties.swift */,
+				A38B4962251C9ECE0026C622 /* HourlyWeatherCoreData+CoreDataClass.swift */,
+				A38B4960251C9ECE0026C622 /* HourlyWeatherCoreData+CoreDataProperties.swift */,
 			);
 			path = "CoreData Models";
 			sourceTree = "<group>";
@@ -874,6 +886,7 @@
 				A3BD78F524E2DD9B003723DE /* ConditionInformationViewModel.swift in Sources */,
 				A37C883124D9773E007764FA /* DetailWeatherViewController.swift in Sources */,
 				A3DCBF1224FE56B500590016 /* NetworkError.swift in Sources */,
+				A38B4964251C9ECE0026C622 /* HourlyWeatherCoreData+CoreDataClass.swift in Sources */,
 				A37C882A24D9535E007764FA /* WeatherTableViewCell.swift in Sources */,
 				A3396EB324F5271F009FDBEC /* CoreDataServiceProtocol.swift in Sources */,
 				A328A87E2501377900C67BDD /* LocationSearchView+Extension.swift in Sources */,
@@ -915,6 +928,7 @@
 				A3BE177E24ED2FAB001D9F82 /* WindCoreData+CoreDataProperties.swift in Sources */,
 				A3BE104624EA9B7D006DFA5B /* NavigationService.swift in Sources */,
 				A347B73824E2027A00DB5C85 /* Array+Extension.swift in Sources */,
+				A38B495D251C99270026C622 /* HourlyWeather.swift in Sources */,
 				A3BE172524ED2E39001D9F82 /* DailyWeatherCoreData+CoreDataClass.swift in Sources */,
 				A3BE172624ED2E39001D9F82 /* DailyWeatherCoreData+CoreDataProperties.swift in Sources */,
 				A329B347250A7303003DE908 /* SectionOfCityViewModels.swift in Sources */,
@@ -924,6 +938,7 @@
 				A32C773B2511565F00FE97C1 /* WeatherConditionDetailCollectionViewCell+Design.swift in Sources */,
 				A3E516AC24DCAD600013F4CE /* UIView+Extension.swift in Sources */,
 				A3794B0024D84D81008A8779 /* WeatherListViewController.swift in Sources */,
+				A38B4963251C9ECE0026C622 /* HourlyWeatherCoreData+CoreDataProperties.swift in Sources */,
 				A3BE178124ED2FAB001D9F82 /* CoordinatesCoreData+CoreDataProperties.swift in Sources */,
 				A391440924F80D3F00509A81 /* Predicates.swift in Sources */,
 				A329B349250B7945003DE908 /* SectionOfSingleWeatherInformation.swift in Sources */,
@@ -950,6 +965,7 @@
 				A3A852DF2511F541003D0C1C /* CityCoreData+CoreDataProperties.swift in Sources */,
 				A3BD78E024E29713003723DE /* UIColor+AppColors.swift in Sources */,
 				A3F4A3C524F56CCE00A30ACB /* LocationService.swift in Sources */,
+				A38B496A251CB41B0026C622 /* HourlyWeatherViewModel.swift in Sources */,
 				A3BE172724ED2E39001D9F82 /* DailyTemperatureCoreData+CoreDataProperties.swift in Sources */,
 				A39BC292250921A0000CDF13 /* DesginProtocol.swift in Sources */,
 				A328A8772501323200C67BDD /* LocationSearchViewController.swift in Sources */,

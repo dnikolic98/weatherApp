@@ -26,6 +26,8 @@ class LocalizedStrings {
     
     static let degreeValueFormat = "%d°"
     
+    static let hourFormat = "%d h"
+    
     static let units = "metric"
     
     static let searchLocations = "Search locations"

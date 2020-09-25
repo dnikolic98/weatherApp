@@ -17,6 +17,7 @@ class DetailWeatherViewController: UIViewController {
     private let warningAnimationTime: TimeInterval = 0.25
     private let detailsNumOfColumns = 2
     private let numberOfDays = 5
+    private let numberOfHours = 24
     private let padding: CGFloat = 10
     private let dataRefreshPeriod: Int = 60 * 2
     private let detailsCollectioViewRowHeight = WeatherConditionDetailCollectionViewCell.height
@@ -26,6 +27,7 @@ class DetailWeatherViewController: UIViewController {
     private var detailWeatherPresenter: DetailWeatherPresenter!
     private var refreshControl: UIRefreshControl!
     private var fiveDaysDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>!
+    private var hoursDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>!
     private var conditionListDataSource: RxCollectionViewSectionedReloadDataSource<SectionOfConditionInformation>!
     
     @IBOutlet private weak var noInternetWarningHeight: NSLayoutConstraint!
@@ -35,6 +37,7 @@ class DetailWeatherViewController: UIViewController {
     @IBOutlet private weak var detailsCollectionView: UICollectionView!
     @IBOutlet private weak var detailsCollectionViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var daysCollectionView: UICollectionView!
+    @IBOutlet weak var hoursCollectionView: UICollectionView!
     
     //MARK: - Initialization
     
@@ -51,6 +54,7 @@ class DetailWeatherViewController: UIViewController {
         configurePullToRefresh()
         setWeatherInformation(currentWeather: detailWeatherPresenter.currentWeather)
         setupFiveDaysDataSource()
+        setupHoursDataSource()
         setupConditionListDataSource()
         setupCollectionViews()
         bindViewModel()
@@ -94,6 +98,10 @@ class DetailWeatherViewController: UIViewController {
             .bind(to: daysCollectionView.rx.items(dataSource: fiveDaysDataSource))
             .disposed(by: dataDisposeBag)
         
+        detailWeatherPresenter.fetchHourlyWeather()
+            .bind(to: hoursCollectionView.rx.items(dataSource: hoursDataSource))
+            .disposed(by: dataDisposeBag)
+        
         detailWeatherPresenter.weatherConditionList
             .bind(to: detailsCollectionView.rx.items(dataSource: conditionListDataSource))
             .disposed(by: dataDisposeBag)
@@ -117,6 +125,15 @@ class DetailWeatherViewController: UIViewController {
     
     private func setupFiveDaysDataSource() {
         fiveDaysDataSource = RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>(
+            configureCell: { _, collectionView, indexPath, item in
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName, for: indexPath) as! SingleWeatherInformationCollectionViewCell
+                cell.set(weatherInfo: item)
+                return cell
+        })
+    }
+    
+    private func setupHoursDataSource() {
+        hoursDataSource = RxCollectionViewSectionedReloadDataSource<SectionOfSingleWeatherInformation>(
             configureCell: { _, collectionView, indexPath, item in
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName, for: indexPath) as! SingleWeatherInformationCollectionViewCell
                 cell.set(weatherInfo: item)
@@ -181,6 +198,7 @@ class DetailWeatherViewController: UIViewController {
     private func setupCollectionViews() {
         setupDetailsCollectionView()
         setupDaysCollectionView()
+        setupHoursCollectionView()
     }
     
     private func setupDetailsCollectionView() {
@@ -197,6 +215,18 @@ class DetailWeatherViewController: UIViewController {
         daysCollectionView.collectionViewLayout = UICollectionViewLayout.createStaticWidthDistributionLayout(columns: numberOfDays, padding: padding, rowHeight: daysCollectioViewRowHeight)
         daysCollectionView.layer.cornerRadius = 15
         daysCollectionView.register(SingleWeatherInformationCollectionViewCell.self, forCellWithReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName)
+    }
+    
+    private func setupHoursCollectionView() {
+        hoursCollectionView.collectionViewLayout = UICollectionViewLayout
+            .createScrollingFixedWidthLayout(itemsAtOnce: numberOfDays,
+                                             numOfItems: numberOfHours,
+                                             padding: padding,
+                                             rowWidth: hoursCollectionView.frame.width,
+                                             rowHeight: daysCollectioViewRowHeight)
+        hoursCollectionView.contentInset.right = 2 * padding
+        hoursCollectionView.layer.cornerRadius = 15
+        hoursCollectionView.register(SingleWeatherInformationCollectionViewCell.self, forCellWithReuseIdentifier: SingleWeatherInformationCollectionViewCell.typeName)
     }
     
     //MARK: - Gradient setup

@@ -31,6 +31,9 @@ protocol CoreDataServiceProtocol {
     func createWeatherFrom(weather: Weather, dailyWeather: DailyWeatherCoreData) -> WeatherCoreData?
     
     @discardableResult
+    func createWeatherFrom(weather: Weather, hourlyWeather: HourlyWeatherCoreData) -> WeatherCoreData?
+    
+    @discardableResult
     func createWindFrom(wind: Wind, currentWeather: CurrentWeatherCoreData) -> WindCoreData?
     
     @discardableResult
@@ -47,6 +50,9 @@ protocol CoreDataServiceProtocol {
     
     @discardableResult
     func createDailyWeatherFrom(dailyWeather: DailyWeather, indexId: Int, forecastedWeather: ForecastedWeatherCoreData) -> DailyWeatherCoreData?
+    
+    @discardableResult
+    func createHourlyWeatherFrom(hourlyWeather: HourlyWeather, indexId: Int, forecastedWeather: ForecastedWeatherCoreData) -> HourlyWeatherCoreData?
     
     @discardableResult
     func createForecastedWeatherFrom(forecastedWeather: ForecastedWeather) -> ForecastedWeatherCoreData?

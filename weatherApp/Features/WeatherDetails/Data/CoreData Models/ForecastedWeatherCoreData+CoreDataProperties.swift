@@ -2,7 +2,7 @@
 //  ForecastedWeatherCoreData+CoreDataProperties.swift
 //  
 //
-//  Created by Dario Nikolic on 19/08/2020.
+//  Created by Dario Nikolic on 24/09/2020.
 //
 //
 
@@ -14,10 +14,11 @@ extension ForecastedWeatherCoreData {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<ForecastedWeatherCoreData> {
         return NSFetchRequest<ForecastedWeatherCoreData>(entityName: "ForecastedWeatherCoreData")
     }
-    
-    @NSManaged public var forecastedWeather: NSSet
+
     @NSManaged public var latitude: Double
     @NSManaged public var longitude: Double
+    @NSManaged public var forecastedWeather: NSSet
+    @NSManaged public var hourlyWeather: NSSet
 
 }
 
@@ -35,5 +36,22 @@ extension ForecastedWeatherCoreData {
 
     @objc(removeForecastedWeather:)
     @NSManaged public func removeFromForecastedWeather(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for hourlyWeather
+extension ForecastedWeatherCoreData {
+
+    @objc(addHourlyWeatherObject:)
+    @NSManaged public func addToHourlyWeather(_ value: HourlyWeatherCoreData)
+
+    @objc(removeHourlyWeatherObject:)
+    @NSManaged public func removeFromHourlyWeather(_ value: HourlyWeatherCoreData)
+
+    @objc(addHourlyWeather:)
+    @NSManaged public func addToHourlyWeather(_ values: NSSet)
+
+    @objc(removeHourlyWeather:)
+    @NSManaged public func removeFromHourlyWeather(_ values: NSSet)
 
 }
