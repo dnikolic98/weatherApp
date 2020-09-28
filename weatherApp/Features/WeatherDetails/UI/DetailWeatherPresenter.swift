@@ -14,6 +14,7 @@ class DetailWeatherPresenter {
     //MARK: - Properties
     
     private let weatherRepository: WeatherRepository
+    private let navigationService: NavigationService
     private var forecastWeather: Observable<ForecastedWeatherCoreData?> {
         weatherRepository.fetchForcastWeather(coord: currentWeather.coord)
     }
@@ -26,9 +27,10 @@ class DetailWeatherPresenter {
 
     //MARK: - Initialization
 
-    init(currentWeather: CurrentWeatherViewModel, weatherRepository: WeatherRepository) {
+    init(currentWeather: CurrentWeatherViewModel, weatherRepository: WeatherRepository, navigationService: NavigationService) {
         self.currentWeather = currentWeather
         self.weatherRepository = weatherRepository
+        self.navigationService = navigationService
 
         weatherConditionList = BehaviorRelay<[SectionOfConditionInformation]>(value: [])
         setConditionList(currentWeather: currentWeather)
@@ -116,6 +118,14 @@ class DetailWeatherPresenter {
             .flatMap { singleWeatherInformationViewModels -> Observable<[SectionOfSingleWeatherInformation]> in
                 .just([SectionOfSingleWeatherInformation(items: singleWeatherInformationViewModels)])
             }
+    }
+    
+    //MARK: - Handle cell remove action
+    
+    func handleRemoveLocation() {
+        let locationId = currentWeather.id
+        weatherRepository.deselectLocation(id: locationId)
+        navigationService.goBack()
     }
 
     //MARK: - Helpers

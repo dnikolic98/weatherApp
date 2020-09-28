@@ -60,6 +60,7 @@ class DetailWeatherViewController: UIViewController {
         bindViewModel()
         startTimer()
         bindReachable()
+        setupRemoveLocation()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -233,6 +234,28 @@ class DetailWeatherViewController: UIViewController {
     
     private func setGradientBackground(currentWeather: CurrentWeatherViewModel) {
         view.setAutomaticGradient(currentWeather: currentWeather)
+    }
+    
+    //MARK: - Navigation remove button setup
+    
+    private func setupRemoveLocation() {
+        let removeButton = UIBarButtonItem(title: LocalizedStrings.removeLocation, style: .plain, target: self, action: #selector(showRemoveAlert))
+        navigationItem.rightBarButtonItem = removeButton
+    }
+    
+    @objc private func showRemoveAlert() {
+        let alert = UIAlertController(title: LocalizedStrings.removeLocation, message: LocalizedStrings.locationDeletionWarning, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: LocalizedStrings.confirm, style: .default, handler: { (action: UIAlertAction!) in
+            self.didTapRemoveLocation()
+        }))
+
+        alert.addAction(UIAlertAction(title: LocalizedStrings.cancel, style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    private func didTapRemoveLocation() {
+        detailWeatherPresenter.handleRemoveLocation()
     }
     
 }

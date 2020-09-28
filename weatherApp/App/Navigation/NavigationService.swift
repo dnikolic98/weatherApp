@@ -37,7 +37,7 @@ class NavigationService {
     }
     
     func goToDetailWeather(currentWeather: CurrentWeatherViewModel) {
-        let presenter = DetailWeatherPresenter(currentWeather: currentWeather, weatherRepository: appDependencies.weatherRepository)
+        let presenter = DetailWeatherPresenter(currentWeather: currentWeather, weatherRepository: appDependencies.weatherRepository, navigationService: self)
         let viewController = DetailWeatherViewController(with: presenter)
         navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
         navigationController?.pushViewController(viewController, animated: true)
